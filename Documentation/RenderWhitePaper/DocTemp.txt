@@ -1,0 +1,3 @@
+VV11AlchemyAO
+
+http://graphics.cs.williams.edu/papers/AlchemyHPG11/VV11AlchemyAO.pdf
