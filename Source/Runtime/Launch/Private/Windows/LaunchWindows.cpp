@@ -1,10 +1,10 @@
-#include <windows.h>
+#include "../../Public/LaunchEngineLoop.h"
 
-extern int GuardedMain(const TCHAR* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, int nCmdShow);
+extern int32 GuardedMain(const TCHAR* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, int32 nCmdShow);
 
-int WINAPI WinMain(HINSTANCE hInInstance, HINSTANCE hPrevInstance, char*, int nCmdShow)
+int32 WINAPI WinMain(HINSTANCE hInInstance, HINSTANCE hPrevInstance, TCHAR*, int32 nCmdShow)
 {
-	int ErrorLevel = 0;
+	int32 ErrorLevel = 0;
 
 	const TCHAR* CmdLine = ::GetCommandLine();
 

@@ -1,16 +1,56 @@
 #include "../Public/LaunchEngineLoop.h"
+#include "HAL/PlatformTLS.h"
+#include "RHI.h"
+#include "ShaderCore.h"
 
 FEngineLoop::FEngineLoop()
 {
 
 }
 
-int FEngineLoop::PreInit(int ArgC, char* ArgV[], const char* AdditionalCommandline)
+int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalCommandline)
 {
+	//Init LogConsole
+
+	//EnableBackLog
+	//GLog->EnableBacklog(true);
+
+	//Multithread------------------------------------------------------------------------------
+	//remember thread id of the main thread;
+	//GGameThreadId = FPlatformTLS::GetCurrentThreadId();
+
+	//FPlatformProcess::SetThreadAffinityMask(FPlatformAffinity::GetMainGameMask());
+	//FPlatformProcess::SetupGameOrRenderThread(false);
+
+	//FTaskGraphInterface::Startup(FPlatformMisc::NumberOfCores());
+	//FTaskGraphInterface::Get().AttachToThread(ENamedThreads::GameThread);
+	//Multithread------------------------------------------------------------------------------
+	LoadCoreModules();
+
+	//Multithread------------------------------------------------------------------------------
+	//if (FPlatformProcess::SupportsMultithreading())
+	//{
+
+	//}
+	//Multithread------------------------------------------------------------------------------
+
+	LoadPreInitModules();
+	//Memory------------------------------------------------------------------------------
+	//FPlatformMisc::PlatformInit();
+	//FPlatformMemory::Init();
+	//Memory------------------------------------------------------------------------------
+
+	//Physics-----------------------------------------------------------------------------
+	//InitGamePhys();
+	//Physics-----------------------------------------------------------------------------
+
+	RHIInit(false);
+
+	InitializeShaderTypes();
 	return 0;
 }
 
-int FEngineLoop::PreInit(const char* CmdLine)
+int32 FEngineLoop::PreInit(const char* CmdLine)
 {
 	return 0;
 }
@@ -35,7 +75,7 @@ bool FEngineLoop::LoadStartupModules()
 	return false;
 }
 
-int FEngineLoop::Init()
+int32 FEngineLoop::Init()
 {
 	return 0;
 }

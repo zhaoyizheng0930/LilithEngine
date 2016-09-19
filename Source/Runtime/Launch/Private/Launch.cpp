@@ -1,20 +1,18 @@
 //support MultiPlatform later
-#include <windows.h>
-#include "Core.h"
 #include "../Public/LaunchEngineLoop.h"
 
 FEngineLoop	GEngineLoop;
 
-int EnginePreInit(const TCHAR* CmdLine)
+int32 EnginePreInit(const TCHAR* CmdLine)
 {
-	int ErrorLevel = GEngineLoop.PreInit(CmdLine);
+	int32 ErrorLevel = GEngineLoop.PreInit(CmdLine);
 
 	return(ErrorLevel);
 }
 
-int EngineInit()
+int32 EngineInit()
 {
-	int ErrorLevel = GEngineLoop.Init();
+	int32 ErrorLevel = GEngineLoop.Init();
 
 	return(ErrorLevel);
 }
@@ -32,9 +30,9 @@ void EngineExit(void)
 	GEngineLoop.Exit();
 }
 
-int GuardedMain(const TCHAR* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, int nCmdShow)
+int32 GuardedMain(const TCHAR* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, int32 nCmdShow)
 {
-	int ErrorLevel = EnginePreInit(CmdLine);
+	int32 ErrorLevel = EnginePreInit(CmdLine);
 
 	// exit if PreInit failed.
 	if (ErrorLevel != 0 || GIsRequestingExit)

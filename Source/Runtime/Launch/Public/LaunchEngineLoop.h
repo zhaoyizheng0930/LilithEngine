@@ -1,4 +1,5 @@
 #pragma once
+#include "Core.h"
 
 
 class FEngineLoop
@@ -6,9 +7,9 @@ class FEngineLoop
 public:
 	FEngineLoop();
 
-	int PreInit(int ArgC, char* ArgV[], const char* AdditionalCommandline = nullptr);
+	int32 PreInit(int32 ArgC, char* ArgV[], const char* AdditionalCommandline = nullptr);
 
-	int PreInit(const char* CmdLine);
+	int32 PreInit(const char* CmdLine);
 
 	void LoadPreInitModules();
 
@@ -18,7 +19,7 @@ public:
 
 	bool LoadStartupModules();
 
-	virtual int Init();// override;
+	virtual int32 Init();// override;
 
 	void InitTime();
 
