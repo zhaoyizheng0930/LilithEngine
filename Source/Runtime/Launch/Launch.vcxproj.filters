@@ -20,5 +20,13 @@
     <ClCompile Include="Private\Windows\LaunchWindows.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\LaunchEngineLoop.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Public\LaunchEngineLoop.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
