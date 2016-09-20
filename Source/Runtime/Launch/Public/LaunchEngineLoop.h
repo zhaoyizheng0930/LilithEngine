@@ -1,8 +1,9 @@
 #pragma once
 #include "Core.h"
+#include "UnrealEngine.h"
 
 
-class FEngineLoop
+class FEngineLoop :public IEngineLoop
 {
 public:
 	FEngineLoop();

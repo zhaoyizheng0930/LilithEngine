@@ -13,14 +13,23 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Classes\Engine">
+      <UniqueIdentifier>{14fb9a6e-d547-47dd-b56c-cb378bc144b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private\RenderingThread.cpp">
+    <ClCompile Include="Private\UnrealEngine.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Public\RenderingThread.h">
+    <ClInclude Include="Public\EngineGlobals.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\Engine\Engine.h">
+      <Filter>Classes\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\UnrealEngine.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

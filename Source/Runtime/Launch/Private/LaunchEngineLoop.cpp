@@ -2,6 +2,9 @@
 #include "HAL/PlatformTLS.h"
 #include "RHI.h"
 #include "ShaderCore.h"
+#include "RenderingThread.h"
+#include "EngineGlobals.h"
+#include "../../Engine/Classes/Engine/Engine.h"
 
 FEngineLoop::FEngineLoop()
 {
@@ -47,6 +50,23 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 	RHIInit(false);
 
 	InitializeShaderTypes();
+
+	//Setup Default material
+	//UMaterialInterface::InitDefaultMaterials();
+	//UMaterialInterface::AssertDefaultMaterialsExist();
+	//UMaterialInterface::AssertDefaultMaterialsPostLoaded();
+
+	RHIPostInit();
+
+	//if Use ThreadRendering
+	StartRenderingThread();
+
+	//TODO:Other things
+
+	if (GIsRequestingExit)
+	{
+		AppPreExit();
+	}
 	return 0;
 }
 
@@ -77,6 +97,12 @@ bool FEngineLoop::LoadStartupModules()
 
 int32 FEngineLoop::Init()
 {
+	//NewEngine
+	GEngine = new UEngine();
+
+	GEngine->Init(this);
+
+	GEngine->StartHardwareSurvey();
 	return 0;
 }
 
@@ -87,7 +113,10 @@ void FEngineLoop::InitTime()
 
 void FEngineLoop::Exit()
 {
-
+	if (GEngine != nullptr)
+	{
+		GEngine->PreExit();
+	}
 }
 
 void FEngineLoop::Tick()
