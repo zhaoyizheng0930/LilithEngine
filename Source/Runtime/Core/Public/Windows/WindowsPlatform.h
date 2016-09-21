@@ -2,6 +2,9 @@
 
 #include "../GenericPlatform/GenericPlatform.h"
 #include <windows.h>
+//TODO:use vector temp
+#include <vector>
+#include <string>
 
 struct FWindowsPlatformTypes : public FGenericPlatformTypes
 {

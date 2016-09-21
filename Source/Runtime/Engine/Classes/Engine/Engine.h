@@ -1,4 +1,5 @@
 #pragma once
+#include "Core.h"
 #include "../../Public/UnrealEngine.h"
 
 class UEngine

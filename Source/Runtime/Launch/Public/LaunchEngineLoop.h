@@ -30,6 +30,8 @@ public:
 
 	static void PreInitHMDDevice();
 
+	virtual void ClearPendingCleanupObjects(){}
+
 public:
 	static bool AppInit();
 

@@ -1,5 +1,6 @@
 //support MultiPlatform later
 #include "../Public/LaunchEngineLoop.h"
+#include "LilithEd.h"
 
 FEngineLoop	GEngineLoop;
 
@@ -46,7 +47,7 @@ int32 GuardedMain(const TCHAR* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevIn
 	//SlowTask.EnterProgressFrame(20);
 	
 	//TODO_EditorMode
-	//ErrorLevel = EditorInit(GEngineLoop);
+	ErrorLevel = EditorInit(GEngineLoop);
 
 	ErrorLevel = EngineInit();
 

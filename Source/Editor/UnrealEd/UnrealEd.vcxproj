@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9DF07E8F-EBD7-4CAA-A9A0-BFD1BEA9BB19}</ProjectGuid>
-    <RootNamespace>Core</RootNamespace>
+    <ProjectGuid>{C353D745-B0B1-43E4-A0F5-BA3A084E9B3A}</ProjectGuid>
+    <RootNamespace>UnrealEd</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>LilithEd</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -82,6 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -105,6 +107,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,26 +130,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Public\Core.h" />
-    <ClInclude Include="Public\CoreGlobals.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatform.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatformProcess.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericWindow.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericWindowDefinition.h" />
-    <ClInclude Include="Public\HAL\Platform.h" />
-    <ClInclude Include="Public\HAL\PlatformTLS.h" />
-    <ClInclude Include="Public\Windows\WindowsApplication.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatform.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformProcess.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformTLS.h" />
-    <ClInclude Include="Public\Windows\WindowsWindow.h" />
+    <ClInclude Include="Public\LilithEd.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private\Core.cpp" />
-    <ClCompile Include="Private\GenericPlatform\GenericWindow.cpp" />
-    <ClCompile Include="Private\Windows\WindowsApplication.cpp" />
-    <ClCompile Include="Private\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="Private\LilithEd.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

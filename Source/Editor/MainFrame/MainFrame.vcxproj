@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9DF07E8F-EBD7-4CAA-A9A0-BFD1BEA9BB19}</ProjectGuid>
-    <RootNamespace>Core</RootNamespace>
+    <ProjectGuid>{964E054C-D9EF-4BC0-ADC5-12901E2122D5}</ProjectGuid>
+    <RootNamespace>MainFrame</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -68,11 +68,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)/../Binaries/$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)/../Intermediate/$(Configuration)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)/../Binaries/$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)/../Intermediate/$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -81,6 +81,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -104,6 +105,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -127,26 +129,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Public\Core.h" />
-    <ClInclude Include="Public\CoreGlobals.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatform.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatformProcess.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericWindow.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericWindowDefinition.h" />
-    <ClInclude Include="Public\HAL\Platform.h" />
-    <ClInclude Include="Public\HAL\PlatformTLS.h" />
-    <ClInclude Include="Public\Windows\WindowsApplication.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatform.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformProcess.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformTLS.h" />
-    <ClInclude Include="Public\Windows\WindowsWindow.h" />
+    <ClInclude Include="Public\MainFrame.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private\Core.cpp" />
-    <ClCompile Include="Private\GenericPlatform\GenericWindow.cpp" />
-    <ClCompile Include="Private\Windows\WindowsApplication.cpp" />
-    <ClCompile Include="Private\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="Private\MainFrame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
