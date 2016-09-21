@@ -2,6 +2,8 @@
 #include "GenericWindow.h"
 #include "GenericWindowDefinition.h"
 
+extern void CreateDefaultApplication();
+
 class GenericApplication
 {
 public:

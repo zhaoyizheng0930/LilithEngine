@@ -1,7 +1,10 @@
 #include "../../Public/Windows/WindowsApplication.h"
 #include "../../Public/Windows/WindowsWindow.h"
 
-GenericApplication* PlatformApplication = nullptr;
+void CreateDefaultApplication()
+{
+	PlatformApplication = new FWindowsApplication();
+}
 
 FWindowsApplication::FWindowsApplication()
 {
@@ -10,7 +13,7 @@ FWindowsApplication::FWindowsApplication()
 
 FGenericWindow* FWindowsApplication::MakeWindow()
 {
-	FGenericWindow* newwindow = new FGenericWindow();
+	FGenericWindow* newwindow = new FWindowsWindow();
 	return newwindow;
 }
 

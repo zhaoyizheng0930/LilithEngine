@@ -8,7 +8,7 @@ SlateApplication* SlateApplicationIns = nullptr;
 
 void CreateDefaultMainFrame(const bool bStartImmersive, const bool bStartPIE)
 {
-
+	SlateApplicationIns = new SlateApplication();
 }
 
 SlateApplication::SlateApplication()

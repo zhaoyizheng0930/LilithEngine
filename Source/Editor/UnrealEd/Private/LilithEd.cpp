@@ -1,6 +1,7 @@
 #include "../Public/LilithEd.h"
 #include "../../../Runtime/Engine/Public/UnrealEngine.h"
 #include "../../../Editor/MainFrame/Public/MainFrame.h"
+#include "GenericPlatform/GenericApplication.h"
 
 int32 EditorInit(class IEngineLoop& EngineLoop)
 {
@@ -12,6 +13,9 @@ int32 EditorInit(class IEngineLoop& EngineLoop)
 	// TODO_DLL:DirectlyCall,change to dll later
 	CreateDefaultMainFrame(false, false);
 
+	CreateDefaultApplication();
+
+	SlateApplication::AddWindow();
 	return 0;
 }
 
