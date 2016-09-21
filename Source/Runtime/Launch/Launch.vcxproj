@@ -71,10 +71,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)/../Binaries/$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)/../Intermediate/$(Configuration)\</IntDir>
+    <TargetName>LilithEngine</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)/../Binaries/$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)/../Intermediate/$(Configuration)\</IntDir>
+    <TargetName>LilithEngine</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -90,6 +92,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)/../Binaries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Core.lib;RHI.lib;ShaderCore.lib;RenderCore.lib;Engine.lib;LilithEd.lib;MainFrame.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)/../Intermediate/log/$(Configuration)/$(MSBuildProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -118,6 +123,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)/../Binaries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Core.lib;RHI.lib;ShaderCore.lib;RenderCore.lib;Engine.lib;LilithEd.lib;MainFrame.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <BuildLog>
+      <Path>$(SolutionDir)/../Intermediate/log/$(Configuration)/$(MSBuildProjectName).log</Path>
+    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
