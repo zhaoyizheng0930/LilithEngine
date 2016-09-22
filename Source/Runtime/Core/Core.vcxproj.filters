@@ -72,6 +72,21 @@
     <ClInclude Include="Public\Windows\WindowsWindow.h">
       <Filter>Public\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Public\GenericPlatform\GenericPlatformMemory.h">
+      <Filter>Public\GenericPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\LilithMemory.h">
+      <Filter>Public\HAL</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Windows\WindowsPlatformMemory.h">
+      <Filter>Public\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\PlatformIncludes.h">
+      <Filter>Public\HAL</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Windows\WindowsPlatformIncludes.h">
+      <Filter>Public\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp">

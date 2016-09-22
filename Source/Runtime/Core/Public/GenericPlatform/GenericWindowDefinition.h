@@ -1,11 +1,15 @@
 #pragma once
-#include "../HAL/Platform.h"
+#include "../Core.h"
 
 struct FGenericWindowDefinition
 {
-	float WidthDesiredOnScreen;
+	int32 XDesiredPositionOnScreen;
 
-	float HeightDesiredOnScreen;
+	int32 YDesiredPositionOnScreen;
+
+	int32 WidthDesiredOnScreen;
+
+	int32 HeightDesiredOnScreen;
 
 	std::string Title;
 };

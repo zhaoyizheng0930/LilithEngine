@@ -2,7 +2,7 @@
 #include "GenericWindow.h"
 #include "GenericWindowDefinition.h"
 
-extern void CreateDefaultApplication();
+extern void CreateDefaultApplication(const HINSTANCE InstanceHandle, const HICON IconHandle);
 
 class GenericApplication
 {

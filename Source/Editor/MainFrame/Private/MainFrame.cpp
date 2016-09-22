@@ -18,9 +18,12 @@ SlateApplication::SlateApplication()
 
 void SlateApplication::MakeWindow()
 {
+	//TODO_Config:
 	FGenericWindowDefinition Windowdefinition;
-	Windowdefinition.WidthDesiredOnScreen = 1920.f;
-	Windowdefinition.WidthDesiredOnScreen = 1080.f;
+	Windowdefinition.WidthDesiredOnScreen = 1280;
+	Windowdefinition.HeightDesiredOnScreen = 720;
+	Windowdefinition.XDesiredPositionOnScreen = 100;
+	Windowdefinition.YDesiredPositionOnScreen = 100;
 	Windowdefinition.Title = "LilithEngine";
 
 	FGenericWindow* NewWindow = PlatformApplication->MakeWindow();

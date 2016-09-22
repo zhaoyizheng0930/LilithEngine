@@ -2,6 +2,9 @@
 #include "../../../Runtime/Engine/Public/UnrealEngine.h"
 #include "../../../Editor/MainFrame/Public/MainFrame.h"
 #include "GenericPlatform/GenericApplication.h"
+#include "../../../Runtime/Core/Public/Windows/WindowsApplication.h"
+
+#define IDICON_LilithEngine		123
 
 int32 EditorInit(class IEngineLoop& EngineLoop)
 {
@@ -13,7 +16,13 @@ int32 EditorInit(class IEngineLoop& EngineLoop)
 	// TODO_DLL:DirectlyCall,change to dll later
 	CreateDefaultMainFrame(false, false);
 
-	CreateDefaultApplication();
+	HICON AppIconHandle = LoadIcon(hInstance, MAKEINTRESOURCE(IDICON_LilithEngine));
+	if (AppIconHandle == NULL)
+	{
+		AppIconHandle = LoadIcon((HINSTANCE)NULL, IDI_APPLICATION);
+	}
+
+	CreateDefaultApplication(hInstance , AppIconHandle);
 
 	SlateApplication::AddWindow();
 	return 0;
