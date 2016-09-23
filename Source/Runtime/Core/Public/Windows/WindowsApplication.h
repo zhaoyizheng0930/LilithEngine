@@ -4,6 +4,8 @@
 
 extern HINSTANCE hInstance;
 
+//extern FWindowsApplication* WindowsApplication;
+
 class FWindowsApplication
 	: public GenericApplication
 {

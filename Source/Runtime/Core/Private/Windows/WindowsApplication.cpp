@@ -4,6 +4,8 @@
 
 HINSTANCE hInstance = NULL;
 
+//FWindowsApplication* WindowsApplication = nullptr;
+
 void CreateDefaultApplication(const HINSTANCE InstanceHandle, const HICON IconHandle)
 {
 	PlatformApplication = new FWindowsApplication(InstanceHandle , IconHandle);
@@ -51,7 +53,7 @@ int32 FWindowsApplication::ProcessMessage(HWND hwnd, uint32 msg, WPARAM wParam, 
 	default:
 		break;
 	}
-	return 0;
+	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
 bool FWindowsApplication::RegisterClass(const HINSTANCE HInstance, const HICON HIcon)

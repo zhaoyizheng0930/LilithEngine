@@ -9,6 +9,11 @@ FWindowsWindow::FWindowsWindow():
 
 }
 
+HWND FWindowsWindow::GetHWnd() const
+{
+	return HWnd;
+}
+
 void FWindowsWindow::Initialize(FWindowsApplication* application , FGenericWindow* InWindow, FGenericWindowDefinition* InDefinition, HINSTANCE InHInstance)
 {
 	m_Definition = InDefinition;

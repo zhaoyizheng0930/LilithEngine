@@ -11,7 +11,7 @@ public:
 
 	virtual FGenericWindow* MakeWindow() { return NULL; }
 
-	virtual void InitializeWindow(FGenericWindow* Window, const FGenericWindowDefinition* InDefinition) { }
+	virtual void InitializeWindow(FGenericWindow* Window, FGenericWindowDefinition* InDefinition) { }
 protected:
 private:
 };

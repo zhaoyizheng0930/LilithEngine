@@ -10,6 +10,8 @@ public:
 public:
 	FWindowsWindow();
 
+	HWND GetHWnd() const;
+
 	virtual void Initialize(FWindowsApplication* application , FGenericWindow* InWindow, FGenericWindowDefinition* InDefinition, HINSTANCE InHInstance);
 protected:
 private:
