@@ -13,6 +13,13 @@ public:
 	HWND GetHWnd() const;
 
 	virtual void Initialize(FWindowsApplication* application , FGenericWindow* InWindow, FGenericWindowDefinition* InDefinition, HINSTANCE InHInstance);
+
+public:
+	virtual void Minimize() override;
+	virtual void Maximize() override;
+	virtual void Restore() override;
+	virtual void Show() override;
+	virtual void Hide() override;
 protected:
 private:
 	FGenericWindowDefinition* m_Definition;
@@ -20,4 +27,6 @@ private:
 
 	/** The window's handle. */
 	HWND HWnd;
+
+	bool bIsVisible : 1;
 };

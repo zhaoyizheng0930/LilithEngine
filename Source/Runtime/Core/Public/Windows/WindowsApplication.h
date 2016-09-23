@@ -15,6 +15,8 @@ public:
 	virtual FGenericWindow* MakeWindow();
 
 	virtual void InitializeWindow(FGenericWindow* InWindow, FGenericWindowDefinition* InDefinition);
+
+	virtual void PumpMessages(const float TimeDelta) override;
 protected:
 	static LRESULT CALLBACK AppWndProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam);
 

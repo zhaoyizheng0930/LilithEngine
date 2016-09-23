@@ -9,3 +9,28 @@ void FGenericWindow::Initialize(FGenericWindow* InWindow, const FGenericWindowDe
 {
 
 }
+
+void FGenericWindow::Minimize()
+{
+
+}
+
+void FGenericWindow::Maximize()
+{
+
+}
+
+void FGenericWindow::Restore()
+{
+
+}
+
+void FGenericWindow::Show()
+{
+
+}
+
+void FGenericWindow::Hide()
+{
+
+}

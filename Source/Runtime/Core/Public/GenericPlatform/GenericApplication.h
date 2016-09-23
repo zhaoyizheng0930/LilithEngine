@@ -12,6 +12,8 @@ public:
 	virtual FGenericWindow* MakeWindow() { return NULL; }
 
 	virtual void InitializeWindow(FGenericWindow* Window, FGenericWindowDefinition* InDefinition) { }
+
+	virtual void PumpMessages(const float TimeDelta) { }
 protected:
 private:
 };

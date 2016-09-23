@@ -4,7 +4,8 @@ const TCHAR FWindowsWindow::AppWindowClass[] = TEXT("LilithWindow");
 
 FWindowsWindow::FWindowsWindow():
 	m_Definition(NULL),
-	m_Application(NULL)
+	m_Application(NULL),
+	bIsVisible(false)
 {
 
 }
@@ -45,4 +46,42 @@ void FWindowsWindow::Initialize(FWindowsApplication* application , FGenericWindo
 		NULL, InHInstance, NULL);
 
 
+}
+
+void FWindowsWindow::Minimize()
+{
+	::ShowWindow(HWnd, SW_MINIMIZE);
+}
+
+void FWindowsWindow::Maximize()
+{
+	::ShowWindow(HWnd, SW_MAXIMIZE);
+}
+
+void FWindowsWindow::Restore()
+{
+	::ShowWindow(HWnd, SW_RESTORE);
+}
+
+void FWindowsWindow::Show()
+{
+	if (!bIsVisible)
+	{
+		bIsVisible = true;
+
+		// Do not activate windows that do not take input; e.g. tool-tips and cursor decorators
+		// Also dont activate if a window wants to appear but not activate itself
+		//const bool bShouldActivate = Definition->AcceptsInput && Definition->ActivateWhenFirstShown;
+		bool bShouldActivate = true;
+		::ShowWindow(HWnd, bShouldActivate ? SW_SHOW : SW_SHOWNA);
+	}
+}
+
+void FWindowsWindow::Hide()
+{
+	if (bIsVisible)
+	{
+		bIsVisible = false;
+		::ShowWindow(HWnd, SW_HIDE);
+	}
 }

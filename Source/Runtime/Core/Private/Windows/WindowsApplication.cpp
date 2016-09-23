@@ -31,6 +31,17 @@ void FWindowsApplication::InitializeWindow(FGenericWindow* InWindow, FGenericWin
 
 	Windows.push_back(Window);
 	Window->Initialize(this , Window , InDefinition, InstanceHandle);
+	Window->Show();
+}
+
+void FWindowsApplication::PumpMessages(const float TimeDelta)
+{
+	MSG Message;
+	while (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&Message);
+		DispatchMessage(&Message);
+	}
 }
 
 LRESULT CALLBACK FWindowsApplication::AppWndProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam)
@@ -53,6 +64,7 @@ int32 FWindowsApplication::ProcessMessage(HWND hwnd, uint32 msg, WPARAM wParam, 
 	default:
 		break;
 	}
+
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
