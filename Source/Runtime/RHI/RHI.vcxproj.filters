@@ -20,7 +20,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DynamicRHI.cpp">
+    <ClCompile Include="Private\DynamicRHI.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>

@@ -134,7 +134,7 @@
     <ClInclude Include="Public\RHI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DynamicRHI.cpp" />
+    <ClCompile Include="Private\DynamicRHI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

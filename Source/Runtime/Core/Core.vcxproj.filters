@@ -104,5 +104,8 @@
     <ClCompile Include="Private\GenericPlatform\GenericApplication.cpp">
       <Filter>Private\GenericPlatform</Filter>
     </ClCompile>
+    <ClCompile Include="Private\GenericPlatform\GenericPlatformProcess.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

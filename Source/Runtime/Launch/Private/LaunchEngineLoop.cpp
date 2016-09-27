@@ -1,5 +1,7 @@
 #include "../Public/LaunchEngineLoop.h"
+#include "HAL/PlatformIncludes.h"
 #include "HAL/PlatformTLS.h"
+#include "HAL/PlatformProcess.h"
 #include "RHI.h"
 #include "ShaderCore.h"
 #include "RenderingThread.h"
@@ -31,10 +33,10 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 	LoadCoreModules();
 
 	//Multithread------------------------------------------------------------------------------
-	//if (FPlatformProcess::SupportsMultithreading())
-	//{
+	if (FPlatformProcess::SupportsMultithreading())
+	{
 
-	//}
+	}
 	//Multithread------------------------------------------------------------------------------
 
 	LoadPreInitModules();
@@ -72,6 +74,15 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 
 int32 FEngineLoop::PreInit(const char* CmdLine)
 {
+	// Initialize the RHI.
+	RHIInit(true);
+
+	RHIPostInit();
+
+	if (GUseThreadedRendering)
+	{
+
+	}
 	return 0;
 }
 
@@ -132,6 +143,7 @@ void FEngineLoop::PreInitHMDDevice()
 
 bool FEngineLoop::AppInit()
 {
+	//PreInitHMDDevice();
 	return true;
 }
 

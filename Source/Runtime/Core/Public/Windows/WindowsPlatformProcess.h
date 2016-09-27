@@ -6,6 +6,7 @@ class FWindowsPlatformProcess
 	: public FGenericPlatformProcess
 {
 public:
+
 protected:
 private:
 };

@@ -1,7 +1,7 @@
 #include "../Public/RHI.h"
+#include "../Public/DynamicRHI.h"
 
-// Globals.
-FDynamicRHI* GDynamicRHI = NULL;
+FDynamicRHI* GDynamicRHI = nullptr;
 
 void RHIInit(bool bHasEditorToken)
 {

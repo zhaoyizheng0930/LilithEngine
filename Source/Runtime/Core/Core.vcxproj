@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp" />
     <ClCompile Include="Private\GenericPlatform\GenericApplication.cpp" />
+    <ClCompile Include="Private\GenericPlatform\GenericPlatformProcess.cpp" />
     <ClCompile Include="Private\GenericPlatform\GenericWindow.cpp" />
     <ClCompile Include="Private\Windows\WindowsApplication.cpp" />
     <ClCompile Include="Private\Windows\WindowsWindow.cpp" />
