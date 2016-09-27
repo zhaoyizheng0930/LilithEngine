@@ -6,6 +6,7 @@
 #include "ShaderCore.h"
 #include "RenderingThread.h"
 #include "EngineGlobals.h"
+#include "HAL/ThreadingBase.h"
 #include "../../Engine/Classes/Engine/Engine.h"
 
 FEngineLoop::FEngineLoop()
@@ -35,7 +36,7 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 	//Multithread------------------------------------------------------------------------------
 	if (FPlatformProcess::SupportsMultithreading())
 	{
-
+		GThreadPool = FQueuedThreadPool::Allocate();
 	}
 	//Multithread------------------------------------------------------------------------------
 
