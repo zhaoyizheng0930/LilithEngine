@@ -13,7 +13,7 @@ public:
 
 	virtual void InitializeWindow(FGenericWindow* Window, FGenericWindowDefinition* InDefinition) { }
 
-	virtual void PumpMessages(const float TimeDelta) { }
+	virtual void PumpMessages() { }
 protected:
 private:
 };

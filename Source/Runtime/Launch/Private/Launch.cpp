@@ -1,5 +1,6 @@
 //support MultiPlatform later
 #include "../Public/LaunchEngineLoop.h"
+#include "GenericPlatform/GenericApplication.h"
 #include "LilithEd.h"
 
 FEngineLoop	GEngineLoop;
@@ -21,6 +22,11 @@ int32 EngineInit()
 void EngineTick(void)
 {
 	GEngineLoop.Tick();
+}
+
+void EditorTick()
+{
+	PlatformApplication->PumpMessages();
 }
 
 void EngineExit(void)
@@ -51,8 +57,11 @@ int32 GuardedMain(const TCHAR* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevIn
 
 	ErrorLevel = EngineInit();
 
+	MSG message;
 	while (!GIsRequestingExit)
 	{
+		EditorTick();
+
 		EngineTick();
 	}
 

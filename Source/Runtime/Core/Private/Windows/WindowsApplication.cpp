@@ -34,7 +34,7 @@ void FWindowsApplication::InitializeWindow(FGenericWindow* InWindow, FGenericWin
 	Window->Show();
 }
 
-void FWindowsApplication::PumpMessages(const float TimeDelta)
+void FWindowsApplication::PumpMessages()
 {
 	MSG Message;
 	while (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))

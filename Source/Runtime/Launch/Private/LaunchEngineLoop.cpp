@@ -121,7 +121,8 @@ void FEngineLoop::Exit()
 
 void FEngineLoop::Tick()
 {
-
+	// Set FApp::CurrentTime, FApp::DeltaTime and potentially wait to enforce max tick rate.
+	//GEngine->UpdateTimeAndHandleMaxTickRate();
 }
 
 void FEngineLoop::PreInitHMDDevice()
