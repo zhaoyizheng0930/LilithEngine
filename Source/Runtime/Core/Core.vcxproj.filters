@@ -75,9 +75,6 @@
     <ClInclude Include="Public\GenericPlatform\GenericPlatformMemory.h">
       <Filter>Public\GenericPlatform</Filter>
     </ClInclude>
-    <ClInclude Include="Public\HAL\LilithMemory.h">
-      <Filter>Public\HAL</Filter>
-    </ClInclude>
     <ClInclude Include="Public\Windows\WindowsPlatformMemory.h">
       <Filter>Public\Windows</Filter>
     </ClInclude>
@@ -86,6 +83,42 @@
     </ClInclude>
     <ClInclude Include="Public\Windows\WindowsPlatformIncludes.h">
       <Filter>Public\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\PlatformProcess.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\ThreadingBase.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\QueuedThread.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\QueuedThreadPool.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\QueuedWork.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\Runnable.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\RunnableThread.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\SingleThreadRunnable.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\Event.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Memory\LilithMemory.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Memory\MallocTBB.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Memory\MemoryBase.h">
+      <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,5 +140,34 @@
     <ClCompile Include="Private\GenericPlatform\GenericPlatformProcess.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Private\HAL\ThreadingBase.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Thread\Event.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Thread\FRunnableThread.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Thread\QueuedThread.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Thread\QueuedThreadPool.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Windows\WindowsPlatformMemory.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Memory\LilithMemory.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Memory\MallocTBB.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Public\HAL\Memory\FMemory.inl">
+      <Filter>Public</Filter>
+    </None>
   </ItemGroup>
 </Project>
