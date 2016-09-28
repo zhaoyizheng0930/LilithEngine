@@ -14,20 +14,11 @@ public:
 		, Thread(nullptr)
 	{ }
 
-	virtual bool Create(class FQueuedThreadPool* InPool, uint32 InStackSize = 0, EThreadPriority ThreadPriority = TPri_Normal)
-	{
+	virtual bool Create(class FQueuedThreadPool* InPool, uint32 InStackSize = 0, EThreadPriority ThreadPriority = TPri_Normal);
 
-	}
+	virtual bool KillThread();
 
-	virtual bool KillThread()
-	{
-
-	}
-
-	void DoWork(IQueuedWork* InQueuedWork)
-	{
-
-	}
+	void DoWork(IQueuedWork* InQueuedWork);
 
 protected:
 	FEvent* DoWorkEvent;
@@ -39,10 +30,7 @@ protected:
 	//MyThread
 	FRunnableThread* Thread;
 
-	virtual uint32 Run() override
-	{
-
-	}
+	virtual uint32 Run() override;
 
 private:
 };

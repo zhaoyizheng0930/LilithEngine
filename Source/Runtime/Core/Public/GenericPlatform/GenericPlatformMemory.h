@@ -4,6 +4,11 @@
 class FGenericPlatformMemory
 {
 public:
+	static void OnOutOfMemory(uint64 Size, uint32 Alignment)
+	{
+		//ZYZ_TODO:Dump!!!!!
+	}
+
 	static FORCEINLINE void* Memmove(void* Dest, const void* Src, SIZE_T Count)
 	{
 		return memmove(Dest, Src, Count);
@@ -42,4 +47,5 @@ public:
 	}
 protected:
 private:
+	static class FMalloc* BaseAllocator() { }
 };

@@ -77,7 +77,7 @@ protected:
 
 	uint64 ThreadAffinityMask;
 
-	TArray<FTlsAutoCleanup*> TlsInstances;
+	std::vector<FTlsAutoCleanup*> TlsInstances;
 
 	EThreadPriority ThreadPriority;
 

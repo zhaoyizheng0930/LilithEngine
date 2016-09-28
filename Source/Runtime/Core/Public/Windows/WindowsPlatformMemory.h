@@ -4,7 +4,8 @@
 struct FWindowsPlatformMemory
 	:public FGenericPlatformMemory
 {
-	
+	static class FMalloc* BaseAllocator();
+
 };
 
 typedef FWindowsPlatformMemory FPlatformMemory;

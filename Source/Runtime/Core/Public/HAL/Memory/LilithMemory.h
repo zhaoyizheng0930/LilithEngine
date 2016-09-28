@@ -1,5 +1,7 @@
 #pragma once
-#include "PlatformIncludes.h"
+#include "../PlatformIncludes.h"
+#include "MemoryBase.h"
+#include "FMemory.inl"
 
 struct FMemory
 {
@@ -98,13 +100,21 @@ struct FMemory
 
 
 	// C style memory allocation stubs.
-	//static void* Malloc(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
-	//static void* Realloc(void* Original, SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
-	//static void Free(void* Original);
-	//static SIZE_T GetAllocSize(void* Original);
+	static void* Malloc(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
+	static void* Realloc(void* Original, SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
+	static void Free(void* Original);
+	static SIZE_T GetAllocSize(void* Original);
+	static SIZE_T QuantizeSize(SIZE_T Count, uint32 Alignment);
 
 	// Malloc for GPU mapped memory on UMA systems (XB1/PS4/etc)
 	//static void* GPUMalloc(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
 	//static void* GPURealloc(void* Original, SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
 	//static void GPUFree(void* Original);
+	private:
+		static void GCreateMalloc();
+		static void* MallocExternal(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
+		static void* ReallocExternal(void* Original, SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
+		static void FreeExternal(void* Original);
+		static SIZE_T GetAllocSizeExternal(void* Original);
+		static SIZE_T QuantizeSizeExternal(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
 };

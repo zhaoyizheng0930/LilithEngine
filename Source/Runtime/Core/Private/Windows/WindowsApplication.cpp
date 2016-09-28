@@ -44,6 +44,56 @@ void FWindowsApplication::PumpMessages()
 	}
 }
 
+int32 FWindowsApplication::NumberOfCores()
+{
+	static int32 CoreCount = 0;
+	if (GbUseHyperthreads)
+	{
+		CoreCount = NumberOfCoresIncludingHyperthreads();
+	}
+	else
+	{
+		PSYSTEM_LOGICAL_PROCESSOR_INFORMATION InfoBuffer = NULL;
+		::DWORD BufferSize = 0;
+
+		// Get the size of the buffer to hold processor information.
+		::BOOL Result = GetLogicalProcessorInformation(InfoBuffer, &BufferSize);
+
+		// Allocate the buffer to hold the processor info.
+		InfoBuffer = (PSYSTEM_LOGICAL_PROCESSOR_INFORMATION)FMemory::Malloc(BufferSize);
+
+		// Get the actual information.
+		Result = GetLogicalProcessorInformation(InfoBuffer, &BufferSize);
+
+		// Count physical cores
+		const int32 InfoCount = (int32)(BufferSize / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION));
+		for (int32 Index = 0; Index < InfoCount; ++Index)
+		{
+			SYSTEM_LOGICAL_PROCESSOR_INFORMATION* Info = &InfoBuffer[Index];
+			if (Info->Relationship == RelationProcessorCore)
+			{
+				CoreCount++;
+			}
+		}
+		FMemory::Free(InfoBuffer);
+	}
+
+	return CoreCount;
+}
+
+int32 FWindowsApplication::NumberOfCoresIncludingHyperthreads()
+{
+	static int32 CoreCount = 0;
+	if (CoreCount == 0)
+	{
+		// Get the number of logical processors, including hyperthreaded ones.
+		SYSTEM_INFO SI;
+		GetSystemInfo(&SI);
+		CoreCount = (int32)SI.dwNumberOfProcessors;
+	}
+	return CoreCount;
+}
+
 LRESULT CALLBACK FWindowsApplication::AppWndProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam)
 {
 	FWindowsApplication* windowsapp = static_cast<FWindowsApplication*>(PlatformApplication);

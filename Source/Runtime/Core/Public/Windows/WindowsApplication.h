@@ -16,7 +16,14 @@ public:
 
 	virtual void InitializeWindow(FGenericWindow* InWindow, FGenericWindowDefinition* InDefinition);
 
+public:
+	//Misc
 	virtual void PumpMessages() override;
+
+	static int32 NumberOfCores();
+
+	static int32 NumberOfCoresIncludingHyperthreads();
+
 protected:
 	static LRESULT CALLBACK AppWndProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam);
 

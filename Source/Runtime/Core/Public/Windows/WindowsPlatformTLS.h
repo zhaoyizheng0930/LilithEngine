@@ -2,12 +2,11 @@
 
 class FWindowsPlatformTLS
 {
+public:
 	static FORCEINLINE uint32 GetCurrentThreadId(void)
 	{
 		return ::GetCurrentThreadId();
 	}
-
-public:
 protected:
 private:
 };
