@@ -148,6 +148,7 @@ Content/
 Intermediate/
 obj/
 Source/ThirdParty
+Documentation/Book
 
 # Ignore any saved local files
 Saved/
