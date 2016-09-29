@@ -11,12 +11,9 @@ public:
 
 
 public:
-	virtual void* Malloc(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT) override;
-
-	virtual void* Realloc(void* Original, SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT) override;
-
-	virtual void Free(void* Original) override;
-
+	virtual void* Malloc(SIZE_T Size, uint32 Alignment) override;
+	virtual void* Realloc(void* Ptr, SIZE_T NewSize, uint32 Alignment) override;
+	virtual void Free(void* Ptr) override;
 	virtual bool GetAllocationSize(void *Original, SIZE_T &SizeOut) override;
 
 	virtual const TCHAR* GetDescriptiveName() override

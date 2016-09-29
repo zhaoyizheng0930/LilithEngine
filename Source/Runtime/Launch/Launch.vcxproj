@@ -90,7 +90,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)/../Binaries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core.lib;RHI.lib;ShaderCore.lib;RenderCore.lib;Engine.lib;LilithEd.lib;MainFrame.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;RHI.lib;ShaderCore.lib;RenderCore.lib;Engine.lib;LilithEd.lib;MainFrame.lib;tbbmalloc_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)/../Intermediate/log/$(Configuration)/$(MSBuildProjectName).log</Path>
@@ -121,7 +121,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)/../Binaries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Core.lib;RHI.lib;ShaderCore.lib;RenderCore.lib;Engine.lib;LilithEd.lib;MainFrame.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;RHI.lib;ShaderCore.lib;RenderCore.lib;Engine.lib;LilithEd.lib;MainFrame.lib;tbbmalloc_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <BuildLog>
       <Path>$(SolutionDir)/../Intermediate/log/$(Configuration)/$(MSBuildProjectName).log</Path>
