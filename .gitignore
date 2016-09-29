@@ -147,6 +147,7 @@ Content/
 # Ignore intermediate folders
 Intermediate/
 obj/
+Source/ThirdParty
 
 # Ignore any saved local files
 Saved/
