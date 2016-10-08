@@ -4,3 +4,5 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/ff381409(v=vs.85).aspx
 http://www.cnblogs.com/mikewolf2002/archive/2012/11/25/2787636.html
 
 http://blog.csdn.net/suhuaiqiang_janlay/article/details/51194984
+
+http://www.cnblogs.com/Azhu/archive/2012/07/15/2592675.html
