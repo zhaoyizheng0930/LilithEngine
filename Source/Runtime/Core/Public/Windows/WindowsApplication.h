@@ -24,6 +24,8 @@ public:
 
 	static int32 NumberOfCoresIncludingHyperthreads();
 
+	static int32 NumberOfWorkerThreadsToSpawn();
+
 protected:
 	static LRESULT CALLBACK AppWndProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam);
 
@@ -35,3 +37,5 @@ private:
 
 	HINSTANCE InstanceHandle;
 };
+
+typedef FWindowsApplication FPlatformApplication;

@@ -2,7 +2,6 @@
 #include "../../../Runtime/Engine/Public/UnrealEngine.h"
 #include "../../../Editor/MainFrame/Public/MainFrame.h"
 #include "GenericPlatform/GenericApplication.h"
-#include "../../../Runtime/Core/Public/Windows/WindowsApplication.h"
 
 #define IDICON_LilithEngine		123
 

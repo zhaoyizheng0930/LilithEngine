@@ -1,7 +1,6 @@
 #include "../Public/LaunchEngineLoop.h"
 #include "HAL/PlatformIncludes.h"
 #include "HAL/PlatformTLS.h"
-#include "HAL/PlatformProcess.h"
 #include "RHI.h"
 #include "ShaderCore.h"
 #include "RenderingThread.h"
@@ -37,6 +36,14 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 	if (FPlatformProcess::SupportsMultithreading())
 	{
 		GThreadPool = FQueuedThreadPool::Allocate();
+		int NumThreadsInThreadPool = FPlatformApplication::NumberOfWorkerThreadsToSpawn();
+
+		GThreadPool->Create(NumThreadsInThreadPool);
+
+		//Only in editor. if you need to build something in editor,Open it.
+		//GLargeThreadPool = FQueuedThreadPool::Allocate();		//UseFor Build lighting in editor run.
+		//int32 NumThreadsInLargeThreadPool = FMath::Max(FPlatformMisc::NumberOfCoresIncludingHyperthreads() - 2, 2);
+		//GLargeThreadPool->Create(NumThreadsInLargeThreadPool)
 	}
 	//Multithread------------------------------------------------------------------------------
 

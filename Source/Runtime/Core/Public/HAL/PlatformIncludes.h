@@ -15,6 +15,7 @@
 
 //Generic Platform Include
 #include "../GenericPlatform/GenericPlatformMemory.h"
+#include "PlatformProcess.h"
 
 #if PLATFORM_WINDOWS
 	#include "../Windows/WindowsPlatformIncludes.h"
