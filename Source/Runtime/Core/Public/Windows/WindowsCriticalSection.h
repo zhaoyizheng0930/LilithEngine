@@ -1,7 +1,9 @@
 #pragma once
+#include "../HAL/PlatformIncludes.h"
 
 class FWindowsCriticalSection
 {
+	CRITICAL_SECTION CriticalSection;
 public:
 
 	FORCEINLINE FWindowsCriticalSection()
@@ -41,8 +43,6 @@ public:
 	}
 protected:
 private:
-	FWindowsCriticalSection(const FWindowsCriticalSection&);
-	FWindowsCriticalSection& operator=(const FWindowsCriticalSection&);
-private:
-	CRITICAL_SECTION CriticalSection;
+	FWindowsCriticalSection(const FWindowsCriticalSection&) {}
+	FWindowsCriticalSection& operator=(const FWindowsCriticalSection&) {}
 };

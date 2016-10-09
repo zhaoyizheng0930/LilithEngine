@@ -1,5 +1,6 @@
 #pragma once
 #include "../PlatformIncludes.h"
+#include "Event.h"
 
 enum EThreadPriority
 {
@@ -31,7 +32,7 @@ public:
 		const TCHAR* ThreadName,
 		uint32 InStackSize = 0,
 		EThreadPriority InThreadPri = TPri_Normal,
-		uint64 InThreadAffinityMask = FPlatformAffinity::GetNoAffinityMask());
+		uint64 InThreadAffinityMask = 0xFFFFFFFFFFFFFFFF);
 
 	virtual void SetThreadPriority(EThreadPriority NewPriority) = 0;
 
@@ -66,7 +67,7 @@ protected:
 
 	static FRunnableThread* GetRunnableThread()
 	{
-		FRunnableThread* RunnableThread = (FRunnableThread*)FPlatformTLS::GetTlsValue(RunnableTlsSlot);
+		FRunnableThread* RunnableThread = nullptr;// = (FRunnableThread*)FPlatformTLS::GetTlsValue(RunnableTlsSlot);
 		return RunnableThread;
 	}
 
@@ -78,7 +79,7 @@ protected:
 
 	uint64 ThreadAffinityMask;
 
-	std::vector<FTlsAutoCleanup*> TlsInstances;
+	//std::vector<FTlsAutoCleanup*> TlsInstances;
 
 	EThreadPriority ThreadPriority;
 

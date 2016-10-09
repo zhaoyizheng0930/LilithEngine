@@ -120,6 +120,27 @@
     <ClInclude Include="Public\HAL\Memory\MemoryBase.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Windows\WindowsCriticalSection.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\ThreadManager.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\WindowsRunnableThread.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\FakeThread.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\EventPool.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\SingleThreadEvent.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\HAL\Thread\WindowsEvent.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp">
@@ -162,6 +183,12 @@
       <Filter>Classes</Filter>
     </ClCompile>
     <ClCompile Include="Private\HAL\Memory\MallocTBB.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Thread\ThreadManager.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\HAL\Thread\WindowsRunnableThread.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,6 +4,9 @@
 #include "WindowsCriticalSection.h"
 #include "../HAL/Thread/WindowsRunnableThread.h"
 #include "../HAL/Thread/Event.h"
+#include "../HAL/Thread/WindowsEvent.h"
+#include "../HAL/Thread/SingleThreadEvent.h"
+#include "../HAL/Thread/EventPool.h"
 
 class FWindowsPlatformProcess
 	: public FGenericPlatformProcess
@@ -16,12 +19,26 @@ public:
 
 	static FEvent* GetSynchEventFromPool(bool bIsManualReset = false)
 	{
-
+		return bIsManualReset
+			? FEventPool<EEventPoolTypes::ManualReset>::Get().GetEventFromPool()
+			: FEventPool<EEventPoolTypes::AutoReset>::Get().GetEventFromPool();
 	}
 
 	static void ReturnSynchEventToPool(FEvent* Event)
 	{
+		if (!Event)
+		{
+			return;
+		}
 
+		if (Event->IsManualReset())
+		{
+			FEventPool<EEventPoolTypes::ManualReset>::Get().ReturnToPool(Event);
+		}
+		else
+		{
+			FEventPool<EEventPoolTypes::AutoReset>::Get().ReturnToPool(Event);
+		}
 	}
 
 	static FRunnableThread* CreateRunnableThread()
