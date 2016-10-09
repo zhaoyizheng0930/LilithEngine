@@ -2,6 +2,8 @@
 #include "Event.h"
 #include "Runnable.h"
 #include "RunnableThread.h"
+#include "../PlatformIncludes.h"
+#include "QueuedWork.h"
 
 class FQueuedThread
 	: public FRunnable
@@ -12,7 +14,7 @@ public:
 		, QueuedWork(nullptr)
 		, OwningThreadPool(nullptr)
 		, Thread(nullptr)
-	{ }
+	{ } 
 
 	virtual bool Create(class FQueuedThreadPool* InPool, uint32 InStackSize = 0, EThreadPriority ThreadPriority = TPri_Normal);
 
@@ -20,7 +22,11 @@ public:
 
 	void DoWork(IQueuedWork* InQueuedWork);
 
+public:
+	static int ThreadIndex;
+
 protected:
+	/** The event that tells the thread there is work to do. */
 	FEvent* DoWorkEvent;
 
 	IQueuedWork* volatile QueuedWork;
@@ -33,4 +39,6 @@ protected:
 	virtual uint32 Run() override;
 
 private:
+
+	std::string ThreadName;
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "../PlatformIncludes.h"
 
 enum EThreadPriority
 {

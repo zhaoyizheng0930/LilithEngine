@@ -12,6 +12,8 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 //Generic Platform Include
 #include "../GenericPlatform/GenericPlatformMemory.h"
