@@ -31,7 +31,7 @@ protected:
 
 	IQueuedWork* volatile QueuedWork;
 
-	class FQueuedThreadPool* OwningThreadPool;
+	FQueuedThreadPool* OwningThreadPool;
 
 	//MyThread
 	FRunnableThread* Thread;

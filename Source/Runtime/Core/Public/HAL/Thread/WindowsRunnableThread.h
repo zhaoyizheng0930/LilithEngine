@@ -7,7 +7,7 @@ public:
 	FRunnableThreadWin();
 	~FRunnableThreadWin();
 
-	static ::DWORD STDCALL _ThreadProc(LPVOID pThis)
+	static DWORD __stdcall _ThreadProc(LPVOID pThis)
 	{
 		return ((FRunnableThreadWin*)pThis)->GuardedRun();
 	}
