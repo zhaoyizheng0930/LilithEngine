@@ -1,4 +1,4 @@
-#include "../../CorePrivatePCH.h"
+#include "CorePrivatePCH.h"
 #include "../../../Public/HAL/Memory/LilithMemory.h"
 
 void FMemory::GCreateMalloc()

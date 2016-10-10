@@ -138,7 +138,7 @@
     <ClInclude Include="Public\HAL\Thread\WindowsEvent.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="Private\CorePrivatePCH.h">
+    <ClInclude Include="Public\CorePrivatePCH.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

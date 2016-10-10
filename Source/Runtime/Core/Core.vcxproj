@@ -82,8 +82,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;$(SolutionDir)/../Source\Runtime\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>CorePrivatePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -111,8 +111,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;$(SolutionDir)/../Source\Runtime\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>CorePrivatePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -139,9 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Private\CorePrivatePCH.h" />
     <ClInclude Include="Public\Core.h" />
     <ClInclude Include="Public\CoreGlobals.h" />
+    <ClInclude Include="Public\CorePrivatePCH.h" />
     <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatform.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatformMemory.h" />

@@ -1,4 +1,4 @@
-#include "../CorePrivatePCH.h"
+#include "CorePrivatePCH.h"
 #include "../../Public/Windows/WindowsApplication.h"
 #include "../../Public/Windows/WindowsWindow.h"
 #include "../../Public/HAL/Memory/LilithMemory.h"

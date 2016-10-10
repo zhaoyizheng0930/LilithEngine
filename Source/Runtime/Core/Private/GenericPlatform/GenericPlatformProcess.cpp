@@ -1,4 +1,4 @@
-#include "../CorePrivatePCH.h"
+#include "CorePrivatePCH.h"
 #include "../../Public/GenericPlatform/GenericPlatformProcess.h"
 
 bool FGenericPlatformProcess::SupportsMultithreading()

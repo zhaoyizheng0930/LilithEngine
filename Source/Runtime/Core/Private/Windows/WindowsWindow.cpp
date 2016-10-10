@@ -1,4 +1,4 @@
-#include "../CorePrivatePCH.h"
+#include "CorePrivatePCH.h"
 #include "../../Public/Windows/WindowsWindow.h"
 
 const TCHAR FWindowsWindow::AppWindowClass[] = TEXT("LilithWindow");
