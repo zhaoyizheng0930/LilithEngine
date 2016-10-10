@@ -36,11 +36,11 @@ void FRunnableThreadWin::WaitForCompletion()
 
 }
 
-void FRunnableThreadWin::GuardedRun()
+uint32 FRunnableThreadWin::GuardedRun()
 {
 	FPlatformProcess::SetThreadAffinityMask(ThreadAffinityMask);
 
-	Run();
+	return Run();
 }
 
 uint32 FRunnableThreadWin::Run()

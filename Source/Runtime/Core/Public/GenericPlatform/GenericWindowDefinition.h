@@ -1,5 +1,6 @@
 #pragma once
-#include "../Core.h"
+#include "../HAL/Platform.h"
+#include <string>
 
 struct FGenericWindowDefinition
 {

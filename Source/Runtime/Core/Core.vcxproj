@@ -189,6 +189,7 @@
     <ClCompile Include="Private\HAL\Thread\WindowsRunnableThread.cpp" />
     <ClCompile Include="Private\Windows\WindowsApplication.cpp" />
     <ClCompile Include="Private\Windows\WindowsPlatformMemory.cpp" />
+    <ClCompile Include="Private\Windows\WindowsPlatformProcess.cpp" />
     <ClCompile Include="Private\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>

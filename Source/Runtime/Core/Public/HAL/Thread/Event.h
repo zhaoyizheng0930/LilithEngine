@@ -1,5 +1,5 @@
 #pragma once
-#include "../PlatformIncludes.h"
+#include "../../Core.h"
 
 #define MAX_uint32		((uint32)	0xffffffff)
 

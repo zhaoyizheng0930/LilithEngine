@@ -1,5 +1,4 @@
 #pragma once
-#include "../PlatformIncludes.h"
 
 class FThreadManager
 {

@@ -14,12 +14,13 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <stack>
 
 //Generic Platform Include
 #include "../GenericPlatform/GenericPlatformMemory.h"
-#include "PlatformProcess.h"
 
 #if PLATFORM_WINDOWS
 	#include "../Windows/WindowsPlatformIncludes.h"
-#elif PLATFORM_PS4
 #endif
+
+#include "PlatformProcess.h"

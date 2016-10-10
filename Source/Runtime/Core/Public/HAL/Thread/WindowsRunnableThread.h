@@ -39,7 +39,7 @@ public:
 
 	virtual void WaitForCompletion();
 
-	void GuardedRun();
+	uint32 GuardedRun();
 
 	uint32 Run();
 protected:

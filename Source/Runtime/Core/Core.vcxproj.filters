@@ -191,6 +191,9 @@
     <ClCompile Include="Private\HAL\Thread\WindowsRunnableThread.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Private\Windows\WindowsPlatformProcess.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Public\HAL\Memory\FMemory.inl">

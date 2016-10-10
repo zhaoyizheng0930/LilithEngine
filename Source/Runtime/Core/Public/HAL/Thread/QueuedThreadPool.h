@@ -1,7 +1,6 @@
 #pragma once
 #include "QueuedWork.h"
 #include "QueuedThread.h"
-#include "../PlatformIncludes.h"
 
 class FScopeLock
 {

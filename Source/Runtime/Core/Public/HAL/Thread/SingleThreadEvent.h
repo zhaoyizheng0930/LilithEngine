@@ -1,6 +1,5 @@
 #pragma once
 #include "Event.h"
-#include "../PlatformIncludes.h"
 
 class FSingleThreadEvent :public FEvent
 {

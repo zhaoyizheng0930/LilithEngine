@@ -46,3 +46,5 @@ private:
 	FWindowsCriticalSection(const FWindowsCriticalSection&) {}
 	FWindowsCriticalSection& operator=(const FWindowsCriticalSection&) {}
 };
+
+typedef FWindowsCriticalSection FCriticalSection;

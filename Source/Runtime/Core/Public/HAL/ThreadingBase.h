@@ -167,5 +167,5 @@ public:
 		}
 		return work;
 	}
-}
+};
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "Event.h"
 
 enum class EEventPoolTypes
 {

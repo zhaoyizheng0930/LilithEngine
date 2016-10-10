@@ -2,7 +2,6 @@
 #include "Event.h"
 #include "Runnable.h"
 #include "RunnableThread.h"
-#include "../PlatformIncludes.h"
 #include "QueuedWork.h"
 
 class FQueuedThread
