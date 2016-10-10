@@ -1,10 +1,9 @@
 #pragma once
 #include "../GenericPlatform/GenericApplication.h"
-#include "WindowsPlatformIncludes.h"
 
 extern HINSTANCE hInstance;
 
-//extern FWindowsApplication* WindowsApplication;
+extern void CreateDefaultApplication(const HINSTANCE InstanceHandle, const HICON IconHandle);
 
 class FWindowsApplication
 	: public GenericApplication

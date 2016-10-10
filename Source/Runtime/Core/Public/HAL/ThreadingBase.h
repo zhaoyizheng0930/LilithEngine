@@ -1,8 +1,5 @@
 #pragma once
-#include "../Core.h"
-
 #include "Thread/QueuedThreadPool.h"
-#include "PlatformIncludes.h"
 
 extern FQueuedThreadPool* GThreadPool;
 
@@ -149,6 +146,7 @@ public:
 			delete *iter;
 			QueuedWork.erase(iter);
 		}
+		return true;
 	}
 
 	virtual IQueuedWork* ReturnToPoolOrGetNextJob(FQueuedThread* InQueuedThread) override

@@ -1,7 +1,7 @@
 //TODO_SUPPORT windows process multithread later
 #pragma once
 #include "../GenericPlatform/GenericPlatformProcess.h"
-#include "../HAL/Thread/EventPool.h"
+#include "../HAL/Thread/Event.h"
 #include "../HAL/Thread/RunnableThread.h"
 #include "../HAL/Thread/WindowsEvent.h"
 #include "../HAL/Thread/SingleThreadEvent.h"

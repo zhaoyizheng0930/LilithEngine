@@ -84,9 +84,6 @@
     <ClInclude Include="Public\Windows\WindowsPlatformIncludes.h">
       <Filter>Public\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Public\HAL\PlatformProcess.h">
-      <Filter>Public</Filter>
-    </ClInclude>
     <ClInclude Include="Public\HAL\ThreadingBase.h">
       <Filter>Public</Filter>
     </ClInclude>
@@ -139,6 +136,9 @@
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Public\HAL\Thread\WindowsEvent.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\CorePrivatePCH.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

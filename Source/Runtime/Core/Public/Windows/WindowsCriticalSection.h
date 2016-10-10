@@ -1,5 +1,4 @@
 #pragma once
-#include "../HAL/PlatformIncludes.h"
 
 class FWindowsCriticalSection
 {

@@ -1,3 +1,4 @@
+#include "../../CorePrivatePCH.h"
 #include "../../../Public/HAL/Memory/LilithMemory.h"
 
 void FMemory::GCreateMalloc()
@@ -20,7 +21,7 @@ void* FMemory::ReallocExternal(void* Original, SIZE_T Count, uint32 Alignment)
 	{
 		GCreateMalloc();
 	}
-	GMalloc->Realloc(Original, Count, Alignment);
+	return GMalloc->Realloc(Original, Count, Alignment);
 }
 
 void FMemory::FreeExternal(void* Original)

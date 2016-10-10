@@ -1,3 +1,4 @@
+#include "CorePrivatePCH.h"
 #include "../Public/Core.h"
 //Global Var
 bool					GIsRequestingExit = false;

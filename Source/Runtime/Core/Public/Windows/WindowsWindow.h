@@ -1,7 +1,6 @@
 #pragma once
 #include "../GenericPlatform/GenericWindow.h"
 #include "WindowsApplication.h"
-#include "../HAL/Platform.h"
 
 class FWindowsWindow :public FGenericWindow
 {

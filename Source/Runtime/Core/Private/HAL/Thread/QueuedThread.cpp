@@ -1,11 +1,12 @@
+#include "../../CorePrivatePCH.h"
 #include "../../../Public/HAL/Thread/QueuedThread.h"
 
 int FQueuedThread::ThreadIndex = 0;
 
-bool FQueuedThread::Create(class FQueuedThreadPool* InPool, uint32 InStackSize = 0, EThreadPriority ThreadPriority = TPri_Normal)
+bool FQueuedThread::Create(class FQueuedThreadPool* InPool, uint32 InStackSize, EThreadPriority ThreadPriority)
 {
 	OwningThreadPool = InPool;
-	stringstream ss;
+	std::stringstream ss;
 	ss << ThreadIndex;
 	ThreadName = "PoolThread " + ss.str();
 	ThreadIndex++;

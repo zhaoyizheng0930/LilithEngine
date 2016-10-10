@@ -1,5 +1,6 @@
 #pragma once
 #include "RunnableThread.h"
+#include "Runnable.h"
 
 class FRunnableThreadWin :public FRunnableThread
 {

@@ -15,12 +15,14 @@
 #include <iostream>
 #include <sstream>
 #include <stack>
+#include <sstream>
 
 //Generic Platform Include
 #include "../GenericPlatform/GenericPlatformMemory.h"
+#include "../GenericPlatform/GenericPlatformProcess.h"
+#include "../GenericPlatform/GenericApplication.h"
+#include "../GenericPlatform/GenericWindow.h"
 
-#if PLATFORM_WINDOWS
+#ifdef PLATFORM_WINDOWS
 	#include "../Windows/WindowsPlatformIncludes.h"
 #endif
-
-#include "PlatformProcess.h"

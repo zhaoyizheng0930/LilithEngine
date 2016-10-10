@@ -2,6 +2,7 @@
 
 #include "../GenericPlatform/GenericPlatform.h"
 
+
 struct FWindowsPlatformTypes : public FGenericPlatformTypes
 {
 #ifdef _WIN64

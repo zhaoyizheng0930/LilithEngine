@@ -1,3 +1,4 @@
+#include "../../CorePrivatePCH.h"
 #include "../../../Public/HAL/Thread/WindowsRunnableThread.h"
 #include "../../../Public/HAL/Thread/ThreadManager.h"
 
@@ -21,14 +22,14 @@ void FRunnableThreadWin::SetThreadPriority(EThreadPriority NewPriority)
 	}
 }
 
-void FRunnableThreadWin::Suspend(bool bShouldPause = true)
+void FRunnableThreadWin::Suspend(bool bShouldPause)
 {
 
 }
 
-bool FRunnableThreadWin::Kill(bool bShouldWait = true)
+bool FRunnableThreadWin::Kill(bool bShouldWait)
 {
-
+	return true;
 }
 
 void FRunnableThreadWin::WaitForCompletion()
@@ -66,8 +67,8 @@ uint32 FRunnableThreadWin::Run()
 }
 
 bool FRunnableThreadWin::CreateInternal(FRunnable* InRunnable, const TCHAR* InThreadName,
-	uint32 InStackSize = 0,
-	EThreadPriority InThreadPri = TPri_Normal, uint64 InThreadAffinityMask = 0)
+	uint32 InStackSize,
+	EThreadPriority InThreadPri, uint64 InThreadAffinityMask)
 {
 	Runnable = InRunnable;
 

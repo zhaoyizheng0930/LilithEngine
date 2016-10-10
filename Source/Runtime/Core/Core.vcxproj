@@ -83,6 +83,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>CorePrivatePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -110,6 +112,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>CorePrivatePCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Private\CorePrivatePCH.h" />
     <ClInclude Include="Public\Core.h" />
     <ClInclude Include="Public\CoreGlobals.h" />
     <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
@@ -148,7 +153,6 @@
     <ClInclude Include="Public\HAL\Memory\MemoryBase.h" />
     <ClInclude Include="Public\HAL\Platform.h" />
     <ClInclude Include="Public\HAL\PlatformIncludes.h" />
-    <ClInclude Include="Public\HAL\PlatformProcess.h" />
     <ClInclude Include="Public\HAL\PlatformTLS.h" />
     <ClInclude Include="Public\HAL\ThreadingBase.h" />
     <ClInclude Include="Public\HAL\Thread\Event.h" />

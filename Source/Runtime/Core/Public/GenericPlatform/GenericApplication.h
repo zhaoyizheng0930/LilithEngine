@@ -1,15 +1,13 @@
 #pragma once
 #include "GenericWindow.h"
-#include "GenericWindowDefinition.h"
 
-extern void CreateDefaultApplication(const HINSTANCE InstanceHandle, const HICON IconHandle);
 
 class GenericApplication
 {
 public:
 	GenericApplication() {}
 
-	virtual FGenericWindow* MakeWindow() { return NULL; }
+	virtual FGenericWindow* MakeWindow() { return nullptr; }
 
 	virtual void InitializeWindow(FGenericWindow* Window, FGenericWindowDefinition* InDefinition) { }
 

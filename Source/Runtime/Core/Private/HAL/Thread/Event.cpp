@@ -1,3 +1,4 @@
+#include "../../CorePrivatePCH.h"
 #include "../../../Public/HAL/Thread/Event.h"
 
 void FEvent::AdvanceStats()

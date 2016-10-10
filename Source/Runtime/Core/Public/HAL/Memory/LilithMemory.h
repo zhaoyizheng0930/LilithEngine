@@ -1,7 +1,5 @@
 #pragma once
-#include "../PlatformIncludes.h"
 #include "MemoryBase.h"
-#include "FMemory.inl"
 
 struct FMemory
 {
@@ -118,3 +116,5 @@ struct FMemory
 		static SIZE_T GetAllocSizeExternal(void* Original);
 		static SIZE_T QuantizeSizeExternal(SIZE_T Count, uint32 Alignment = DEFAULT_ALIGNMENT);
 };
+
+#include "FMemory.inl"

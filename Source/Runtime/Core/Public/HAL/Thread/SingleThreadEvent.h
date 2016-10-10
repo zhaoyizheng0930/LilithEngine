@@ -31,6 +31,7 @@ public:
 	bool Wait(uint32 WaitTime, const bool bIgnoreThreadIdleStats = false)
 	{
 		bTriggered = bManualReset;
+		return true;
 	}
 protected:
 private:

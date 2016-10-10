@@ -1,3 +1,4 @@
+#include "../CorePrivatePCH.h"
 #include "../../Public/Windows/WindowsApplication.h"
 #include "../../Public/Windows/WindowsWindow.h"
 #include "../../Public/HAL/Memory/LilithMemory.h"
@@ -101,8 +102,6 @@ int32 FWindowsApplication::NumberOfWorkerThreadsToSpawn()
 
 	int32 NumberOfCores = FWindowsApplication::NumberOfCores();
 	return max(min(NumberOfCores - 1, MaxThreads), 1);
-
-
 }
 
 LRESULT CALLBACK FWindowsApplication::AppWndProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam)

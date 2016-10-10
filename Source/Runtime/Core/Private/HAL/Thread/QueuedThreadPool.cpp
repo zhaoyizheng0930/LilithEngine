@@ -1,4 +1,5 @@
-#include "../../../Public/HAL/Thread/QueuedThreadPool.h"
+#include "../../CorePrivatePCH.h"
+#include "../../../Public/HAL/ThreadingBase.h"
 
 
 FQueuedThreadPool* FQueuedThreadPool::Allocate()

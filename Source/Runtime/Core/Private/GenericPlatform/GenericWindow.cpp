@@ -1,3 +1,4 @@
+#include "../CorePrivatePCH.h"
 #include "../../Public/GenericPlatform/GenericWindow.h"
 
 FGenericWindow::FGenericWindow()

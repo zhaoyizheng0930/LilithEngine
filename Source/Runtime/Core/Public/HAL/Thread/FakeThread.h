@@ -17,7 +17,7 @@ public:
 
 	virtual bool Kill(bool bShouldWait = true)
 	{
-
+		return true;
 	}
 
 	virtual void WaitForCompletion()

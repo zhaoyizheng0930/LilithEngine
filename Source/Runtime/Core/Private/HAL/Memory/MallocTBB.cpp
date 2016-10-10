@@ -1,3 +1,4 @@
+#include "../../CorePrivatePCH.h"
 #include "../../../Public/HAL/Memory/MallocTBB.h"
 #include "tbb/scalable_allocator.h"
 
@@ -20,6 +21,8 @@ void* FMallocTBB::Malloc(SIZE_T Size, uint32 Alignment)
 	{
 		OutOfMemory(Size, Alignment);
 	}
+
+	return NewPtr;
 }
 
 void* FMallocTBB::Realloc(void* Ptr, SIZE_T NewSize, uint32 Alignment)

@@ -3,6 +3,7 @@
 #include "Runnable.h"
 #include "RunnableThread.h"
 #include "QueuedWork.h"
+#include "QueuedThreadPool.h"
 
 class FQueuedThread
 	: public FRunnable
