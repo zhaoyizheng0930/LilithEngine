@@ -23,5 +23,8 @@
     <ClInclude Include="Public\RenderingThread.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\RenderCorePCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

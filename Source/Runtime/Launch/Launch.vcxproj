@@ -84,7 +84,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\ShaderCore\Public;$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Engine\Public;$(SolutionDir)/../Source\Editor\UnrealEd\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\ShaderCore\Public;$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Engine\Public;$(SolutionDir)/../Source\Editor\LilithEd\Public;$(SolutionDir)/../Source\Runtime\Launch\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>LaunchPCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -113,8 +115,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\ShaderCore\Public;$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Engine\Public;$(SolutionDir)/../Source\Editor\UnrealEd\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\ShaderCore\Public;$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Engine\Public;$(SolutionDir)/../Source\Editor\LilithEd\Public;$(SolutionDir)/../Source\Runtime\Launch\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>LaunchPCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -148,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\LaunchEngineLoop.h" />
+    <ClInclude Include="Public\LaunchPCH.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

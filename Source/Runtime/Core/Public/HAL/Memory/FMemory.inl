@@ -1,3 +1,4 @@
+#pragma once
 
 void* FMemory::Malloc(SIZE_T Count, uint32 Alignment)
 {

@@ -1,4 +1,5 @@
-#include "../Public/LilithEd.h"
+#include "LilithEdPCH.h"
+#include "LilithEd.h"
 #include "../../../Runtime/Engine/Public/UnrealEngine.h"
 #include "../../../Editor/MainFrame/Public/MainFrame.h"
 #include "GenericPlatform/GenericApplication.h"

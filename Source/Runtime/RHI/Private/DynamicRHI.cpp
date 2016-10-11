@@ -1,3 +1,4 @@
+#include "RHIPCH.h"
 #include "../Public/RHI.h"
 #include "../Public/DynamicRHI.h"
 

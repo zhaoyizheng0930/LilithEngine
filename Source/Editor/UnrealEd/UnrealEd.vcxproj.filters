@@ -15,13 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Public\LilithEd.h">
-      <Filter>Public</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Private\LilithEd.cpp">
+    <ClCompile Include="..\LilithEd\Private\LilithEd.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\LilithEd\Public\LilithEd.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LilithEd\Public\LilithEdPCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

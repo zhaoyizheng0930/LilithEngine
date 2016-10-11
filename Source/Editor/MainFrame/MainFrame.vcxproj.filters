@@ -18,6 +18,9 @@
     <ClInclude Include="Public\MainFrame.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\MainFramePCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\MainFrame.cpp">

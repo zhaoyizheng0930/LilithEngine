@@ -1,5 +1,8 @@
-#include "CorePrivatePCH.h"
-#include "../../../Public/HAL/Memory/LilithMemory.h"
+#include "CorePCH.h"
+#include "HAL/Memory/LilithMemory.h"
+#include "HAL/Memory/FMemory.inl"
+
+FMalloc* GMalloc = nullptr;
 
 void FMemory::GCreateMalloc()
 {

@@ -19,9 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9DF07E8F-EBD7-4CAA-A9A0-BFD1BEA9BB19}</ProjectGuid>
-    <RootNamespace>Core</RootNamespace>
+    <ProjectGuid>{C353D745-B0B1-43E4-A0F5-BA3A084E9B3A}</ProjectGuid>
+    <RootNamespace>UnrealEd</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>LilithEd</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -82,9 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;$(SolutionDir)/../Source\Runtime\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>CorePCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -111,9 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\ThirdParty\IntelTBB\IntelTBB-4.4u3\include;$(SolutionDir)/../Source\Runtime\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>CorePCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -139,65 +136,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Public\Core.h" />
-    <ClInclude Include="Public\CoreGlobals.h" />
-    <ClInclude Include="Public\CorePCH.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatform.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatformMemory.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericPlatformProcess.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericWindow.h" />
-    <ClInclude Include="Public\GenericPlatform\GenericWindowDefinition.h" />
-    <ClInclude Include="Public\HAL\Memory\LilithMemory.h" />
-    <ClInclude Include="Public\HAL\Memory\MallocTBB.h" />
-    <ClInclude Include="Public\HAL\Memory\MemoryBase.h" />
-    <ClInclude Include="Public\HAL\Platform.h" />
-    <ClInclude Include="Public\HAL\PlatformIncludes.h" />
-    <ClInclude Include="Public\HAL\PlatformTLS.h" />
-    <ClInclude Include="Public\HAL\ThreadingBase.h" />
-    <ClInclude Include="Public\HAL\Thread\Event.h" />
-    <ClInclude Include="Public\HAL\Thread\EventPool.h" />
-    <ClInclude Include="Public\HAL\Thread\FakeThread.h" />
-    <ClInclude Include="Public\HAL\Thread\QueuedThread.h" />
-    <ClInclude Include="Public\HAL\Thread\QueuedThreadPool.h" />
-    <ClInclude Include="Public\HAL\Thread\QueuedWork.h" />
-    <ClInclude Include="Public\HAL\Thread\Runnable.h" />
-    <ClInclude Include="Public\HAL\Thread\RunnableThread.h" />
-    <ClInclude Include="Public\HAL\Thread\SingleThreadEvent.h" />
-    <ClInclude Include="Public\HAL\Thread\SingleThreadRunnable.h" />
-    <ClInclude Include="Public\HAL\Thread\ThreadManager.h" />
-    <ClInclude Include="Public\HAL\Thread\WindowsEvent.h" />
-    <ClInclude Include="Public\HAL\Thread\WindowsRunnableThread.h" />
-    <ClInclude Include="Public\Windows\WindowsApplication.h" />
-    <ClInclude Include="Public\Windows\WindowsCriticalSection.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatform.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformIncludes.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformMemory.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformProcess.h" />
-    <ClInclude Include="Public\Windows\WindowsPlatformTLS.h" />
-    <ClInclude Include="Public\Windows\WindowsWindow.h" />
+    <ClInclude Include="Public\LilithEd.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private\Core.cpp" />
-    <ClCompile Include="Private\GenericPlatform\GenericApplication.cpp" />
-    <ClCompile Include="Private\GenericPlatform\GenericPlatformProcess.cpp" />
-    <ClCompile Include="Private\GenericPlatform\GenericWindow.cpp" />
-    <ClCompile Include="Private\HAL\Memory\LilithMemory.cpp" />
-    <ClCompile Include="Private\HAL\Memory\MallocTBB.cpp" />
-    <ClCompile Include="Private\HAL\ThreadingBase.cpp" />
-    <ClCompile Include="Private\HAL\Thread\Event.cpp" />
-    <ClCompile Include="Private\HAL\Thread\FRunnableThread.cpp" />
-    <ClCompile Include="Private\HAL\Thread\QueuedThread.cpp" />
-    <ClCompile Include="Private\HAL\Thread\QueuedThreadPool.cpp" />
-    <ClCompile Include="Private\HAL\Thread\ThreadManager.cpp" />
-    <ClCompile Include="Private\HAL\Thread\WindowsRunnableThread.cpp" />
-    <ClCompile Include="Private\Windows\WindowsApplication.cpp" />
-    <ClCompile Include="Private\Windows\WindowsPlatformMemory.cpp" />
-    <ClCompile Include="Private\Windows\WindowsPlatformProcess.cpp" />
-    <ClCompile Include="Private\Windows\WindowsWindow.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Public\HAL\Memory\FMemory.inl" />
+    <ClCompile Include="Private\LilithEd.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

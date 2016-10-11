@@ -1,4 +1,5 @@
-#include "../Public/MainFrame.h"
+#include "MainFramePCH.h"
+#include "MainFrame.h"
 #include "HAL/Platform.h"
 #include "GenericPlatform/GenericWindowDefinition.h"
 #include "GenericPlatform/GenericApplication.h"

@@ -1,4 +1,4 @@
-#include "CorePrivatePCH.h"
+#include "CorePCH.h"
 #include "../../Public/Windows/WindowsPlatformMemory.h"
 #include "../../Public/HAL/Memory/MallocTBB.h"
 

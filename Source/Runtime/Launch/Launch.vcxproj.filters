@@ -28,5 +28,8 @@
     <ClInclude Include="Public\LaunchEngineLoop.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\LaunchPCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

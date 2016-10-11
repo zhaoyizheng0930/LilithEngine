@@ -1,3 +1,4 @@
+#include "RenderCorePCH.h"
 #include "../Public/RenderingThread.h"
 
 
