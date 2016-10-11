@@ -20,13 +20,17 @@ public:
 
 	FEvent* GetEventFromPool()
 	{
-		FEvent* Result = Pool.top();
-
-		if (!Result)
+		FEvent* Result = nullptr;
+		if (Pool.size() > 0)
+		{
+			Result = Pool.top();
+			Pool.pop();
+		}
+		else
 		{
 			Result = FPlatformProcess::CreateSynchEvent();
 		}
-		Pool.pop();
+
 		return Result;
 	}
 

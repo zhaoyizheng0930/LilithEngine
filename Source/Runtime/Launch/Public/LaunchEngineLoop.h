@@ -40,4 +40,5 @@ public:
 	static void AppExit();
 protected:
 private:
+	void CreateMultithread();
 };

@@ -16,6 +16,11 @@ FEngineLoop::FEngineLoop()
 
 int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalCommandline)
 {
+	return 0;
+}
+
+int32 FEngineLoop::PreInit(const char* CmdLine)
+{
 	//Init LogConsole
 
 	//EnableBackLog
@@ -34,18 +39,7 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 	LoadCoreModules();
 
 	//Multithread------------------------------------------------------------------------------
-	if (FPlatformProcess::SupportsMultithreading())
-	{
-		GThreadPool = FQueuedThreadPool::Allocate();
-		int NumThreadsInThreadPool = FPlatformApplication::NumberOfWorkerThreadsToSpawn();
-
-		GThreadPool->Create(NumThreadsInThreadPool);
-
-		//Only in editor. if you need to build something in editor,Open it.
-		//GLargeThreadPool = FQueuedThreadPool::Allocate();		//UseFor Build lighting in editor run.
-		//int32 NumThreadsInLargeThreadPool = FMath::Max(FPlatformMisc::NumberOfCoresIncludingHyperthreads() - 2, 2);
-		//GLargeThreadPool->Create(NumThreadsInLargeThreadPool)
-	}
+	CreateMultithread();
 	//Multithread------------------------------------------------------------------------------
 
 	LoadPreInitModules();
@@ -81,20 +75,6 @@ int32 FEngineLoop::PreInit(int32 ArgC, char* ArgV[], const char* AdditionalComma
 	return 0;
 }
 
-int32 FEngineLoop::PreInit(const char* CmdLine)
-{
-	// Initialize the RHI.
-	RHIInit(true);
-
-	RHIPostInit();
-
-	if (GUseThreadedRendering)
-	{
-
-	}
-	return 0;
-}
-
 void FEngineLoop::LoadPreInitModules()
 {
 
@@ -102,7 +82,7 @@ void FEngineLoop::LoadPreInitModules()
 
 void FEngineLoop::LoadCoreModules()
 {
-
+	//UseLib So Support it later.
 }
 
 bool FEngineLoop::LoadStartupCoreModules()
@@ -164,4 +144,20 @@ void FEngineLoop::AppPreExit()
 void FEngineLoop::AppExit()
 {
 
+}
+
+void FEngineLoop::CreateMultithread()
+{
+	if (FPlatformProcess::SupportsMultithreading())
+	{
+		GThreadPool = FQueuedThreadPool::Allocate();
+		int NumThreadsInThreadPool = FPlatformApplication::NumberOfWorkerThreadsToSpawn();
+
+		GThreadPool->Create(NumThreadsInThreadPool);
+
+		//Only in editor. if you need to build something in editor,Open it.
+		//GLargeThreadPool = FQueuedThreadPool::Allocate();		//UseFor Build lighting in editor run.
+		//int32 NumThreadsInLargeThreadPool = FMath::Max(FPlatformMisc::NumberOfCoresIncludingHyperthreads() - 2, 2);
+		//GLargeThreadPool->Create(NumThreadsInLargeThreadPool)
+	}
 }

@@ -11,8 +11,8 @@ bool FQueuedThread::Create(class FQueuedThreadPool* InPool, uint32 InStackSize, 
 	ThreadName = "PoolThread " + ss.str();
 	ThreadIndex++;
 
-	Thread = FRunnableThread::Create(this, ThreadName.c_str(), InStackSize, ThreadPriority);
 	DoWorkEvent = FPlatformProcess::GetSynchEventFromPool();
+	Thread = FRunnableThread::Create(this, ThreadName.c_str(), InStackSize, ThreadPriority);
 	return true;
 }
 

@@ -57,7 +57,7 @@ FEvent* FWindowsPlatformProcess::CreateSynchEvent(bool bIsManualReset)
 		Event = new FSingleThreadEvent();
 	}
 
-	if (Event->Create(bIsManualReset))
+	if (!Event->Create(bIsManualReset))
 	{
 		delete Event;
 		Event = NULL;
