@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DynamicRHI.h"
+
 /** Initializes the RHI. */
 extern void RHIInit(bool bHasEditorToken);
 

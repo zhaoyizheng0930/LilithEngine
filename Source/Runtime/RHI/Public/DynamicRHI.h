@@ -18,5 +18,6 @@ protected:
 private:
 };
 
-/** A global pointer to the dynamically bound RHI implementation. */
 extern FDynamicRHI* GDynamicRHI;
+
+FDynamicRHI* PlatformCreateDynamicRHI();

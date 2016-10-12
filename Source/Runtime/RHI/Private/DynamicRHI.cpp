@@ -6,7 +6,10 @@ FDynamicRHI* GDynamicRHI = nullptr;
 
 void RHIInit(bool bHasEditorToken)
 {
+	if (GDynamicRHI == nullptr)
+	{
 
+	}
 }
 
 void RHIPostInit()

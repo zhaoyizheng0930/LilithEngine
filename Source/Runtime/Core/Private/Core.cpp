@@ -6,3 +6,7 @@ bool					GIsRequestingExit = false;
 uint32					GGameThreadId = 0;
 
 bool					GbUseHyperthreads = true;
+
+bool					GUseThreadedRendering = true;
+
+bool					GRHISupportsRHIThread = true;

@@ -64,7 +64,13 @@ int32 FEngineLoop::PreInit(const char* CmdLine)
 	RHIPostInit();
 
 	//if Use ThreadRendering
-	StartRenderingThread();
+	if (GUseThreadedRendering)
+	{
+		if (GRHISupportsRHIThread)
+		{
+			StartRenderingThread();
+		}
+	}
 
 	//TODO:Other things
 
