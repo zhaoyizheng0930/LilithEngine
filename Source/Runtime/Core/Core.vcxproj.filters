@@ -141,6 +141,18 @@
     <ClInclude Include="Public\CorePCH.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Math\LilithMath.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Windows\WindowsPlatformMath.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\GenericPlatform\GenericPlatformMath.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Windows\XNA\xnamath.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp">
@@ -194,9 +206,27 @@
     <ClCompile Include="Private\Windows\WindowsPlatformProcess.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="Private\Math\LilithMath.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Windows\WindowsPlatformMath.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Public\HAL\Memory\FMemory.inl">
+      <Filter>Public</Filter>
+    </None>
+    <None Include="Public\Windows\XNA\xnamathconvert.inl">
+      <Filter>Public</Filter>
+    </None>
+    <None Include="Public\Windows\XNA\xnamathmatrix.inl">
+      <Filter>Public</Filter>
+    </None>
+    <None Include="Public\Windows\XNA\xnamathmisc.inl">
+      <Filter>Public</Filter>
+    </None>
+    <None Include="Public\Windows\XNA\xnamathvector.inl">
       <Filter>Public</Filter>
     </None>
   </ItemGroup>

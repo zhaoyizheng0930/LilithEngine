@@ -7,3 +7,4 @@
 #include "WindowsApplication.h"
 #include "WindowsCriticalSection.h"
 #include "WindowsPlatformProcess.h"
+#include "WindowsPlatformMath.h"

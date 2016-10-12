@@ -144,6 +144,7 @@
     <ClInclude Include="Public\CorePCH.h" />
     <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatform.h" />
+    <ClInclude Include="Public\GenericPlatform\GenericPlatformMath.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatformMemory.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatformProcess.h" />
     <ClInclude Include="Public\GenericPlatform\GenericWindow.h" />
@@ -168,14 +169,17 @@
     <ClInclude Include="Public\HAL\Thread\ThreadManager.h" />
     <ClInclude Include="Public\HAL\Thread\WindowsEvent.h" />
     <ClInclude Include="Public\HAL\Thread\WindowsRunnableThread.h" />
+    <ClInclude Include="Public\Math\LilithMath.h" />
     <ClInclude Include="Public\Windows\WindowsApplication.h" />
     <ClInclude Include="Public\Windows\WindowsCriticalSection.h" />
     <ClInclude Include="Public\Windows\WindowsPlatform.h" />
     <ClInclude Include="Public\Windows\WindowsPlatformIncludes.h" />
+    <ClInclude Include="Public\Windows\WindowsPlatformMath.h" />
     <ClInclude Include="Public\Windows\WindowsPlatformMemory.h" />
     <ClInclude Include="Public\Windows\WindowsPlatformProcess.h" />
     <ClInclude Include="Public\Windows\WindowsPlatformTLS.h" />
     <ClInclude Include="Public\Windows\WindowsWindow.h" />
+    <ClInclude Include="Public\Windows\XNA\xnamath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp" />
@@ -191,13 +195,19 @@
     <ClCompile Include="Private\HAL\Thread\QueuedThreadPool.cpp" />
     <ClCompile Include="Private\HAL\Thread\ThreadManager.cpp" />
     <ClCompile Include="Private\HAL\Thread\WindowsRunnableThread.cpp" />
+    <ClCompile Include="Private\Math\LilithMath.cpp" />
     <ClCompile Include="Private\Windows\WindowsApplication.cpp" />
+    <ClCompile Include="Private\Windows\WindowsPlatformMath.cpp" />
     <ClCompile Include="Private\Windows\WindowsPlatformMemory.cpp" />
     <ClCompile Include="Private\Windows\WindowsPlatformProcess.cpp" />
     <ClCompile Include="Private\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Public\HAL\Memory\FMemory.inl" />
+    <None Include="Public\Windows\XNA\xnamathconvert.inl" />
+    <None Include="Public\Windows\XNA\xnamathmatrix.inl" />
+    <None Include="Public\Windows\XNA\xnamathmisc.inl" />
+    <None Include="Public\Windows\XNA\xnamathvector.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
