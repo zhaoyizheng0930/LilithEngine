@@ -10,3 +10,5 @@ extern void RHIPostInit();
 
 /** Shuts down the RHI. */
 extern void RHIExit();
+
+extern FDynamicRHI* CreateRHI();

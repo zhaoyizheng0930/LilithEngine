@@ -5,32 +5,35 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Private">
+    <Filter Include="Classes">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Classes">
+    <Filter Include="Private">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Public\RHI.h">
-      <Filter>Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Public\RHIPCH.h">
-      <Filter>Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Public\DynamicRHI.h">
-      <Filter>Public</Filter>
-    </ClInclude>
+    <ClCompile Include="Private\WindowsD3D11Device.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private\DynamicRHI.cpp">
+    <ClInclude Include="Public\D3D11RHIPCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\WindowsD3D11Device.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11RHI.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11RHIBasePCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\WindowsD3D11DynamicRHI.h">
       <Filter>Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Private\WindowsDynamicRHI.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
+    </ClInclude>
   </ItemGroup>
 </Project>
