@@ -10,3 +10,7 @@ bool					GbUseHyperthreads = true;
 bool					GUseThreadedRendering = true;
 
 bool					GRHISupportsRHIThread = true;
+
+bool					GUseMultithreadDevice = true;
+
+bool					GUseD3DDebug = true;
