@@ -81,7 +81,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Windows\D3D11RHI\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Windows\D3D11RHI\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -104,7 +104,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Windows\D3D11RHI\Public;$(SolutionDir)/../Source\Runtime\RHI\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\Windows\D3D11RHI\Public;$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>D3D11RHIPCH.h</PrecompiledHeaderFile>
     </ClCompile>

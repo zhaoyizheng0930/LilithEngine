@@ -34,7 +34,7 @@ bool SafeTestCreateD3D11Device(IDXGIAdapter* Adapter,D3D_FEATURE_LEVEL MaxFeatur
 }
 
 //Device check
-void FindAdaptor(FD3D11Adapter* ChosenAdaptor)
+void FindAdaptor(FD3D11Adapter& ChosenAdaptor , DXGI_ADAPTER_DESC& ChosenDescription)
 {
 	IDXGIFactory1* DXGIFactory1;
 	SafeCreateDXGIFactory(&DXGIFactory1);
@@ -56,16 +56,16 @@ void FindAdaptor(FD3D11Adapter* ChosenAdaptor)
 					if (!FAILED(TempAdapter->GetDesc(&AdapterDesc)))
 					{
 						AdapterDescs.push_back(AdapterDesc);
+						if (!ChosenAdaptor->IsValid())
+						{
+							FD3D11Adapter CurrentAdapter(i, ActualFeatureLevel);
+							ChosenAdaptor = CurrentAdapter;
+							ChosenDescription = AdapterDesc;
+						}
 					}
 				}
 			}
 		}
-		if (AdapterDescs.size() > 0)
-		{
-			FD3D11Adapter CurrentAdapter(AdapterIndex, ActualFeatureLevel);
-		}
-
-
 	}
 }
 
@@ -77,12 +77,12 @@ FDynamicRHI* CreateRHI()
 	FDynamicRHI* DynamicRHI = nullptr;
 	if (!ChosenAdaptor.IsValid())
 	{
-
+		FindAdaptor(ChosenAdaptor , ChosenDescription);
 	}
 
 	IDXGIFactory1* DXGIFactory1;
 	SafeCreateDXGIFactory(&DXGIFactory1);
-	DynamicRHI = new FD3D11DynamicRHI();
+	DynamicRHI = new FD3D11DynamicRHI(DXGIFactory1 , ChosenAdaptor.MaxSupportedFeatureLevel , ChosenAdaptor.AdapterIndex , ChosenDescription);
 	return DynamicRHI;
 }
 
