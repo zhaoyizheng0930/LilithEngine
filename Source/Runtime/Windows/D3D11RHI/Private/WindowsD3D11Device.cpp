@@ -93,6 +93,8 @@ FD3D11DynamicRHI::FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LE
 	ChosenAdapter(InChosenAdapter),
 	ChosenDescription(InChosenDescription)
 {
+	GTexturePoolSize = 0;
+
 
 }
 
@@ -121,6 +123,11 @@ void FD3D11DynamicRHI::ClearState()
 
 }
 
+void FD3D11DynamicRHI::UpdateMSAASettings()
+{
+
+}
+
 void FD3D11DynamicRHI::InitD3DDevice()
 {
 	if (!Direct3DDevice)
@@ -143,7 +150,70 @@ void FD3D11DynamicRHI::InitD3DDevice()
 		{
 			if (EnumAdapter)
 			{
+				DXGI_ADAPTER_DESC AdapterDesc = ChosenDescription;
+				Adapter = EnumAdapter;
+
+				GRHIAdapterName = std::wstring(AdapterDesc.Description);
+				GRHIVendorId = AdapterDesc.VendorId;
+				GRHIDeviceId = AdapterDesc.DeviceId;
+
+				{
+					//Get DriverVersion
+				}
+
+				D3D_FEATURE_LEVEL ActualFeatureLevel = (D3D_FEATURE_LEVEL)0;
+				D3D11CreateDevice( Adapter ,
+					DriverType ,
+					NULL,DeviceFlags ,
+					&FeatureLevel ,
+					1 ,
+					D3D11_SDK_VERSION ,
+					&Direct3DDevice ,
+					&ActualFeatureLevel ,
+					&Direct3DDeviceIMContext);
+
+				StateCache.Init(Direct3DDeviceIMContext);
+
+				SetupAfterDeviceCreation();
+
+				// Notify all initialized FRenderResources that there's a valid RHI device to create their RHI resources for now.
+				// Dynamic resources can have dependencies on static resources (with uniform buffers) and must initialized last!
 			}
 		}
+	}
+}
+
+void FD3D11DynamicRHI::SetupAfterDeviceCreation()
+{
+	RHISetScissorRect(false, 0, 0, 0, 0);
+
+	UpdateMSAASettings();
+}
+
+void FD3D11DynamicRHI::InitConstantBuffers()
+{
+
+}
+
+
+void FD3D11DynamicRHI::RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY)
+{
+	if (bEnable)
+	{
+		D3D11_RECT rect;
+		rect.bottom = MaxY;
+		rect.top = MinY;
+		rect.left = MinX;
+		rect.right = MaxX;
+		Direct3DDeviceIMContext->RSSetScissorRects(1, &rect);
+	}
+	else
+	{
+		D3D11_RECT rect;
+		rect.bottom = MaxY;
+		rect.top = 0;
+		rect.left = 0;
+		rect.right = MaxX;
+		Direct3DDeviceIMContext->RSSetScissorRects(1, &rect);
 	}
 }

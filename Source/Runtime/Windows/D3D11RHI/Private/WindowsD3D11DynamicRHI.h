@@ -1,6 +1,8 @@
 #pragma once
 #include "RHI.h"
 #include "D3D11RHI.h"
+#include "D3D11Resources.h"
+#include "Windows/D3D11StateCache.h"
 
 struct FD3D11Adapter
 {
@@ -35,13 +37,46 @@ public:
 
 	void InitD3DDevice();
 
+	void SetupAfterDeviceCreation();
+
 	virtual void ClearState();
+
+	void UpdateMSAASettings();
+
+public:
+	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) final override;
+	//virtual class IRHICommandContext* RHIGetDefaultContext() final override;
 protected:
-private:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;
 	int32 ChosenAdapter;
 	DXGI_ADAPTER_DESC ChosenDescription;
 
 	FD3D11Device* Direct3DDevice;
+	FD3D11DeviceContext* Direct3DDeviceIMContext;
+
+	FD3D11StateCache StateCache;
+
+	ID3D11RenderTargetView* CurrentRenderTargets[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+	ID3D11UnorderedAccessView* CurrentRenderTargets[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+	ID3D11DepthStencilView* CurrentDepthStencilTarget;
+	FD3D11TextureBase* CurrentDepthTexture;
+
+	FD3D11BaseShaderResource* CurrentResourcesBoundAsSRVs[SF_NumFrequencies][D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
+
+	//TRefCountPtr<FD3D11DynamicBuffer> DynamicVB;
+	//TRefCountPtr<FD3D11DynamicBuffer> DynamicIB;
+
+	std::vector<FD3D11ConstantBuffer*> VSConstantBuffers;
+	std::vector<FD3D11ConstantBuffer*> HSConstantBuffers;
+	std::vector<FD3D11ConstantBuffer*> DSConstantBuffers;
+	std::vector<FD3D11ConstantBuffer*> PSConstantBuffers;
+	std::vector<FD3D11ConstantBuffer*> GSConstantBuffers;
+	std::vector<FD3D11ConstantBuffer*> CSConstantBuffers;
+
+protected:
+	/** Initializes the constant buffers.  Called once at RHI initialization time. */
+	void InitConstantBuffers();
+private:
+
 };

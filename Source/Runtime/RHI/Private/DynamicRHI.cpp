@@ -3,6 +3,9 @@
 #include "../Public/DynamicRHI.h"
 
 FDynamicRHI* GDynamicRHI = nullptr;
+std::wstring GRHIAdapterName = L"";
+uint32 GRHIVendorId = 0;
+uint32 GRHIDeviceId = 0;
 
 void RHIInit(bool bHasEditorToken)
 {
