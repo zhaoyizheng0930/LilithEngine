@@ -52,6 +52,7 @@ int32 FEngineLoop::PreInit(const char* CmdLine)
 	//InitGamePhys();
 	//Physics-----------------------------------------------------------------------------
 
+	//CreateDevice And Context
 	RHIInit(false);
 
 	InitializeShaderTypes();

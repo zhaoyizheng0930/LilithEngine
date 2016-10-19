@@ -2,7 +2,6 @@
 #include "WindowsD3D11Device.h"
 #include "RHI.h"
 #include "WindowsD3D11DynamicRHI.h"
-#include "Core.h"
 
 void SafeCreateDXGIFactory(IDXGIFactory1** DXGIFactory1)
 {

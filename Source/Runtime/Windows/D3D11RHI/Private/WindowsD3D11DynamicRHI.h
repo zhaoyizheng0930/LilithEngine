@@ -34,6 +34,7 @@ public:
 	virtual void PostInit();
 
 	virtual void Shutdown();
+private:
 
 	void InitD3DDevice();
 
@@ -45,7 +46,14 @@ public:
 
 public:
 	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) final override;
-	//virtual class IRHICommandContext* RHIGetDefaultContext() final override;
+
+	virtual FRHISamplerState* RHICreateSamplerState(const FSamplerStateInitializerRHI& Initializer) final override;
+
+	virtual FRHIRasterizerState* RHICreateRasterizerState(const FRasterizerStateInitializerRHI& Initializer) final override;
+
+	virtual FRHIDepthStencilState* RHICreateDepthStencilState(const FDepthStencilStateInitializerRHI& Initializer) final override;
+
+	virtual FRHIBlendState* RHICreateBlendState(const FBlendStateInitializerRHI& Initializer) final override;
 protected:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;

@@ -4,6 +4,7 @@
 //Temp Use XNA math lib.
 //Do myself math lib later.
 
+#include <math.h>
 #include "Windows/XNA/xnamath.h"
 //
 typedef XMFLOAT3 FVector3;
