@@ -96,11 +96,11 @@ static D3D11_CULL_MODE TranslateCullMode(ERasterizerCullMode mode)
 	switch (mode)
 	{
 	case CM_None:
-		break;
+		return D3D11_CULL_NONE;
 	case CM_CW:
-		break;
+		return D3D11_CULL_BACK;
 	case CM_CCW:
-		break;
+		return D3D11_CULL_FRONT;
 	default:
 	}
 }
@@ -112,15 +112,12 @@ FRHIRasterizerState* FD3D11DynamicRHI::RHICreateRasterizerState(const FRasterize
 	{
 		D3D11_RASTERIZER_DESC desc;
 		desc.FillMode = TranslateFillMode(Initializer.FillMode);
-		desc.CullMode = TranslateFillMode(Initializer.FillMode);
-		desc.FrontCounterClockwise;
-		desc.DepthBias;
-		desc.DepthBiasClamp;
-		desc.SlopeScaledDepthBias;
-		desc.DepthClipEnable;
-		desc.ScissorEnable;
-		desc.MultisampleEnable;
-		desc.AntialiasedLineEnable;
+		desc.CullMode = TranslateCullMode(Initializer.CullMode);
+		desc.FrontCounterClockwise = true; //true ÊÇÄæÊ±Õë³¯Ç°
+		desc.DepthBias = FMath::FloorToInt(Initializer.DepthBias);
+		desc.SlopeScaledDepthBias = Initializer.SlopeScaleDepthBias;
+		desc.DepthClipEnable = true;
+		desc.ScissorEnable = true;
 
 		ID3D11RasterizerState* RasterizerState;
 		Direct3DDevice->CreateRasterizerState(&desc, &RasterizerState);
@@ -133,7 +130,22 @@ FRHIRasterizerState* FD3D11DynamicRHI::RHICreateRasterizerState(const FRasterize
 
 FRHIDepthStencilState* FD3D11DynamicRHI::RHICreateDepthStencilState(const FDepthStencilStateInitializerRHI& Initializer)
 {
-
+	FD3D11DepthStencilState* RHIDepthStencilState = nullptr;
+	if (Direct3DDevice)
+	{
+		D3D11_DEPTH_STENCIL_DESC desc;
+		// depth part
+		desc.DepthEnable = Initializer.DepthTest
+		D3D11_DEPTH_WRITE_MASK DepthWriteMask;
+		D3D11_COMPARISON_FUNC DepthFunc;
+		BOOL StencilEnable;
+		UINT8 StencilReadMask;
+		UINT8 StencilWriteMask;
+		D3D11_DEPTH_STENCILOP_DESC FrontFace;
+		D3D11_DEPTH_STENCILOP_DESC BackFace;
+		ID3D11DepthStencilState* DepthStencilState = nullptr;
+		Direct3DDevice->CreateDepthStencilState(&desc , &DepthStencilState);
+	}
 }
 
 FRHIBlendState* FD3D11DynamicRHI::RHICreateBlendState(const FBlendStateInitializerRHI& Initializer)

@@ -11,6 +11,11 @@ public:
 	{
 		return value<min ? min : value<max ? value : max;
 	}
+
+	static int32 FloorToInt(float F)
+	{
+		return _mm_cvt_ss2si(_mm_set_ss(F + F - 0.5f)) >> 1;
+	}
 protected:
 private:
 };

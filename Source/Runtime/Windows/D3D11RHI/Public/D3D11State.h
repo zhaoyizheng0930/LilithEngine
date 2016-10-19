@@ -16,3 +16,19 @@ public:
 protected:
 private:
 };
+
+class FD3D11DepthStencilState :public FRHIRasterizerState
+{
+public:
+	ID3D11DepthStencilState* Resource;
+protected:
+private:
+};
+
+class FD3D11BlendState :public FRHIRasterizerState
+{
+public:
+	ID3D11BlendState* Resource;
+protected:
+private:
+};
