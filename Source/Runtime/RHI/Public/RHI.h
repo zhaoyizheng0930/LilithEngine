@@ -162,5 +162,10 @@ struct FDepthStencilStateInitializerRHI
 
 struct FBlendStateInitializerRHI
 {
+	struct RenderTargetBlendState
+	{
 
+	};
+
+	RenderTargetBlendState RenderTargets[MaxSimultaneousRenderTargets];
 };

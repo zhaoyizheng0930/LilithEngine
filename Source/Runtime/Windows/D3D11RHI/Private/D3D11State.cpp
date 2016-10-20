@@ -1,5 +1,6 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
+#include "D3D11Definitions.h"
 
 static D3D11_TEXTURE_ADDRESS_MODE TranslateAddressMode(ESamplerAddressMode AddressMode)
 {
@@ -128,6 +129,57 @@ FRHIRasterizerState* FD3D11DynamicRHI::RHICreateRasterizerState(const FRasterize
 	return RHIRasterizerState;
 }
 
+static D3D11_COMPARISON_FUNC TranslateComparisonFunc(ECompareFunction InCompareFunc)
+{
+	switch (InCompareFunc)
+	{
+	case CF_Less:
+		return D3D11_COMPARISON_LESS;
+	case CF_LessEqual:
+		return D3D11_COMPARISON_LESS_EQUAL;
+	case CF_Greater:
+		return D3D11_COMPARISON_GREATER;
+	case CF_GreaterEqual:
+		return D3D11_COMPARISON_GREATER_EQUAL;
+	case CF_Equal:
+		return D3D11_COMPARISON_EQUAL;
+	case CF_NotEqual:
+		return D3D11_COMPARISON_NOT_EQUAL;
+	case CF_Never:
+		return D3D11_COMPARISON_NEVER;
+	case CF_Always:
+		return D3D11_COMPARISON_ALWAYS;
+	default:
+		return D3D11_COMPARISON_ALWAYS;
+		break;
+	}
+}
+
+static D3D11_STENCIL_OP TranslateStencilOP(EStencilOp InStencilOp)
+{
+	switch (InStencilOp)
+	{
+	case SO_Keep:
+		return D3D11_STENCIL_OP_KEEP;
+	case SO_Zero:
+		return D3D11_STENCIL_OP_ZERO;
+	case SO_Replace:
+		return D3D11_STENCIL_OP_REPLACE;
+	case SO_SaturatedIncrement:
+		return D3D11_STENCIL_OP_INCR_SAT;
+	case SO_SaturatedDecrement:
+		return D3D11_STENCIL_OP_DECR_SAT;
+	case SO_Invert:
+		return D3D11_STENCIL_OP_INVERT;
+	case SO_Increment:
+		return D3D11_STENCIL_OP_INCR;
+	case SO_Decrement:
+		return D3D11_STENCIL_OP_DECR;
+	default:
+		break;
+	}
+}
+
 FRHIDepthStencilState* FD3D11DynamicRHI::RHICreateDepthStencilState(const FDepthStencilStateInitializerRHI& Initializer)
 {
 	FD3D11DepthStencilState* RHIDepthStencilState = nullptr;
@@ -135,20 +187,52 @@ FRHIDepthStencilState* FD3D11DynamicRHI::RHICreateDepthStencilState(const FDepth
 	{
 		D3D11_DEPTH_STENCIL_DESC desc;
 		// depth part
-		desc.DepthEnable = Initializer.DepthTest
-		D3D11_DEPTH_WRITE_MASK DepthWriteMask;
-		D3D11_COMPARISON_FUNC DepthFunc;
-		BOOL StencilEnable;
-		UINT8 StencilReadMask;
-		UINT8 StencilWriteMask;
-		D3D11_DEPTH_STENCILOP_DESC FrontFace;
-		D3D11_DEPTH_STENCILOP_DESC BackFace;
+		desc.DepthEnable = Initializer.DepthTest != CF_Always || Initializer.bEnableDepthWrite;
+		desc.DepthWriteMask = Initializer.bEnableDepthWrite ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
+		desc.DepthFunc = TranslateComparisonFunc(Initializer.DepthTest);
+
+		//Stencil part
+		desc.StencilEnable = Initializer.bEnableBackFaceStencil || Initializer.bEnableFrontFaceStencil;
+		desc.StencilReadMask = Initializer.StencilReadMask;
+		desc.StencilWriteMask = Initializer.StencilWriteMask;
+		desc.FrontFace.StencilFailOp = TranslateStencilOP(Initializer.FrontFaceStencilFailStencilOp);
+		desc.FrontFace.StencilDepthFailOp = TranslateStencilOP(Initializer.FrontFaceDepthFailStencilOp);
+		desc.FrontFace.StencilPassOp = TranslateStencilOP(Initializer.FrontFacePassStencilOp);
+		desc.FrontFace.StencilFunc = TranslateComparisonFunc(Initializer.FrontFaceDepthTest);
+		if (Initializer.bEnableBackFaceStencil)
+		{
+			desc.BackFace.StencilFailOp = TranslateStencilOP(Initializer.BackFaceStencilFailStencilOp);
+			desc.BackFace.StencilDepthFailOp = TranslateStencilOP(Initializer.BackFaceDepthFailStencilOp);
+			desc.BackFace.StencilPassOp = TranslateStencilOP(Initializer.BackFacePassStencilOp);
+			desc.BackFace.StencilFunc = TranslateComparisonFunc(Initializer.BackFaceDepthTest);
+		}
+		else
+		{
+			desc.BackFace = desc.FrontFace;
+		}
 		ID3D11DepthStencilState* DepthStencilState = nullptr;
 		Direct3DDevice->CreateDepthStencilState(&desc , &DepthStencilState);
+		RHIDepthStencilState = new FD3D11DepthStencilState;
+		RHIDepthStencilState->Resource = DepthStencilState;
 	}
+	return RHIDepthStencilState;
 }
 
 FRHIBlendState* FD3D11DynamicRHI::RHICreateBlendState(const FBlendStateInitializerRHI& Initializer)
 {
+	FD3D11BlendState* RHIBlendState = nullptr;
+	if (Direct3DDevice)
+	{
+		D3D11_BLEND_DESC BlendStateDesc;
+		BlendStateDesc.RenderTarget;
+		BOOL AlphaToCoverageEnable;
+		BOOL IndependentBlendEnable;
+		D3D11_RENDER_TARGET_BLEND_DESC RenderTarget[8];
 
+		ID3D11BlendState* BlendState = nullptr;
+		Direct3DDevice->CreateBlendState(&BlendStateDesc, &BlendState);
+		RHIBlendState = new FD3D11BlendState;
+		RHIBlendState->Resource = BlendState;
+
+	}
 }

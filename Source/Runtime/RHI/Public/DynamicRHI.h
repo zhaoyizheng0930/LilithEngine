@@ -1,5 +1,6 @@
 #pragma once
 #include "RHIResource.h"
+#include "RHIDefinitions.h"
 
 class FDynamicRHI
 {
