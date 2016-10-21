@@ -160,12 +160,58 @@ struct FDepthStencilStateInitializerRHI
 	uint8 StencilWriteMask;
 };
 
+enum EBlendOperation
+{
+	BO_Add,
+	BO_Subtract,
+	BO_Min,
+	BO_Max,
+	BO_ReverseSubtract,
+};
+
+enum EBlendFactor
+{
+	BF_Zero,
+	BF_One,
+	BF_SourceColor,
+	BF_InverseSourceColor,
+	BF_SourceAlpha,
+	BF_InverseSourceAlpha,
+	BF_DestAlpha,
+	BF_InverseDestAlpha,
+	BF_DestColor,
+	BF_InverseDestColor,
+	BF_ConstantBlendFactor,
+	BF_InverseConstantBlendFactor
+};
+
+enum EColorWriteMask
+{
+	CW_RED = 0x01,
+	CW_GREEN = 0x02,
+	CW_BLUE = 0x04,
+	CW_ALPHA = 0x08,
+
+	CW_NONE = 0,
+	CW_RGB = CW_RED | CW_GREEN | CW_BLUE,
+	CW_RGBA = CW_RED | CW_GREEN | CW_BLUE | CW_ALPHA,
+	CW_RG = CW_RED | CW_GREEN,
+	CW_BA = CW_BLUE | CW_ALPHA,
+};
+
 struct FBlendStateInitializerRHI
 {
 	struct RenderTargetBlendState
 	{
-
+		EBlendOperation ColorBlendOp;
+		EBlendFactor ColorSrcBlend;
+		EBlendFactor ColorDestBlend;
+		EBlendOperation AlphaBlendOp;
+		EBlendFactor AlphaSrcBlend;
+		EBlendFactor AlphaDestBlend;
+		EColorWriteMask ColorWriteMask;
 	};
 
 	RenderTargetBlendState RenderTargets[MaxSimultaneousRenderTargets];
+	bool bUseIndependentRenderTargetBlendStates;
 };

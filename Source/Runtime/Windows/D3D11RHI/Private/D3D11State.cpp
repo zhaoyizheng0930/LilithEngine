@@ -218,21 +218,84 @@ FRHIDepthStencilState* FD3D11DynamicRHI::RHICreateDepthStencilState(const FDepth
 	return RHIDepthStencilState;
 }
 
+static D3D11_BLEND_OP TranslateBlendOp(EBlendOperation InBlendOp)
+{
+	switch (EBlendOperation)
+	{
+	case BO_Add:
+		break;
+	case BO_Subtract:
+		break;
+	case BO_Min:
+		break;
+	case BO_Max:
+		break;
+	case BO_ReverseSubtract:
+		break;
+	default:
+		break;
+	}
+}
+
+static D3D11_BLEND TranslateBlendFactor(EBlendFactor InBlendFactor)
+{
+	switch (InBlendFactor)
+	{
+	case BF_Zero:
+		break;
+	case BF_One:
+		break;
+	case BF_SourceColor:
+		break;
+	case BF_InverseSourceColor:
+		break;
+	case BF_SourceAlpha:
+		break;
+	case BF_InverseSourceAlpha:
+		break;
+	case BF_DestAlpha:
+		break;
+	case BF_InverseDestAlpha:
+		break;
+	case BF_DestColor:
+		break;
+	case BF_InverseDestColor:
+		break;
+	case BF_ConstantBlendFactor:
+		break;
+	case BF_InverseConstantBlendFactor:
+		break;
+	default:
+		break;
+	}
+}
+
 FRHIBlendState* FD3D11DynamicRHI::RHICreateBlendState(const FBlendStateInitializerRHI& Initializer)
 {
 	FD3D11BlendState* RHIBlendState = nullptr;
 	if (Direct3DDevice)
 	{
 		D3D11_BLEND_DESC BlendStateDesc;
-		BlendStateDesc.RenderTarget;
-		BOOL AlphaToCoverageEnable;
-		BOOL IndependentBlendEnable;
+		BlendStateDesc.AlphaToCoverageEnable = false;
+		BlendStateDesc.IndependentBlendEnable = Initializer.bUseIndependentRenderTargetBlendStates;
+		for (int i = 0; i < MaxSimultaneousRenderTargets; i++)
+		{
+			BlendStateDesc.RenderTarget[i].BlendEnable = Initializer.RenderTargets[i].ColorSrcBlend;
+			BlendStateDesc.RenderTarget[i].SrcBlend = TranslateBlendFactor(Initializer.RenderTargets[i].ColorSrcBlend);
+			BlendStateDesc.RenderTarget[i].DestBlend = TranslateBlendFactor(Initializer.RenderTargets[i].ColorDestBlend);
+			BlendStateDesc.RenderTarget[i].BlendOp = TranslateBlendOp(Initializer.RenderTargets[i].ColorBlendOp);
+			BlendStateDesc.RenderTarget[i].SrcBlendAlpha = TranslateBlendFactor(Initializer.RenderTargets[i].AlphaSrcBlend);
+			BlendStateDesc.RenderTarget[i].DestBlendAlpha = TranslateBlendFactor(Initializer.RenderTargets[i].AlphaDestBlend);
+			BlendStateDesc.RenderTarget[i].BlendOpAlpha = TranslateBlendOp(Initializer.RenderTargets[i].AlphaBlendOp);
+			BlendStateDesc.RenderTarget[i].RenderTargetWriteMask;
+		}
 		D3D11_RENDER_TARGET_BLEND_DESC RenderTarget[8];
 
 		ID3D11BlendState* BlendState = nullptr;
 		Direct3DDevice->CreateBlendState(&BlendStateDesc, &BlendState);
 		RHIBlendState = new FD3D11BlendState;
 		RHIBlendState->Resource = BlendState;
-
 	}
+
+	return RHIBlendState;
 }
