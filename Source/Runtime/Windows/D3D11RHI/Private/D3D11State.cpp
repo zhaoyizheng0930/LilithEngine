@@ -103,6 +103,7 @@ static D3D11_CULL_MODE TranslateCullMode(ERasterizerCullMode mode)
 	case CM_CCW:
 		return D3D11_CULL_FRONT;
 	default:
+		return D3D11_CULL_NONE;
 	}
 }
 
@@ -215,25 +216,26 @@ FRHIDepthStencilState* FD3D11DynamicRHI::RHICreateDepthStencilState(const FDepth
 		RHIDepthStencilState = new FD3D11DepthStencilState;
 		RHIDepthStencilState->Resource = DepthStencilState;
 	}
+
 	return RHIDepthStencilState;
 }
 
 static D3D11_BLEND_OP TranslateBlendOp(EBlendOperation InBlendOp)
 {
-	switch (EBlendOperation)
+	switch (InBlendOp)
 	{
 	case BO_Add:
-		break;
+		return D3D11_BLEND_OP_ADD;
 	case BO_Subtract:
-		break;
+		return D3D11_BLEND_OP_SUBTRACT;
 	case BO_Min:
-		break;
+		return D3D11_BLEND_OP_MIN;
 	case BO_Max:
-		break;
+		return D3D11_BLEND_OP_MAX;
 	case BO_ReverseSubtract:
-		break;
+		return D3D11_BLEND_OP_REV_SUBTRACT;
 	default:
-		break;
+		return D3D11_BLEND_OP_ADD;
 	}
 }
 
@@ -242,31 +244,31 @@ static D3D11_BLEND TranslateBlendFactor(EBlendFactor InBlendFactor)
 	switch (InBlendFactor)
 	{
 	case BF_Zero:
-		break;
+		return D3D11_BLEND_ZERO;
 	case BF_One:
-		break;
+		return D3D11_BLEND_ONE;
 	case BF_SourceColor:
-		break;
+		return D3D11_BLEND_SRC_COLOR;
 	case BF_InverseSourceColor:
-		break;
+		return D3D11_BLEND_INV_SRC_COLOR;
 	case BF_SourceAlpha:
-		break;
+		return D3D11_BLEND_SRC_ALPHA;
 	case BF_InverseSourceAlpha:
-		break;
+		return D3D11_BLEND_INV_SRC_ALPHA;
 	case BF_DestAlpha:
-		break;
+		return D3D11_BLEND_DEST_ALPHA;
 	case BF_InverseDestAlpha:
-		break;
+		return D3D11_BLEND_INV_DEST_ALPHA;
 	case BF_DestColor:
-		break;
+		return D3D11_BLEND_DEST_COLOR;
 	case BF_InverseDestColor:
-		break;
+		return D3D11_BLEND_INV_DEST_COLOR;
 	case BF_ConstantBlendFactor:
-		break;
+		return D3D11_BLEND_BLEND_FACTOR;
 	case BF_InverseConstantBlendFactor:
-		break;
+		return D3D11_BLEND_INV_BLEND_FACTOR;
 	default:
-		break;
+		return D3D11_BLEND_ZERO;
 	}
 }
 
@@ -287,9 +289,11 @@ FRHIBlendState* FD3D11DynamicRHI::RHICreateBlendState(const FBlendStateInitializ
 			BlendStateDesc.RenderTarget[i].SrcBlendAlpha = TranslateBlendFactor(Initializer.RenderTargets[i].AlphaSrcBlend);
 			BlendStateDesc.RenderTarget[i].DestBlendAlpha = TranslateBlendFactor(Initializer.RenderTargets[i].AlphaDestBlend);
 			BlendStateDesc.RenderTarget[i].BlendOpAlpha = TranslateBlendOp(Initializer.RenderTargets[i].AlphaBlendOp);
-			BlendStateDesc.RenderTarget[i].RenderTargetWriteMask;
+			BlendStateDesc.RenderTarget[i].RenderTargetWriteMask = ((Initializer.RenderTargets[i].ColorWriteMask & CW_RED) ? D3D11_COLOR_WRITE_ENABLE_RED : 0)
+				| ((Initializer.RenderTargets[i].ColorWriteMask & CW_GREEN) ? D3D11_COLOR_WRITE_ENABLE_GREEN : 0)
+				| ((Initializer.RenderTargets[i].ColorWriteMask & CW_BLUE) ? D3D11_COLOR_WRITE_ENABLE_BLUE : 0)
+				| ((Initializer.RenderTargets[i].ColorWriteMask & CW_ALPHA) ? D3D11_COLOR_WRITE_ENABLE_ALPHA : 0);;
 		}
-		D3D11_RENDER_TARGET_BLEND_DESC RenderTarget[8];
 
 		ID3D11BlendState* BlendState = nullptr;
 		Direct3DDevice->CreateBlendState(&BlendStateDesc, &BlendState);

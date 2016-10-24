@@ -1,6 +1,7 @@
 #pragma once
 #include "RHI.h"
 #include "D3D11RHI.h"
+#include "DynamicRHI.h"
 #include "D3D11Resources.h"
 #include "Windows/D3D11StateCache.h"
 
@@ -54,6 +55,20 @@ public:
 	virtual FRHIDepthStencilState* RHICreateDepthStencilState(const FDepthStencilStateInitializerRHI& Initializer) final override;
 
 	virtual FRHIBlendState* RHICreateBlendState(const FBlendStateInitializerRHI& Initializer) final override;
+
+	virtual FRHIVertexDeclaration* RHICreateVertexDeclaration(const FVertexDeclarationElementList& Elements) final override;
+
+	virtual FRHIVertexShader* RHICreateVertexShader(const std::vector<uint8>& Code) final override;
+
+	virtual FRHIHullShader* RHICreateHullShader(const std::vector<uint8>& Code) final override;
+
+	virtual FRHIDomainShader* RHICreateDomainShader(const std::vector<uint8>& Code) final override;
+
+	virtual FRHIGeometryShader* RHICreateGeometryShader(const std::vector<uint8>& Code) final override;
+
+	virtual FRHIComputeShader* RHICreateComputeShader(const std::vector<uint8>& Code) final override;
+
+	virtual FRHIPixelShader* RHICreatePixelShader(const std::vector<uint8>& Code) final override;
 protected:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;
@@ -66,7 +81,7 @@ protected:
 	FD3D11StateCache StateCache;
 
 	ID3D11RenderTargetView* CurrentRenderTargets[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
-	ID3D11UnorderedAccessView* CurrentRenderTargets[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+	ID3D11UnorderedAccessView* CurrentUAVs[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
 	ID3D11DepthStencilView* CurrentDepthStencilTarget;
 	FD3D11TextureBase* CurrentDepthTexture;
 

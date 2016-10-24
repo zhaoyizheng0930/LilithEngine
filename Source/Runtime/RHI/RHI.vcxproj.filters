@@ -24,6 +24,12 @@
     <ClInclude Include="Public\DynamicRHI.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\RHIResource.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RHIDefinitions.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\DynamicRHI.cpp">

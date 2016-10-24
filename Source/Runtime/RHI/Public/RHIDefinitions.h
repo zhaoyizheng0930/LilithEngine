@@ -1,3 +1,3 @@
 #pragma once
 
-#define MaxSimultaneousRenderTargets 8;
+#define MaxSimultaneousRenderTargets 8

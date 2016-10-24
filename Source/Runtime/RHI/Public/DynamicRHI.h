@@ -1,6 +1,7 @@
 #pragma once
 #include "RHIResource.h"
-#include "RHIDefinitions.h"
+#include "RHI.h"
+
 
 class FDynamicRHI
 {
@@ -26,7 +27,26 @@ public:
 
 	virtual FRHIBlendState* RHICreateBlendState(const FBlendStateInitializerRHI& Initializer) = 0;
 
+	//Resource-----------------------------------------------------VertexDecl
+	virtual FRHIVertexDeclaration* RHICreateVertexDeclaration(const FVertexDeclarationElementList& Elements) = 0;
+
 	//Resource-----------------------------------------------------Shader
+	virtual FRHIVertexShader* RHICreateVertexShader(const std::vector<uint8>& Code) = 0;
+
+	virtual FRHIHullShader* RHICreateHullShader(const std::vector<uint8>& Code) = 0;
+
+	virtual FRHIDomainShader* RHICreateDomainShader(const std::vector<uint8>& Code) = 0;
+
+	virtual FRHIGeometryShader* RHICreateGeometryShader(const std::vector<uint8>& Code) = 0;
+	virtual FRHIGeometryShader* RHICreateGeometryShaderWithStreamOutput() {} //Todo:Later
+
+	virtual FRHIComputeShader* RHICreateComputeShader(const std::vector<uint8>& Code) = 0;
+
+	virtual FRHIPixelShader* RHICreatePixelShader(const std::vector<uint8>& Code) = 0;
+	virtual void FlushPendingLogs() {}
+	//Resource-----------------------------------------------------Fence
+
+	//Resource-----------------------------------------------------Buffer
 
 protected:
 private:

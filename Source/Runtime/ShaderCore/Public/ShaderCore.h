@@ -3,3 +3,8 @@
 extern void InitializeShaderTypes();
 
 extern void UninitializeShaderTypes();
+
+struct FBaseShaderResourceTable
+{
+
+};

@@ -83,7 +83,8 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>RHIPCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RHI\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -111,7 +112,8 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>RHIPCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RHI\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RHI\Public;$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -139,7 +141,9 @@
   <ItemGroup>
     <ClInclude Include="Public\DynamicRHI.h" />
     <ClInclude Include="Public\RHI.h" />
+    <ClInclude Include="Public\RHIDefinitions.h" />
     <ClInclude Include="Public\RHIPCH.h" />
+    <ClInclude Include="Public\RHIResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\DynamicRHI.cpp" />

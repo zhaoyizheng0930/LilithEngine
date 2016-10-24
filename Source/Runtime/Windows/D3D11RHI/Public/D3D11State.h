@@ -1,4 +1,5 @@
 #pragma once
+#include "RHIResource.h"
 
 
 class FD3D11SamplerState :public FRHISamplerState
@@ -17,7 +18,7 @@ protected:
 private:
 };
 
-class FD3D11DepthStencilState :public FRHIRasterizerState
+class FD3D11DepthStencilState :public FRHIDepthStencilState
 {
 public:
 	ID3D11DepthStencilState* Resource;
@@ -25,7 +26,7 @@ protected:
 private:
 };
 
-class FD3D11BlendState :public FRHIRasterizerState
+class FD3D11BlendState :public FRHIBlendState
 {
 public:
 	ID3D11BlendState* Resource;

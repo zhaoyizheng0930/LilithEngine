@@ -8,4 +8,3 @@
 #include "WindowsCriticalSection.h"
 #include "WindowsPlatformProcess.h"
 #include "WindowsPlatformMath.h"
-#include "WindowsDynamicRHI.h"

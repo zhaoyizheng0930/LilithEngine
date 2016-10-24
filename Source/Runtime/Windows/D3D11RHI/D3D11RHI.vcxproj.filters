@@ -13,9 +13,21 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Private\Windows">
+      <UniqueIdentifier>{6cc7454c-1b2f-454d-9356-f7b3cfe0a58a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\WindowsD3D11Device.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11Device.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11State.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11VertexDeclaration.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
@@ -34,6 +46,30 @@
     </ClInclude>
     <ClInclude Include="Private\WindowsD3D11DynamicRHI.h">
       <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11Resources.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11Definitions.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11Util.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11ConstantBuffer.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RenderResource.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\Windows\D3D11StateCache.h">
+      <Filter>Private\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Private\D3D11StateCachePrivate.h">
+      <Filter>Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11State.h">
+      <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
