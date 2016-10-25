@@ -51,8 +51,21 @@ public:
 	virtual FRHIComputeFence* RHICreateComputeFence() {
 		return new FRHIComputeFence;
 	}
-	//Resource-----------------------------------------------------Buffer
 
+	//Resource-----------------------------------------------------Buffer
+	virtual FRHIUniformBuffer* RHICreateUniformBuffer() = 0;
+	virtual FRHIIndexBuffer* RHICreateIndexBuffer() = 0;
+	virtual void* RHILockIndexBuffer(FRHIIndexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
+	virtual void RHIUnlockIndexBuffer(FRHIIndexBuffer* IndexBuffer) = 0;//Flush
+	virtual FRHIVertexBuffer* RHICreateVertexBuffer() = 0;
+	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
+	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* IndexBuffer) = 0;//Flush
+	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* IndexBuffer) = 0;
+	virtual FRHIStructureBuffer* RHICreateStructureBuffer() = 0;
+	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
+	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* IndexBuffer) = 0;//Flush
+
+	//Resource-----------------------------------------------------
 protected:
 private:
 };

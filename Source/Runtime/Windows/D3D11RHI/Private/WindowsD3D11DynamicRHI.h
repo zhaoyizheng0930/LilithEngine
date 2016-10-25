@@ -71,6 +71,29 @@ public:
 	virtual FRHIPixelShader* RHICreatePixelShader(const std::vector<uint8>& Code) final override;
 
 	virtual FRHIBoundShaderState* RHICreateBoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader) final override;
+
+	virtual FRHIUniformBuffer* RHICreateUniformBuffer() final override;
+
+	virtual FRHIIndexBuffer* RHICreateIndexBuffer() final override;
+
+	virtual void* RHILockIndexBuffer(FRHIIndexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
+
+	virtual void RHIUnlockIndexBuffer(FRHIIndexBuffer* IndexBuffer)  final override;
+
+	virtual FRHIVertexBuffer* RHICreateVertexBuffer()  final override;
+
+	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
+
+	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* IndexBuffer)  final override;
+
+	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* IndexBuffer)  final override;
+
+	virtual FRHIStructureBuffer* RHICreateStructureBuffer()  final override;
+
+	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
+
+	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* IndexBuffer)  final override;
+
 protected:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;
