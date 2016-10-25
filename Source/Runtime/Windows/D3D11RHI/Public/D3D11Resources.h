@@ -103,3 +103,23 @@ public:
 protected:
 private:
 };
+
+class FD3D11BoundShaderState : public FRHIBoundShaderState
+{
+public:
+	FD3D11BoundShaderState() { }
+	FD3D11BoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader, ID3D11Device* Direct3DDevice);
+	~FD3D11BoundShaderState() {}
+
+
+	ID3D11InputLayout* InputeLayout;
+	ID3D11VertexShader* VertexShader;
+	ID3D11HullShader* HullShader;
+	ID3D11DomainShader* DomainShader;
+	ID3D11GeometryShader* GeometryShader;
+	ID3D11PixelShader* PixelShader;
+
+	bool bShaderNeedsGlobalConstantBuffer[SF_NumFrequencies];
+private:
+
+};

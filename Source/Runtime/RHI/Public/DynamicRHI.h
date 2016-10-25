@@ -44,6 +44,9 @@ public:
 
 	virtual FRHIPixelShader* RHICreatePixelShader(const std::vector<uint8>& Code) = 0;
 	virtual void FlushPendingLogs() {}
+
+	virtual FRHIBoundShaderState* RHICreateBoundShaderState(FRHIVertexDeclaration* InVertexDeclaration , FRHIVertexShader* InVertexShader , FRHIHullShader* InHullShader ,FRHIDomainShader* InDomainShader,FRHIGeometryShader* InGeometryShader , FRHIPixelShader* InPixelShader) = 0;
+
 	//Resource-----------------------------------------------------Fence
 	virtual FRHIComputeFence* RHICreateComputeFence() {
 		return new FRHIComputeFence;

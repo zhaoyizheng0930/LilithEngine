@@ -69,6 +69,8 @@ public:
 	virtual FRHIComputeShader* RHICreateComputeShader(const std::vector<uint8>& Code) final override;
 
 	virtual FRHIPixelShader* RHICreatePixelShader(const std::vector<uint8>& Code) final override;
+
+	virtual FRHIBoundShaderState* RHICreateBoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader) final override;
 protected:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;

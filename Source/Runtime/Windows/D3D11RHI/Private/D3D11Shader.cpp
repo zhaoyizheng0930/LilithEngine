@@ -1,6 +1,7 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
 #include "D3D11Definitions.h"
+#include "HAL/Memory/LilithMemory.h"
 
 
 FRHIVertexShader* FD3D11DynamicRHI::RHICreateVertexShader(const std::vector<uint8>& Code)
@@ -85,4 +86,40 @@ FRHIPixelShader* FD3D11DynamicRHI::RHICreatePixelShader(const std::vector<uint8>
 	Shader->Resource = D11Shader;
 
 	return Shader;
+}
+
+FRHIBoundShaderState* FD3D11DynamicRHI::RHICreateBoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader)
+{
+	//TODO:Wait for BoundStateCache
+	FD3D11BoundShaderState* BoundShaderState = new FD3D11BoundShaderState(InVertexDeclaration , InVertexShader , InHullShader , InDomainShader , InGeometryShader , InPixelShader , Direct3DDevice);
+
+	return BoundShaderState
+}
+
+FD3D11BoundShaderState::FD3D11BoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader, ID3D11Device* Direct3DDevice)
+{
+	FD3D11VertexDeclaration* D11VertexDeclaration = (FD3D11VertexDeclaration*)InVertexDeclaration;
+	FD3D11VertexShader* D11VertexShader = (FD3D11VertexShader*)InVertexShader;
+	FD3D11HullShader* D11HullShader = (FD3D11HullShader*)InHullShader;
+	FD3D11DomainShader* D11DomainShader = (FD3D11DomainShader*)InDomainShader;
+	FD3D11GeometryShader* D11GeometryShader = (FD3D11GeometryShader*)InGeometryShader;
+	FD3D11PixelShader* D11PixelShader = (FD3D11PixelShader*)InPixelShader;
+
+
+	VertexShader = D11VertexShader->Resource;
+	HullShader = D11HullShader->Resource;
+	DomainShader = D11DomainShader->Resource;
+	GeometryShader = D11GeometryShader->Resource;
+	PixelShader = D11PixelShader->Resource;
+
+	Direct3DDevice->CreateInputLayout(D11VertexDeclaration->VertexElements.data(), D11VertexDeclaration->VertexElements.size() , D11VertexShader->Code.data() , D11VertexShader->Code.size(),&InputeLayout);
+
+	FMemory::Memzero(&bShaderNeedsGlobalConstantBuffer, sizeof(bShaderNeedsGlobalConstantBuffer));
+
+	bShaderNeedsGlobalConstantBuffer[SF_Vertex] = D11VertexShader->bShaderNeedsGlobalConstantBuffer;
+	bShaderNeedsGlobalConstantBuffer[SF_Hull] = D11HullShader?D11HullShader->bShaderNeedsGlobalConstantBuffer:false;
+	bShaderNeedsGlobalConstantBuffer[SF_Domain] = D11DomainShader?D11DomainShader->bShaderNeedsGlobalConstantBuffer:false;
+	bShaderNeedsGlobalConstantBuffer[SF_Pixel] = D11GeometryShader ?D11GeometryShader->bShaderNeedsGlobalConstantBuffer:false;
+	bShaderNeedsGlobalConstantBuffer[SF_Geometry] = D11PixelShader?D11PixelShader->bShaderNeedsGlobalConstantBuffer:false;
+
 }

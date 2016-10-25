@@ -13,7 +13,7 @@ class FRHIRasterizerState : public FRHIResource {};
 class FRHIDepthStencilState : public FRHIResource {};
 class FRHIBlendState : public FRHIResource {};
 
-//
+//shader bindings
 class FRHIVertexDeclaration : public FRHIResource {};
 class FRHIBoundShaderState : public FRHIResource {};
 
