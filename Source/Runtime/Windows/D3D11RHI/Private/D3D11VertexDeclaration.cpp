@@ -73,39 +73,3 @@ FRHIVertexDeclaration* FD3D11DynamicRHI::RHICreateVertexDeclaration(const FVerte
 	VertextDecl = new FD3D11VertexDeclaration(key.VertexElements);
 	return VertextDecl;
 }
-
-FRHIVertexShader* FD3D11DynamicRHI::RHICreateVertexShader(const std::vector<uint8>& Code)
-{
-	ID3D11VertexShader* Shader = nullptr;
-
-	FD3D11VertexShader* Shader = new FD3D11VertexShader;
-
-	//const uint8* CodePtr = Code.GetData() + Offset;
-	//const size_t CodeSize =
-	//Direct3DDevice->CreateVertexShader((void*)Code.data(), , , Shader);
-}
-
-FRHIHullShader* FD3D11DynamicRHI::RHICreateHullShader(const std::vector<uint8>& Code)
-{
-
-}
-
-FRHIDomainShader* FD3D11DynamicRHI::RHICreateDomainShader(const std::vector<uint8>& Code)
-{
-
-}
-
-FRHIGeometryShader* FD3D11DynamicRHI::RHICreateGeometryShader(const std::vector<uint8>& Code)
-{
-
-}
-
-FRHIComputeShader* FD3D11DynamicRHI::RHICreateComputeShader(const std::vector<uint8>& Code)
-{
-
-}
-
-FRHIPixelShader* FD3D11DynamicRHI::RHICreatePixelShader(const std::vector<uint8>& Code)
-{
-
-}

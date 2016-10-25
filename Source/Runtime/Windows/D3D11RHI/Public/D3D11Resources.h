@@ -59,7 +59,7 @@ protected:
 private:
 };
 
-class FD3D11HullShader :public FRHIVertexShader, public FD3D11ShaderData
+class FD3D11HullShader :public FRHIHullShader, public FD3D11ShaderData
 {
 public:
 	enum { StaticFrequency = SF_Hull };
@@ -68,7 +68,7 @@ protected:
 private:
 };
 
-class FD3D11DomainShader :public FRHIVertexShader, public FD3D11ShaderData
+class FD3D11DomainShader :public FRHIDomainShader, public FD3D11ShaderData
 {
 public:
 	enum { StaticFrequency = SF_Domain };
@@ -77,7 +77,7 @@ protected:
 private:
 };
 
-class FD3D11GeometryShader :public FRHIVertexShader, public FD3D11ShaderData
+class FD3D11GeometryShader :public FRHIGeometryShader, public FD3D11ShaderData
 {
 public:
 	enum { StaticFrequency = SF_Geometry };
@@ -86,7 +86,7 @@ protected:
 private:
 };
 
-class FD3D11ComputeShader :public FRHIVertexShader, public FD3D11ShaderData
+class FD3D11ComputeShader :public FRHIComputeShader, public FD3D11ShaderData
 {
 public:
 	enum { StaticFrequency = SF_Compute };
@@ -95,7 +95,7 @@ protected:
 private:
 };
 
-class FD3D11PixelShader :public FRHIVertexShader, public FD3D11ShaderData
+class FD3D11PixelShader :public FRHIPixelShader, public FD3D11ShaderData
 {
 public:
 	enum { StaticFrequency = SF_Pixel };

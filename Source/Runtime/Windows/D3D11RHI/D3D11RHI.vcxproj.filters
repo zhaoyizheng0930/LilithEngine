@@ -30,6 +30,9 @@
     <ClCompile Include="Private\D3D11VertexDeclaration.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\D3D11Shader.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\D3D11RHIPCH.h">
