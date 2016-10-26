@@ -257,3 +257,9 @@ struct FVertexElement
 };
 
 typedef std::vector<FVertexElement> FVertexDeclarationElementList;
+
+
+struct FRHIResourceCreateInfo
+{
+	FRHIResourceCreateInfo() {}
+};

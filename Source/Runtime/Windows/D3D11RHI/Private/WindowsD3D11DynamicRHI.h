@@ -72,15 +72,15 @@ public:
 
 	virtual FRHIBoundShaderState* RHICreateBoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader) final override;
 
-	virtual FRHIUniformBuffer* RHICreateUniformBuffer() final override;
+	virtual FRHIUniformBuffer* RHICreateUniformBuffer(const void* Contents, const FRHIUniformBufferLayout& Layout, EUniformBufferUsage Usage) final override;
 
-	virtual FRHIIndexBuffer* RHICreateIndexBuffer() final override;
+	virtual FRHIIndexBuffer* RHICreateIndexBuffer(uint32 Stride, uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo) final override;
 
 	virtual void* RHILockIndexBuffer(FRHIIndexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
 
 	virtual void RHIUnlockIndexBuffer(FRHIIndexBuffer* IndexBuffer)  final override;
 
-	virtual FRHIVertexBuffer* RHICreateVertexBuffer()  final override;
+	virtual FRHIVertexBuffer* RHICreateVertexBuffer(uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo)  final override;
 
 	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
 
@@ -88,7 +88,7 @@ public:
 
 	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* IndexBuffer)  final override;
 
-	virtual FRHIStructureBuffer* RHICreateStructureBuffer()  final override;
+	virtual FRHIStructureBuffer* RHICreateStructureBuffer(uint32 Stride, uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo)  final override;
 
 	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
 

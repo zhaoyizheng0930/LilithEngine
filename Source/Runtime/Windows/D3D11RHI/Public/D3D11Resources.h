@@ -123,3 +123,78 @@ public:
 private:
 
 };
+
+//struct FRingAllocation
+//{
+//	ID3D11Buffer* Buffer;
+//	void* DataPtr;
+//	uint32 Offset;
+//	uint32 Size;
+//
+//	FRingAllocation() : Buffer(NULL) {}
+//	inline bool IsValid() const { return Buffer != NULL; }
+//};
+
+class FD3D11UniformBuffer:public FRHIUniformBuffer
+{
+public:
+	ID3D11Buffer* Resource;
+
+	//FRingAllocation RingAllocation;
+
+	FD3D11UniformBuffer(class FD3D11DynamicRHI* InD3D11RHI, const FRHIUniformBufferLayout& InLayout, ID3D11Buffer* InResource) :FRHIUniformBuffer(InLayout)
+	{
+
+	}
+protected:
+private:
+};
+
+
+class FD3D11IndexBuffer : public FRHIIndexBuffer
+{
+public:
+	ID3D11Buffer* Resource;
+
+	FD3D11IndexBuffer(ID3D11Buffer* InResource, uint32 InStride, uint32 InSize, uint32 InUsage)
+		:FRHIIndexBuffer(InStride , InSize , InUsage),
+		Resource(InResource)
+	{
+
+	}
+
+protected:
+private:
+};
+
+class FD3D11VertexBuffer:public FRHIVertexBuffer
+{
+public:
+	FD3D11VertexBuffer(ID3D11Buffer* InResource , uint32 InSize , uint32 InUsage) 
+		:FRHIVertexBuffer(InSize , InUsage),
+		Resource(InResource)
+	{
+
+	}
+
+	ID3D11Buffer* Resource;
+
+protected:
+private:
+};
+
+class FD3D11StructureBuffer :public FRHIStructureBuffer
+{
+public:
+	FD3D11StructureBuffer(ID3D11Buffer* InResource, uint32 InStride, uint32 InSize, uint32 InUsage) :
+		FRHIStructureBuffer(InStride, InSize, InUsage),
+		Resource(InResource)
+
+	{
+
+	}
+
+	ID3D11Buffer* Resource;
+protected:
+private:
+};
