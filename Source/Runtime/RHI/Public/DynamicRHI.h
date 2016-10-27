@@ -58,12 +58,12 @@ public:
 	virtual void* RHILockIndexBuffer(FRHIIndexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
 	virtual void RHIUnlockIndexBuffer(FRHIIndexBuffer* IndexBuffer) = 0;//Flush
 	virtual FRHIVertexBuffer* RHICreateVertexBuffer(uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo) = 0;
-	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
-	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* IndexBuffer) = 0;//Flush
-	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* IndexBuffer) = 0;
+	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* VertexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
+	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* VertexBuffer) = 0;//Flush
+	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* VertexBuffer) = 0;
 	virtual FRHIStructureBuffer* RHICreateStructureBuffer(uint32 Stride, uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo) = 0;
-	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
-	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* IndexBuffer) = 0;//Flush
+	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* StructureBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
+	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* StructureBuffer) = 0;//Flush
 
 	//Resource-----------------------------------------------------
 protected:

@@ -82,17 +82,17 @@ public:
 
 	virtual FRHIVertexBuffer* RHICreateVertexBuffer(uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo)  final override;
 
-	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
+	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* VertexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
 
-	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* IndexBuffer)  final override;
+	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* VertexBuffer)  final override;
 
-	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* IndexBuffer)  final override;
+	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* VertexBuffer)  final override;
 
 	virtual FRHIStructureBuffer* RHICreateStructureBuffer(uint32 Stride, uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo)  final override;
 
-	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
+	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* StructureBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
 
-	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* IndexBuffer)  final override;
+	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* StructureBuffer)  final override;
 
 protected:
 	IDXGIFactory1* DXGIFactory1;

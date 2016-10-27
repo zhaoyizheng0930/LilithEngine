@@ -7,12 +7,12 @@ FRHIStructureBuffer* FD3D11DynamicRHI::RHICreateStructureBuffer(uint32 Stride, u
 
 }
 
-void* FD3D11DynamicRHI::RHILockStructureBuffer(FRHIStructureBuffer* IndexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)
+void* FD3D11DynamicRHI::RHILockStructureBuffer(FRHIStructureBuffer* StructureBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)
 {
 
 }
 
-void FD3D11DynamicRHI::RHIUnlockStructureBuffer(FRHIStructureBuffer* IndexBuffer)
+void FD3D11DynamicRHI::RHIUnlockStructureBuffer(FRHIStructureBuffer* StructureBuffer)
 {
 
 }
