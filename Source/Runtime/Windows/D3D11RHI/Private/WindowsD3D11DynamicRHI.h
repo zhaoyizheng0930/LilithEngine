@@ -115,6 +115,9 @@ protected:
 	//TRefCountPtr<FD3D11DynamicBuffer> DynamicVB;
 	//TRefCountPtr<FD3D11DynamicBuffer> DynamicIB;
 
+	/** Global D3D11 lock list */
+	std::map<FD3D11LockedKey, FD3D11LockedData> OutstandingLocks;
+
 	std::vector<FD3D11ConstantBuffer*> VSConstantBuffers;
 	std::vector<FD3D11ConstantBuffer*> HSConstantBuffers;
 	std::vector<FD3D11ConstantBuffer*> DSConstantBuffers;

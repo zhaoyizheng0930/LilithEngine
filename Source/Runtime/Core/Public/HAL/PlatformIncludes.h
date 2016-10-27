@@ -17,6 +17,7 @@
 #include <stack>
 #include <sstream>
 #include <algorithm>
+#include <map>
 
 //Generic Platform Include
 #include "../GenericPlatform/GenericPlatformMemory.h"
