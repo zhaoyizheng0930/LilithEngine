@@ -263,3 +263,57 @@ struct FRHIResourceCreateInfo
 {
 	FRHIResourceCreateInfo() {}
 };
+
+struct FUpdateTextureRegion2D
+{
+	uint32 DestX;
+	uint32 DestY;
+
+	uint32 SrcX;
+	uint32 SrcY;
+
+	uint32 Wight;
+	uint32 Height;
+
+	FUpdateTextureRegion2D(uint32 InDestX, uint32 InDestY, uint32 InSrcX, uint32 InSrcY, uint32 InWight, uint32 InHeight)
+		:DestX(InDestX),
+		DestY(InDestY),
+		SrcX(InSrcX),
+		SrcY(InSrcY),
+		Wight(InWight),
+		Height(InHeight)
+	{
+
+	}
+
+};
+
+struct FUpdateTextureRegion3D
+{
+	uint32 DestX;
+	uint32 DestY;
+	uint32 DestZ;
+
+	uint32 SrcX;
+	uint32 SrcY;
+	uint32 SrcZ;
+
+	uint32 Wight;
+	uint32 Height;
+	uint32 Depth;
+
+	FUpdateTextureRegion3D(uint32 InDestX, uint32 InDestY,uint32 InDestZ, uint32 InSrcX, uint32 InSrcY, uint32 InSrcZ, uint32 InWight, uint32 InHeight , uint32 InDepth)
+		:DestX(InDestX),
+		DestY(InDestY),
+		DestZ(InDestZ),
+		SrcX(InSrcX),
+		SrcY(InSrcY),
+		SrcZ(InSrcZ),
+		Wight(InWight),
+		Height(InHeight),
+		Depth(InDepth)
+	{
+
+	}
+
+};

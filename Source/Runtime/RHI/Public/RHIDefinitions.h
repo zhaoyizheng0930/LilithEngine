@@ -77,3 +77,20 @@ enum EBufferUsageFlags
 	// Helper bit-masks
 	BUF_AnyDynamic = (BUF_Dynamic | BUF_Volatile),
 };
+
+enum ETextureReallocationStatus
+{
+	TexRealloc_Succeeded = 0,
+	TexRealloc_Failed,
+	TexRealloc_InProgress,
+};
+
+enum ERenderQueryType
+{
+	// e.g. WaitForFrameEventCompletion()
+	RQT_Undefined,
+	// Result is the number of samples that are not culled (divide by MSAACount to get pixels)
+	RQT_Occlusion,
+	// Result is time in micro seconds = 1/1000 ms = 1/1000000 sec
+	RQT_AbsoluteTime,
+};

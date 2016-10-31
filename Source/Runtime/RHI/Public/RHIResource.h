@@ -100,9 +100,14 @@ class FRHITexture2D : public FRHITexture {};
 class FRHIComputeFence : public FRHIResource {};
 class FRHIViewport : public FRHIResource {};
 class FRHICustomPresent : public FRHIResource {};
+class FRHIRenderQuery : public FRHIResource {};
 
 //RTV
 class FRHIRenderTargetView : public FRHIResource {};
 class FExclusiveDepthStencil : public FRHIResource {};
 class FRHIDepthRenderTargetView : public FRHIResource {};
 class FRHISetRenderTargetsInfo : public FRHIResource {};
+
+//View
+class FRHIUnorderedAccessView : public FRHIResource {};
+class FRHIShaderResourceView : public FRHIResource {};

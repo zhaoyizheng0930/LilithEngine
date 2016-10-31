@@ -24,7 +24,7 @@ struct FD3D11Adapter
 	}
 };
 
-class FD3D11DynamicRHI:public FDynamicRHI
+class FD3D11DynamicRHI:public FDynamicRHI, public IRHICommandContext
 {
 public:
 	FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LEVEL InFeatureLevel, int32 InChosenAdapter, const DXGI_ADAPTER_DESC& InChosenDescription);
@@ -94,6 +94,28 @@ public:
 	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* StructureBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode)  final override;
 
 	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* StructureBuffer)  final override;
+
+	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHITexture* Texture, uint32 MipLevel)  final override;
+
+	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIStructureBuffer* StructBuffer, bool bUseUAVCounter, bool bAppendBuffer)  final override;
+
+	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIVertexBuffer* VertexBuffer, uint8 Format)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIStructureBuffer* StructBuffer)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIVertexBuffer* VertexBuffer, uint32 Stride, uint8 Format)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIIndexBuffer* IndexBuffer)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2D* Texture2D, uint8 MipLevel)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2D* Texture2D, uint8 MipLevel, uint8 NumMipLevels, uint8 Format)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture3D* Texture3D, uint8 MipLevel)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2DArray* Texture2DArray, uint8 MipLevel)  final override;
+
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITextureCube* TextureCube, uint8 MipLevel)  final override;
 
 protected:
 	IDXGIFactory1* DXGIFactory1;
