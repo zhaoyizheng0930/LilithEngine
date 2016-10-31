@@ -118,27 +118,41 @@ void FD3D11DynamicRHI::RHIUnlockVertexBuffer(FRHIVertexBuffer* VertexBuffer)
 	D3D11_BUFFER_DESC desc;
 	D11VertexBuffer->Resource->GetDesc(&desc);
 	FD3D11LockedKey lockedKey(D11VertexBuffer->Resource);
-	FD3D11LockedData LockedData;
-	LockedData = (OutstandingLocks.find(lockedKey))->second;
+	FD3D11LockedData* LockedData;
+	LockedData = &((OutstandingLocks.find(lockedKey))->second);
 	if (desc.Usage == D3D11_USAGE_DYNAMIC)
 	{
 		Direct3DDeviceIMContext->Unmap(D11VertexBuffer->Resource, 0);
 	}
 	else
 	{
-		if (LockedData.StagingResource)
+		if (LockedData->StagingResource)
 		{
 			Direct3DDeviceIMContext->Unmap(D11VertexBuffer->Resource , 0);
 		}
 		else
 		{
-			//Direct3DDeviceIMContext->UpdateSubresource(D11VertexBuffer->Resource , )
-			//LockedData.FreeData();
+			Direct3DDeviceIMContext->UpdateSubresource(D11VertexBuffer->Resource,lockedKey.Subresource , NULL , LockedData->GetData() , LockedData->Pitch , 0 );
+			LockedData->FreeData();
 		}
 	}
+
+	OutstandingLocks.erase(lockedKey);
 }
 
-void FD3D11DynamicRHI::RHICopyVertexBuffer(FRHIVertexBuffer* VertexBuffer)
+void FD3D11DynamicRHI::RHICopyVertexBuffer(FRHIVertexBuffer* SourceBufferRHI, FRHIVertexBuffer* DestBufferRHI)
 {
+	FD3D11VertexBuffer* SourceBuffer = (FD3D11VertexBuffer*)SourceBufferRHI;
+	FD3D11VertexBuffer* DestBuffer = (FD3D11VertexBuffer*)DestBufferRHI;
 
+	D3D11_BUFFER_DESC SrcDesc;
+	SourceBuffer->Resource->GetDesc(&SrcDesc);
+
+	D3D11_BUFFER_DESC DestDesc;
+	DestBuffer->Resource->GetDesc(&DestDesc);
+
+	if (SrcDesc.ByteWidth == DestDesc.ByteWidth)
+	{
+		Direct3DDeviceIMContext->CopyResource(DestBuffer->Resource, SourceBuffer->Resource);
+	}
 }

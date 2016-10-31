@@ -36,6 +36,7 @@ struct FRHIUniformBufferLayout
 };
 class FRHIUniformBuffer : public FRHIResource 
 {
+public:
 	FRHIUniformBuffer(const FRHIUniformBufferLayout& InLayout)
 		: Layout(&InLayout)
 	{}

@@ -60,7 +60,7 @@ public:
 	virtual FRHIVertexBuffer* RHICreateVertexBuffer(uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo) = 0;
 	virtual void* RHILockVertexBuffer(FRHIVertexBuffer* VertexBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
 	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* VertexBuffer) = 0;//Flush
-	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* VertexBuffer) = 0;
+	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* SourceBufferRHI, FRHIVertexBuffer* DestBufferRHI) = 0;
 	virtual FRHIStructureBuffer* RHICreateStructureBuffer(uint32 Stride, uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo) = 0;
 	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* StructureBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
 	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* StructureBuffer) = 0;//Flush

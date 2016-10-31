@@ -96,7 +96,7 @@ void FD3D11DynamicRHI::RHIUnlockIndexBuffer(FRHIIndexBuffer* IndexBuffer)
 	buffer->GetDesc(&desc);
 
 	FD3D11LockedKey LockedKey(buffer);
-	FD3D11LockedData LockedData = (OutstandingLocks.find(LockedKey))->second;
+	FD3D11LockedData* LockedData = &((OutstandingLocks.find(LockedKey))->second);
 
 	if (desc.Usage == D3D11_USAGE_DYNAMIC)
 	{
@@ -104,14 +104,14 @@ void FD3D11DynamicRHI::RHIUnlockIndexBuffer(FRHIIndexBuffer* IndexBuffer)
 	}
 	else
 	{
-		if (LockedData.StagingResource)
+		if (LockedData->StagingResource)
 		{
-			Direct3DDeviceIMContext->Unmap(LockedData.StagingResource, 0);
+			Direct3DDeviceIMContext->Unmap(LockedData->StagingResource, 0);
 		}
 		else
 		{
-			Direct3DDeviceIMContext->UpdateSubresource(D11Buffer->Resource, 0, NULL, LockedData.GetData(), LockedData.Pitch, 0);
-			LockedData.FreeData();
+			Direct3DDeviceIMContext->UpdateSubresource(D11Buffer->Resource, 0, NULL, LockedData->GetData(), LockedData->Pitch, 0);
+			LockedData->FreeData();
 		}
 	}
 

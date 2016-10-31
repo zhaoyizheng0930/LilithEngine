@@ -15,6 +15,26 @@ public:
 
 	FD3D11LockedKey(ID3D11Texture3D* Inbuffer, uint32 InSubresource = 0) :SourceObject((void*)Inbuffer), Subresource(InSubresource) {}
 
+	bool operator==(const FD3D11LockedKey& Other) const
+	{
+		return SourceObject == Other.SourceObject && Subresource == Other.Subresource;
+	}
+	bool operator!=(const FD3D11LockedKey& Other) const
+	{
+		return SourceObject != Other.SourceObject || Subresource != Other.Subresource;
+	}
+	bool operator<(const FD3D11LockedKey& Other) const
+	{
+		return SourceObject > Other.SourceObject ? true : false;
+	}
+
+	FD3D11LockedKey& operator=(const FD3D11LockedKey& Other)
+	{
+		SourceObject = Other.SourceObject;
+		Subresource = Other.Subresource;
+		return *this;
+	}
+
 	uint32 GetHash() { return PointerHash(SourceObject); };
 protected:
 private:

@@ -1,12 +1,6 @@
 #pragma once
 #include "../Core.h"
 
-uint32 PointerHash(const void* Key , uint32 c = 0)
-{
-	auto PtrInt = reinterpret_cast<uint32>(Key) >> 4;
-
-	return HashCombine(PtrInt , c);
-}
 
 uint32 HashCombine(uint32 A, uint32 C)
 {
@@ -24,4 +18,11 @@ uint32 HashCombine(uint32 A, uint32 C)
 	C -= A; C -= B; C ^= (B >> 15);
 
 	return C;
+}
+
+uint32 PointerHash(const void* Key, uint32 c = 0)
+{
+	auto PtrInt = reinterpret_cast<uint32>(Key) >> 4;
+
+	return HashCombine(PtrInt, c);
 }

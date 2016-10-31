@@ -16,6 +16,9 @@
     <Filter Include="Private\Windows">
       <UniqueIdentifier>{6cc7454c-1b2f-454d-9356-f7b3cfe0a58a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Private\Buffer">
+      <UniqueIdentifier>{c604269c-bef0-4dad-8972-2267cc6a6b38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\WindowsD3D11Device.cpp">
@@ -31,6 +34,21 @@
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="Private\D3D11Shader.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Buffer\D3D11IndexBuffer.cpp">
+      <Filter>Private\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Buffer\D3D11UniformBuffer.cpp">
+      <Filter>Private\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Buffer\D3D11StructureBuffer.cpp">
+      <Filter>Private\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Buffer\D3D11VertexBuffer.cpp">
+      <Filter>Private\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11Util.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>

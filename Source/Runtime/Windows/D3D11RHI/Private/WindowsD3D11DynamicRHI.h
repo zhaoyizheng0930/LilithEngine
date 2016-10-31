@@ -4,6 +4,7 @@
 #include "DynamicRHI.h"
 #include "D3D11Resources.h"
 #include "Windows/D3D11StateCache.h"
+#include "D3D11Util.h"
 
 struct FD3D11Adapter
 {
@@ -86,7 +87,7 @@ public:
 
 	virtual void RHIUnlockVertexBuffer(FRHIVertexBuffer* VertexBuffer)  final override;
 
-	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* VertexBuffer)  final override;
+	virtual void RHICopyVertexBuffer(FRHIVertexBuffer* SourceBufferRHI, FRHIVertexBuffer* DestBufferRHI)  final override;
 
 	virtual FRHIStructureBuffer* RHICreateStructureBuffer(uint32 Stride, uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo)  final override;
 
