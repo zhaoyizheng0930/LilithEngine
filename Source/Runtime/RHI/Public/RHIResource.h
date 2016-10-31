@@ -88,13 +88,43 @@ public:
 };
 
 //Texture
-class FRHITexture : public FRHIResource {};
-class FRHITextureReference : public FRHITexture {};
-class FRHITextureReferenceNullImpl : public FRHITextureReference {};
-class FRHITextureCube : public FRHITexture {};
-class FRHITexture3D : public FRHITexture {};
-class FRHITexture2DArray : public FRHITexture {};
-class FRHITexture2D : public FRHITexture {};
+class FRHITexture : public FRHIResource 
+{
+public:
+	virtual class FRHITexture2D* GetTexture2D() { return NULL; }
+	virtual class FRHITexture2DArray* GetTexture2DArray() { return NULL; }
+	virtual class FRHITexture3D* GetTexture3D() { return NULL; }
+	virtual class FRHITextureCube* GetTextureCube() { return NULL; }
+	virtual class FRHITextureReference* GetTextureReference() { return NULL; }
+};
+
+class FRHITextureReference : public FRHITexture 
+{
+	virtual FRHITextureReference* GetTextureReference() { return this; }
+};
+class FRHITextureReferenceNullImpl : public FRHITextureReference
+{
+};
+class FRHITextureCube : public FRHITexture
+{
+public:
+	virtual class FRHITextureCube* GetTextureCube() { return this; }
+};
+class FRHITexture3D : public FRHITexture 
+{
+public:
+	virtual FRHITexture3D* GetTexture3D() { return this; }
+};
+class FRHITexture2DArray : public FRHITexture 
+{
+public:
+	virtual FRHITexture2DArray* GetTexture2DArray() { return this; }
+};
+class FRHITexture2D : public FRHITexture 
+{
+public:
+	virtual FRHITexture2D* GetTexture2D() { return this; }
+};
 
 //Others
 class FRHIComputeFence : public FRHIResource {};

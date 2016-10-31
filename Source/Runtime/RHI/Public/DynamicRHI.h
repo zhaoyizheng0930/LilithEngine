@@ -67,20 +67,15 @@ public:
 	virtual void* RHILockStructureBuffer(FRHIStructureBuffer* StructureBuffer, uint32 Offset, uint32 Size, EResourceLockMode LockMode) = 0;//Flush
 	virtual void RHIUnlockStructureBuffer(FRHIStructureBuffer* StructureBuffer) = 0;//Flush
 
-	//Resource-----------------------------------------------------View   ShaderInput
-	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHITexture* Texture , uint32 MipLevel) = 0;
-	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIStructureBuffer* StructBuffer, bool bUseUAVCounter, bool bAppendBuffer) = 0;
-	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIVertexBuffer* VertexBuffer, uint8 Format) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIStructureBuffer* StructBuffer) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIVertexBuffer* VertexBuffer , uint32 Stride, uint8 Format) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIIndexBuffer* IndexBuffer) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2D* Texture2D , uint8 MipLevel) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2D* Texture2D , uint8 MipLevel , uint8 NumMipLevels,uint8 Format) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture3D* Texture3D, uint8 MipLevel) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2DArray* Texture2DArray, uint8 MipLevel) = 0;
-	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITextureCube* TextureCube, uint8 MipLevel) = 0;
-
 	//Resource-----------------------------------------------------Texture 
+	virtual FRHITexture2D* RHICreateTexture2D(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 NumSamples, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
+	virtual FRHITexture2D* RHIAsyncCreateTexture2D(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 Flags, void** InitialMipData, uint32 NumInitialMips) = 0;
+	virtual void RHICopySharedMips(FRHITexture2D* DestTexture2D, FRHITexture2D* SrcTexture2D) = 0;
+	virtual FRHITexture2DArray* RHICreateTexture2DArray(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
+	virtual FRHITexture3D* RHICreateTexture3D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 NumSamples, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
+	virtual FRHITextureCube* RHICreateTextureCube(uint32 Size, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
+	virtual FRHITextureCube* RHICreateTextureCubeArray(uint32 Size, uint32 ArraySize, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
+
 	virtual uint64 RHICalcTexture2DPlatformSize(uint32 SizeX , uint32 SizeY , uint8 Format , uint32 NumMips , uint32 Flag , uint32& OutAlign) = 0;
 	virtual uint64 RHICalcTexture3DPlatformSize(uint32 SizeX, uint32 SizeY, uint32 SizeZ,uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign) = 0;
 	virtual uint64 RHICalcTextureCubePlatformSize(uint32 Size, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign) = 0;
@@ -88,14 +83,6 @@ public:
 	//virtual void RHIGetTextureMemoryStats(FTextureMemoryStats& OutStats) = 0;
 	virtual bool RHIGetTextureMemoryVisualizeData(FColor* TextureData , int32 SizeX , int32 SizeY , int32 Pitch , int32 PixelSize) = 0;
 	//virtual FRHITextureReference* RHICreateTextureRefrence(FLastRenderTimeContainer* LastRenderTime) = 0;
-
-	virtual FRHITexture2D* RHICreateTexture2D(uint32 SizeX , uint32 SizeY ,uint8 Format , uint32 NumMips , uint32 NumSamples , uint32 Flags , FRHIResourceCreateInfo& CreateInfo) = 0;
-	virtual FRHITexture2D* RHIAsyncCreateTexture2D(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 Flags, void** InitialMipData, uint32 NumInitialMips) = 0;
-	virtual void RHICopySharedMips(FRHITexture2D* DestTexture2D , FRHITexture2D* SrcTexture2D) = 0;
-	virtual FRHITexture2DArray* RHICreateTexture2DArray(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
-	virtual FRHITexture3D* RHICreateTexture3D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 NumSamples, uint32 Flags, FRHIResourceCreateInfo& CreateInfo) = 0;
-	virtual FRHITextureCube* RHICreateTextureCube(uint32 Size , uint8 Format ,uint32 NumMips , uint32 Flags ,FRHIResourceCreateInfo& CreateInfo ) = 0;
-	virtual FRHITextureCube* RHICreateTextureCubeArray(uint32 Size , uint32 ArraySize , uint8 Format , uint32 NumMips , uint32 Flags , FRHIResourceCreateInfo& CreateInfo) = 0;
 
 	//virtual void RHIGetResourceInfo(FRHITexture* Texture , FRHIResourceInfo& OutInfo);
 	virtual void RHIGenerateMips(FRHITexture* Texture) = 0;
@@ -122,6 +109,19 @@ public:
 	//virtual void RHIUnmapStagingSurface(FTextureRHIParamRef Texture) = 0;
 	//virtual void RHIReadSurfaceFloatData(FTextureRHIParamRef Texture, FIntRect Rect, TArray<FFloat16Color>& OutData, ECubeFace CubeFace, int32 ArrayIndex, int32 MipIndex) = 0;
 	//virtual void RHIRead3DSurfaceFloatData(FTextureRHIParamRef Texture, FIntRect Rect, FIntPoint ZMinMax, TArray<FFloat16Color>& OutData) = 0;
+
+	//Resource-----------------------------------------------------View   ShaderInput
+	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHITexture* Texture, uint32 MipLevel) = 0;
+	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIStructureBuffer* StructBuffer, bool bUseUAVCounter, bool bAppendBuffer) = 0;
+	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIVertexBuffer* VertexBuffer, uint8 Format) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIStructureBuffer* StructBuffer) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIVertexBuffer* VertexBuffer, uint32 Stride, uint8 Format) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHIIndexBuffer* IndexBuffer) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2D* Texture2D, uint8 MipLevel) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2D* Texture2D, uint8 MipLevel, uint8 NumMipLevels, uint8 Format) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture3D* Texture3D, uint8 MipLevel) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITexture2DArray* Texture2DArray, uint8 MipLevel) = 0;
+	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITextureCube* TextureCube, uint8 MipLevel) = 0;
 
 	//Query-------------------------------------------------------------------------------------------------------------------
 	virtual FRHIRenderQuery* RHICreateRenderQuery(ERenderQueryType QueryType) = 0;

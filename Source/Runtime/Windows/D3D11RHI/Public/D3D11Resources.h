@@ -13,14 +13,6 @@ protected:
 private:
 };
 
-
-class FD3D11TextureBase :public FD3D11BaseShaderResource
-{
-public:
-protected:
-private:
-};
-
 class FD3D11VertexDeclaration:public FRHIVertexDeclaration
 {
 public:
@@ -151,7 +143,7 @@ private:
 };
 
 
-class FD3D11IndexBuffer : public FRHIIndexBuffer
+class FD3D11IndexBuffer : public FRHIIndexBuffer, public FD3D11BaseShaderResource
 {
 public:
 	ID3D11Buffer* Resource;
@@ -167,7 +159,7 @@ protected:
 private:
 };
 
-class FD3D11VertexBuffer:public FRHIVertexBuffer
+class FD3D11VertexBuffer:public FRHIVertexBuffer, public FD3D11BaseShaderResource
 {
 public:
 	FD3D11VertexBuffer(ID3D11Buffer* InResource , uint32 InSize , uint32 InUsage) 
@@ -183,7 +175,7 @@ protected:
 private:
 };
 
-class FD3D11StructureBuffer :public FRHIStructureBuffer
+class FD3D11StructureBuffer :public FRHIStructureBuffer, public FD3D11BaseShaderResource
 {
 public:
 	FD3D11StructureBuffer(ID3D11Buffer* InResource, uint32 InStride, uint32 InSize, uint32 InUsage) :
@@ -195,6 +187,55 @@ public:
 	}
 
 	ID3D11Buffer* Resource;
+protected:
+private:
+};
+
+
+class FD3D11TextureBase :public FD3D11BaseShaderResource
+{
+public:
+protected:
+private:
+};
+
+class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
+{
+
+};
+
+class FD3D11Texture2DArray :public FRHITexture2DArray, public FD3D11TextureBase
+{
+
+};
+
+class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
+{
+
+};
+
+class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
+{
+
+};
+
+class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
+{
+
+};
+
+class FD3D11UnorderedAccessView:public FRHIUnorderedAccessView
+{
+public:
+	FD3D11UnorderedAccessView(ID3D11UnorderedAccessView* InView , FD3D11BaseShaderResource* InResource)
+		:View(InView),
+		Resource(InResource)
+	{
+
+	}
+
+	ID3D11UnorderedAccessView* View;
+	FD3D11BaseShaderResource* Resource;
 protected:
 private:
 };
