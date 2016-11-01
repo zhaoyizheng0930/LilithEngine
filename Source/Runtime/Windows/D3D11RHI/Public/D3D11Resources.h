@@ -195,31 +195,124 @@ private:
 class FD3D11TextureBase :public FD3D11BaseShaderResource
 {
 public:
+	FD3D11TextureBase(FD3D11DynamicRHI* InD3DRHI,
+		ID3D11Resource* InResource,
+		ID3D11ShaderResourceView* InShaderResourceView,
+		int32 InRTVArraySize,
+		bool bInCreatedRTVsPerSlice,
+		std::vector<ID3D11RenderTargetView*>& InRenderTargetViews,
+		std::vector<ID3D11DepthStencilView*>& InDepthStencilViews)
+		:D3DRHI(InD3DRHI),
+		Resouece(InResource),
+		ShaderResourceView(InShaderResourceView),
+		RTVArraySize(InRTVArraySize),
+		bCreatedRTVsPerSlice(bInCreatedRTVsPerSlice),
+		RenderTargetViews(InRenderTargetViews),
+		DepthStencilView(InDepthStencilViews)
+
+	{
+
+	}
+
+	virtual ~FD3D11TextureBase()
+	{
+
+	}
+protected:
+	FD3D11DynamicRHI* D3DRHI;
+
+	int MemorySize;
+
+	FD3D11BaseShaderResource* BaseShaderResource;
+
+	ID3D11Resource* Resouece;
+
+	ID3D11ShaderResourceView* ShaderResourceView;
+
+	std::vector<ID3D11RenderTargetView*> RenderTargetViews;
+
+	bool bCreatedRTVsPerSlice;
+
+	int32 RTVArraySize;
+
+	std::vector<ID3D11DepthStencilView*> DepthStencilView; //Max 4
+private:
+};
+
+template <class BaseResourceType>
+class TD3D11Texture2D :public BaseResourceType, public FD3D11TextureBase
+{
+public:
+	TD3D11Texture2D(FD3D11DynamicRHI* InD3DRHI,
+		ID3D11Resource* InResource,
+		ID3D11ShaderResourceView* InShaderResourceView,
+		int32 InRTVArraySize,
+		bool bInCreatedRTVsPerSlice,
+		std::vector<ID3D11RenderTargetView*>& InRenderTargetViews,
+		std::vector<ID3D11DepthStencilView*>& InDepthStencilViews,
+		uint32 InSizeX,
+		uint32 InSizeY,
+		uint32 InSizeZ,
+		uint32 InNumMips,
+		uint32 InNumSamples/*,*/
+		/*EPixelFormat InFormat*/) :
+		BaseResourceType(InD3DRHI, InResource , InShaderResourceView , InRTVArraySize , bInCreatedRTVsPerSlice , InRenderTargetViews , InDepthStencilViews),
+		FD3D11TextureBase(InSizeX , InSizeY , InSizeZ , InNumMips , InNumSamples /*, InFormat*/)
+	{
+
+	}
+	virtual ~TD3D11Texture2D() {}
+
+	void* Lock(uint32 MipIndex, uint32 ArrayIndex, EResourceLockMode LockMode, uint32& DestStride);
+
+	void Unlock(uint32 MipIndex, uint32 ArrayIndex);
+};
+
+class FD3D11BaseTexture2D : public FRHITexture2D
+{
+public:
+	FD3D11BaseTexture2D(uint32 InSizeX, uint32 InSizeY, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
+		:FRHITexture2D(InSizeX , InSizeY , InNumMips , InNumSamples , InFlags)
+	{
+	}
+};
+
+class FD3D11BaseTexture2DArray :public FRHITexture2DArray
+{
+public:
+	FD3D11BaseTexture2DArray(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags) 
+		:FRHITexture2DArray(InSizeX , InSizeY , InSizeZ , InNumMips , InNumSamples , InFlags)
+	{
+	}
 protected:
 private:
 };
 
-class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
+class FD3D11BaseTextureCube:public FRHITextureCube
 {
-
+public:
+	FD3D11BaseTextureCube(uint32 InSize, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
+		:FRHITextureCube(InSize , InNumMips , InNumSamples , InFlags)
+	{
+	}
+protected:
+private:
 };
 
-class FD3D11Texture2DArray :public FRHITexture2DArray, public FD3D11TextureBase
-{
+typedef TD3D11Texture2D<FRHITexture>              FD3D11Texture;
+typedef TD3D11Texture2D<FD3D11BaseTexture2D>      FD3D11Texture2D;
+typedef TD3D11Texture2D<FD3D11BaseTexture2DArray> FD3D11Texture2DArray;
+typedef TD3D11Texture2D<FD3D11BaseTextureCube>    FD3D11TextureCube;
 
+class FD3D11TextureReference:public FRHITextureReference,public FD3D11TextureBase
+{
+public:
+	FD3D11TextureReference():FRHITextureReference(), FD3D11TextureBase() {}
+protected:
+private:
 };
 
-class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
-{
-
-};
-
-class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
-{
-
-};
-
-class FD3D11Texture2D :public FRHITexture2D, public FD3D11TextureBase
+class FD3D11Texture3D :public FRHITexture3D, public FD3D11TextureBase
 {
 
 };

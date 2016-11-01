@@ -91,39 +91,132 @@ public:
 class FRHITexture : public FRHIResource 
 {
 public:
+	FRHITexture(uint32 InNumMips,uint32 InNumSamples,uint32 InFlags)
+		:NumMips(InNumMips),
+		NumSamples(InNumSamples),
+		Flags(InFlags)
+	{
+
+	}
+
 	virtual class FRHITexture2D* GetTexture2D() { return NULL; }
 	virtual class FRHITexture2DArray* GetTexture2DArray() { return NULL; }
 	virtual class FRHITexture3D* GetTexture3D() { return NULL; }
 	virtual class FRHITextureCube* GetTextureCube() { return NULL; }
 	virtual class FRHITextureReference* GetTextureReference() { return NULL; }
+
+private:
+	uint32 NumMips;
+	uint32 NumSamples;
+	//EPixelFormat InFormat;
+	uint32 Flags;
 };
 
 class FRHITextureReference : public FRHITexture 
 {
+public:
+	FRHITextureReference()
+		:FRHITexture(0,0,0)
+	{
+
+	}
+
 	virtual FRHITextureReference* GetTextureReference() { return this; }
+protected:
+	void SetReferencedTexture(FRHITexture* InTexture)
+	{
+		RefTexture = InTexture;
+	}
+private:
+	FRHITexture* RefTexture;
 };
 class FRHITextureReferenceNullImpl : public FRHITextureReference
 {
+public:
+	FRHITextureReferenceNullImpl()
+		:FRHITextureReference()
+	{}
+
+	void SetReferencedTexture(FRHITexture* InTexture)
+	{
+		FRHITextureReference::SetReferencedTexture(InTexture);
+	}
 };
 class FRHITextureCube : public FRHITexture
 {
 public:
+	FRHITextureCube(uint32 InSize, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
+		:FRHITexture(InNumMips, InNumSamples, InFlags),
+		Size(InSize)
+	{
+
+	}
+
 	virtual class FRHITextureCube* GetTextureCube() { return this; }
+
+	uint32 GetSize() { return Size; }
+private:
+	uint32 Size;
 };
 class FRHITexture3D : public FRHITexture 
 {
 public:
+	FRHITexture3D(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
+		:FRHITexture(InNumMips, InNumSamples, InFlags),
+		SizeX(InSizeX),
+		SizeY(InSizeY),
+		SizeZ(InSizeZ)
+	{
+
+	}
+
 	virtual FRHITexture3D* GetTexture3D() { return this; }
+
+	uint32 GetSizeX() { return SizeX; }
+	uint32 GetSizeY() { return SizeY; }
+	uint32 GetSizeZ() { return SizeZ; }
+private:
+	uint32 SizeX;
+	uint32 SizeY;
+	uint32 SizeZ;
 };
 class FRHITexture2DArray : public FRHITexture 
 {
 public:
+	FRHITexture2DArray(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
+		:FRHITexture(InNumMips, InNumSamples, InFlags),
+		SizeX(InSizeX),
+		SizeY(InSizeY),
+		SizeZ(InSizeZ)
+	{
+
+	}
+
 	virtual FRHITexture2DArray* GetTexture2DArray() { return this; }
+
+private:
+	uint32 SizeX;
+	uint32 SizeY;
+	uint32 SizeZ;
 };
 class FRHITexture2D : public FRHITexture 
 {
 public:
+	FRHITexture2D(uint32 InSizeX, uint32 InSizeY , uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
+		:FRHITexture(InNumMips , InNumSamples , InFlags),
+		SizeX(InSizeX),
+		SizeY(InSizeY)
+	{
+
+	}
+
 	virtual FRHITexture2D* GetTexture2D() { return this; }
+
+	uint32 GetSizeX() { return SizeX; }
+	uint32 GetSizeY() { return SizeY; }
+private:
+	uint32 SizeX;
+	uint32 SizeY;
 };
 
 //Others
