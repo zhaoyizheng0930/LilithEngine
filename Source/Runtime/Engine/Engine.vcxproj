@@ -145,6 +145,7 @@
     <ClInclude Include="Classes\Engine\Engine.h" />
     <ClInclude Include="Public\EngineGlobals.h" />
     <ClInclude Include="Public\EnginePCH.h" />
+    <ClInclude Include="Public\PixelFormat.h" />
     <ClInclude Include="Public\UnrealEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

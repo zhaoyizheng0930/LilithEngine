@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\RenderingThread.cpp" />
+    <ClCompile Include="Private\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\RenderCorePCH.h" />
     <ClInclude Include="Public\RenderingThread.h" />
+    <ClInclude Include="Public\RenderUtils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8DC83F3-B237-4FFC-B24B-0B4AB0653C3F}</ProjectGuid>
@@ -90,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>RenderCorePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\Engine\Public</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -118,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>RenderCorePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

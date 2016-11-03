@@ -18,12 +18,18 @@
     <ClCompile Include="Private\RenderingThread.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\RenderUtils.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\RenderingThread.h">
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Public\RenderCorePCH.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RenderUtils.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

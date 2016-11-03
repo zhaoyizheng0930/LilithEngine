@@ -1,6 +1,7 @@
 #include "D3D11RHIPCH.h"
 #include "D3D11Resources.h"
 #include "WindowsD3D11DynamicRHI.h"
+#include "RenderUtils.h"
 
 template<typename BaseResourceType>
 TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, bool bTextureArray, bool bCubeTexture, uint8 Format,
@@ -37,7 +38,7 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 	{
 		CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 		TextureUsage = D3D11_USAGE_STAGING;
-		BindFlags = 0;
+		BindFlag = 0;
 		bCreateShaderResource = false;
 	}
 
@@ -46,7 +47,7 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 	TexDesc.Height = SizeY;
 	TexDesc.MipLevels = NumMips;
 	TexDesc.ArraySize = SizeZ;
-	TexDesc.Format = GPixelFormats[Format].PlatformFormat;
+	TexDesc.Format = (DXGI_FORMAT)GPixelFormats[Format].PlatformFormat;
 	TexDesc.SampleDesc.Count = ActualMSAACount;
 	TexDesc.SampleDesc.Quality = ActualMSAAQuality;
 	TexDesc.Usage = TextureUsage;
@@ -100,12 +101,12 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 
 	ID3D11Texture2D* TextureResource = NULL;
 	ID3D11ShaderResourceView* ShaderResourceView = NULL;
-	std::vector<ID3D11RenderTargetView*> RenderTargetViews = NULL;
-	ID3D11DepthStencilView* DepthStencilViews[4];
+	std::vector<ID3D11RenderTargetView*> RenderTargetViews;
+	std::vector<ID3D11DepthStencilView*> DepthStencilViews;
 
 	D3D11_SUBRESOURCE_DATA* SubResource;
 	//Init Later
-	Direct3DDevice->CreateTexture2D(TexDesc, NULL, &TextureResource);
+	Direct3DDevice->CreateTexture2D(&TexDesc, NULL, &TextureResource);
 
 	//CreateRTV
 	if (bCreateRTV)
@@ -114,11 +115,12 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 		{
 			if ((Flags & TexCreate_TargetArraySlicesIndependently) && (bTextureArray || bCubeTexture))
 			{
+				bCreatedRTVPerSlice = true;
 				for (uint32 SliceIndex = 0; SliceIndex < TexDesc.ArraySize;SliceIndex++)
 				{
 					ID3D11RenderTargetView* RenderTarget = NULL;
 					D3D11_RENDER_TARGET_VIEW_DESC RenderTargetDesc;
-					RenderTargetDesc.Format = FindShaderResourceDXGIFormat(GPixelFormats[Format].PlatformFormat);
+					RenderTargetDesc.Format = FindShaderResourceDXGIFormat((DXGI_FORMAT)GPixelFormats[Format].PlatformFormat , (Flags & TexCreate_SRGB) != 0);
 					RenderTargetDesc.ViewDimension = RenderTargetViewDimension;
 					RenderTargetDesc.Texture2DArray.ArraySize = 1;
 					RenderTargetDesc.Texture2DArray.MipSlice = MipIndex;
@@ -130,7 +132,7 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 			else
 			{
 				D3D11_RENDER_TARGET_VIEW_DESC RenderTargetDesc;
-				RenderTargetDesc.Format = FindShaderResourceDXGIFormat(GPixelFormats[Format].PlatformFormat);
+				RenderTargetDesc.Format = FindShaderResourceDXGIFormat((DXGI_FORMAT)GPixelFormats[Format].PlatformFormat , (Flags & TexCreate_SRGB) != 0);
 				if (bTextureArray || bCubeTexture)
 				{
 					RenderTargetDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
@@ -154,13 +156,95 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 	//CreateDSV
 	if (bCreateDSV)
 	{
+		D3D11_DEPTH_STENCIL_VIEW_DESC DSVDesc;
+		DSVDesc.Format = FindDepthStencilDXGIFormat((DXGI_FORMAT)GPixelFormats[Format].PlatformFormat);
+		if (bTextureArray || bCubeTexture)
+		{
+			DSVDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+			DSVDesc.Texture2DArray.ArraySize = TexDesc.ArraySize;
+			DSVDesc.Texture2DArray.FirstArraySlice = 0;
+			DSVDesc.Texture2DArray.MipSlice = 0;
+		}
+		else
+		{
+			DSVDesc.ViewDimension = DepthStencilViewDimension;
+			DSVDesc.Texture2D.MipSlice = 0;
+		}
 
+		for (int AccessType = 0; AccessType < 4; ++AccessType)
+		{
+			if (Direct3DDevice->GetFeatureLevel() == D3D_FEATURE_LEVEL_11_0)
+			{
+				DSVDesc.Flags = D3D11_DSV_READ_ONLY_DEPTH;
+				if (DSVDesc.Format == DXGI_FORMAT_D24_UNORM_S8_UINT)
+				{
+					DSVDesc.Flags = D3D11_DSV_READ_ONLY_STENCIL;
+				}
+			}
+			
+			ID3D11DepthStencilView* DepthStencilView = NULL;
+			Direct3DDevice->CreateDepthStencilView(TextureResource, &DSVDesc, &DepthStencilView);
+			DepthStencilViews.push_back(DepthStencilView);
+		}
 	}
 
 	//CreateSRV
 	if (bCreateShaderResource)
 	{
+		D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
+		SRVDesc.Format = (DXGI_FORMAT)GPixelFormats[Format].PlatformFormat;
+		if (bTextureArray && bCubeTexture)
+		{
+			SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+			SRVDesc.TextureCubeArray.First2DArrayFace = 0;
+			SRVDesc.TextureCubeArray.MostDetailedMip = 0;
+			SRVDesc.TextureCubeArray.MipLevels = NumMips;
+			SRVDesc.TextureCubeArray.NumCubes = SizeZ / 6;
+		}
+		else if(bTextureArray)
+		{
+			SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+			SRVDesc.Texture2DArray.ArraySize = TexDesc.ArraySize;
+			SRVDesc.Texture2DArray.FirstArraySlice = 0;
+			SRVDesc.Texture2DArray.MipLevels = NumMips;
+			SRVDesc.Texture2DArray.MostDetailedMip = 0;
+		}
+		else if(bCubeTexture)
+		{
+			SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+			SRVDesc.TextureCube.MostDetailedMip = 0;
+			SRVDesc.TextureCube.MipLevels = NumMips;
+		}
+		else
+		{
+			SRVDesc.ViewDimension = ShaderResourceViewDimension;
+			SRVDesc.Texture2D.MostDetailedMip = 0;
+			SRVDesc.Texture2D.MipLevels = NumMips;
+		}
+
+		Direct3DDevice->CreateShaderResourceView(TextureResource , &SRVDesc , &ShaderResourceView);
 	}
+
+	//Create RHITexture2D
+	TD3D11Texture2D<BaseResourceType>* RHITexture2D = new TD3D11Texture2D<BaseResourceType>(this,
+		TextureResource,
+		ShaderResourceView,
+		RenderTargetViews.size(),
+		bCreatedRTVPerSlice,
+		RenderTargetViews,
+		DepthStencilViews,
+		SizeX,
+		SizeY,
+		SizeZ,
+		NumMips,
+		NumSamples,
+		(EPixelFormat)Format,
+		Flags);
+
+	//Wait for Memory Calculate.
+	//D3D11TextureAllocated();
+
+	return RHITexture2D;
 }
 
 uint32 FD3D11DynamicRHI::GetMaxMSAAQuality(int InActualMSAACount)
@@ -178,6 +262,124 @@ uint32 FD3D11DynamicRHI::GetMaxMSAAQuality(int InActualMSAACount)
 FRHITexture2D* FD3D11DynamicRHI::RHICreateTexture2D(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 NumSamples, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
 {
 	FD3D11Texture2D* Texture2D = CreateD3D11Texture2D<FD3D11BaseTexture2D>(SizeX , SizeY , 1 ,false ,false,Format , NumMips , NumSamples , Flags , CreateInfo);
+	return Texture2D;
+}
+
+FRHITexture2D* FD3D11DynamicRHI::RHIAsyncCreateTexture2D(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 Flags, void** InitialMipData, uint32 NumInitialMips)
+{
+	FD3D11Texture2D* NewTexture = NULL;
+	ID3D11ShaderResourceView* ShaderResourceView = NULL;
+	std::vector<ID3D11RenderTargetView*> RenderTargetViews;
+
+	//CreateTexture-------------------------------------------------------------------------
+	D3D11_TEXTURE2D_DESC Texture2dDesc;
+	Texture2dDesc.Width = SizeX;
+	Texture2dDesc.Height = SizeY;
+	Texture2dDesc.MipLevels = NumMips;
+	Texture2dDesc.ArraySize = 1;
+	Texture2dDesc.Format = (DXGI_FORMAT)(GPixelFormats[Format].PlatformFormat);
+	Texture2dDesc.SampleDesc.Count = 1;
+	Texture2dDesc.SampleDesc.Quality = 0;
+	Texture2dDesc.Usage = D3D11_USAGE_DEFAULT;
+	Texture2dDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	Texture2dDesc.MiscFlags = 0;
+	Texture2dDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA D3D11SubResources[14];
+	//InitData
+	for (uint32 i = 0;i<NumInitialMips;i++)
+	{
+		uint32 NumBlocksX = FMath::Max<uint32>(1, (SizeX >> i) / GPixelFormats[Format].BlockSizeX);
+		uint32 NumBlocksY = FMath::Max<uint32>(1, (SizeY >> i) / GPixelFormats[Format].BlockSizeY);
+
+		D3D11SubResources[i].pSysMem = InitialMipData[i];
+		D3D11SubResources[i].SysMemPitch = NumBlocksX * GPixelFormats[Format].BlockBytes;
+		D3D11SubResources[i].SysMemSlicePitch = NumBlocksY * NumBlocksX * GPixelFormats[Format].BlockBytes;
+	}
+
+	//Init Other Mip data
+	for (uint32 i = NumInitialMips;i<14;i++)
+	{
+		uint32 NumBlocksX = FMath::Max<uint32>(1, (SizeX >> i) / GPixelFormats[Format].BlockSizeX);
+		uint32 NumBlocksY = FMath::Max<uint32>(1, (SizeY >> i) / GPixelFormats[Format].BlockSizeY);
+
+		uint32 MipSize = NumBlocksX * NumBlocksY * GPixelFormats[Format].BlockBytes;
+		/*void* TempBuffer = ZeroMemory;
+		if (MipSize > ZeroMemorySize)
+		{
+			TempBuffer = FMemory::Malloc(MipSize);
+			FMemory::Memzero(TempBuffer , MipSize);
+		}*/
+		D3D11SubResources[i].pSysMem = NULL;
+		D3D11SubResources[i].SysMemPitch = NumBlocksX * GPixelFormats[Format].BlockBytes;
+		D3D11SubResources[i].SysMemSlicePitch = MipSize;
+	}
+
+	ID3D11Texture2D* Texture;
+	Direct3DDevice->CreateTexture2D(&Texture2dDesc , D3D11SubResources , &Texture);
+	/*if (TempBufferSize != ZeroBufferSize)
+	{
+	FMemory::Free(TempBuffer);
+	}*/
+
+	//Create Shader Resource View-------------------------------------------------------------------------
+	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
+	ShaderResourceViewDesc.Format = FindShaderResourceDXGIFormat((DXGI_FORMAT)GPixelFormats[Format].PlatformFormat, ((Flags & TexCreate_SRGB) != 0));
+	ShaderResourceViewDesc.Texture2D.MipLevels = NumMips;
+	ShaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+	ShaderResourceViewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+
+	Direct3DDevice->CreateShaderResourceView(Texture, &ShaderResourceViewDesc, &ShaderResourceView);
+
+	NewTexture = new FD3D11Texture2D(this,
+		Texture,
+		ShaderResourceView,
+		1,
+		false,
+		RenderTargetViews,
+		std::vector<ID3D11DepthStencilView*>(),
+		SizeX,
+		SizeY,
+		0,
+		NumMips,
+		1,
+		(EPixelFormat)Format,
+		Flags);
+
+	//Wait for Memory Calculate.
+	//D3D11TextureAllocated();
+
+	return NewTexture;
+}
+
+void FD3D11DynamicRHI::RHICopySharedMips(FRHITexture2D* DestTexture2D, FRHITexture2D* SrcTexture2D)
+{
+	FD3D11Texture2D* D11DestTexture2D = (FD3D11Texture2D*)DestTexture2D;
+	FD3D11Texture2D* D11SrcTexture2D = (FD3D11Texture2D*)SrcTexture2D;
+
+	int NumSharedMips = FMath::Min(D11DestTexture2D->GetNumMips(), D11DestTexture2D->GetNumMips());
+
+	for (int MipIndex = 0; MipIndex < NumSharedMips; MipIndex++)
+	{
+		Direct3DDeviceIMContext->CopySubresourceRegion(D11DestTexture2D->GetResource() ,
+			D3D11CalcSubresource(MipIndex + (D11DestTexture2D->GetNumMips() - NumSharedMips),0 ,D11DestTexture2D->GetNumMips()),
+			0,
+			0,
+			0,
+			D11SrcTexture2D->GetResource(),
+			D3D11CalcSubresource(MipIndex + (D11SrcTexture2D->GetNumMips() - NumSharedMips), 0, D11SrcTexture2D->GetNumMips()) ,
+			NULL);
+	}
+}
+
+FRHITexture2DArray* FD3D11DynamicRHI::RHICreateTexture2DArray(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
+{
+	return CreateD3D11Texture2D<FD3D11BaseTexture2DArray>(SizeX ,SizeY , SizeZ , true , false , Format , NumMips ,1 , Flags , CreateInfo );
+}
+
+FRHITexture3D* FD3D11DynamicRHI::RHICreateTexture3D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 NumSamples, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
+{
+
 }
 
 template <class RHIResourceType>

@@ -12,6 +12,18 @@ public:
 		return value<min ? min : value<max ? value : max;
 	}
 
+	template<class T>
+	static T Max(const T value1, const T value2)
+	{
+		return value1 < value2 ? value2 : value1;
+	}
+
+	template<class T>
+	static T Min(const T value1, const T value2)
+	{
+		return value1 < value2 ? value1 : value2;
+	}
+
 	static int32 FloorToInt(float F)
 	{
 		return _mm_cvt_ss2si(_mm_set_ss(F + F - 0.5f)) >> 1;

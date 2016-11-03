@@ -1,6 +1,7 @@
 #pragma once
 #include "RHIResource.h"
 #include "ShaderCore.h"
+#include "D3D11Definitions.h"
 
 /**
 * A rendering resource which is owned by the rendering thread.
@@ -218,6 +219,10 @@ public:
 	{
 
 	}
+
+	ID3D11Resource* GetResource() {
+		return Resouece;
+	}
 protected:
 	FD3D11DynamicRHI* D3DRHI;
 
@@ -254,10 +259,11 @@ public:
 		uint32 InSizeY,
 		uint32 InSizeZ,
 		uint32 InNumMips,
-		uint32 InNumSamples/*,*/
-		/*EPixelFormat InFormat*/) :
-		BaseResourceType(InD3DRHI, InResource , InShaderResourceView , InRTVArraySize , bInCreatedRTVsPerSlice , InRenderTargetViews , InDepthStencilViews),
-		FD3D11TextureBase(InSizeX , InSizeY , InSizeZ , InNumMips , InNumSamples /*, InFormat*/)
+		uint32 InNumSamples,
+		EPixelFormat InFormat,
+		uint32 InFlags) :
+		FD3D11TextureBase(InD3DRHI, InResource , InShaderResourceView , InRTVArraySize , bInCreatedRTVsPerSlice , InRenderTargetViews , InDepthStencilViews),
+		BaseResourceType(InSizeX , InSizeY , InSizeZ , InNumMips , InNumSamples , InFormat , InFlags)
 	{
 
 	}
@@ -271,8 +277,8 @@ public:
 class FD3D11BaseTexture2D : public FRHITexture2D
 {
 public:
-	FD3D11BaseTexture2D(uint32 InSizeX, uint32 InSizeY, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
-		:FRHITexture2D(InSizeX , InSizeY , InNumMips , InNumSamples , InFlags)
+	FD3D11BaseTexture2D(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, EPixelFormat InPixelFormat, uint32 InFlags)
+		:FRHITexture2D(InSizeX , InSizeY , InNumMips , InNumSamples , InPixelFormat, InFlags)
 	{
 	}
 };
@@ -280,8 +286,8 @@ public:
 class FD3D11BaseTexture2DArray :public FRHITexture2DArray
 {
 public:
-	FD3D11BaseTexture2DArray(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags) 
-		:FRHITexture2DArray(InSizeX , InSizeY , InSizeZ , InNumMips , InNumSamples , InFlags)
+	FD3D11BaseTexture2DArray(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, EPixelFormat InPixelFormat, uint32 InFlags)
+		:FRHITexture2DArray(InSizeX , InSizeY , InSizeZ , InNumMips , InNumSamples , InPixelFormat, InFlags)
 	{
 	}
 protected:
@@ -291,8 +297,8 @@ private:
 class FD3D11BaseTextureCube:public FRHITextureCube
 {
 public:
-	FD3D11BaseTextureCube(uint32 InSize, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
-		:FRHITextureCube(InSize , InNumMips , InNumSamples , InFlags)
+	FD3D11BaseTextureCube(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, EPixelFormat InPixelFormat, uint32 InFlags)
+		:FRHITextureCube(InSizeX, InNumMips , InNumSamples , InPixelFormat, InFlags)
 	{
 	}
 protected:
@@ -307,14 +313,37 @@ typedef TD3D11Texture2D<FD3D11BaseTextureCube>    FD3D11TextureCube;
 class FD3D11TextureReference:public FRHITextureReference,public FD3D11TextureBase
 {
 public:
-	FD3D11TextureReference():FRHITextureReference(), FD3D11TextureBase() {}
+	FD3D11TextureReference(FD3D11DynamicRHI* InD3DRHI):FRHITextureReference(), FD3D11TextureBase(InD3DRHI , NULL , NULL , 0 
+		 ,false , std::vector<ID3D11RenderTargetView*>() , std::vector<ID3D11DepthStencilView*>()) {}
 protected:
 private:
 };
 
 class FD3D11Texture3D :public FRHITexture3D, public FD3D11TextureBase
 {
+public:
+	FD3D11Texture3D(FD3D11DynamicRHI* InD3DRHI,
+		ID3D11Resource* InResource,
+		ID3D11ShaderResourceView* InShaderResourceView,
+		std::vector<ID3D11RenderTargetView*>& InRenderTargetViews,
+		uint32 InSizeX,
+		uint32 InSizeY,
+		uint32 InSizeZ,
+		uint32 InNumMips,
+		EPixelFormat InFormat,
+		uint32 InFlags)
+		:FRHITexture3D(InSizeX , InSizeY , InSizeZ , InNumMips , InFormat , InFlags),
+		FD3D11TextureBase(InD3DRHI, InResource ,InShaderResourceView , InRenderTargetViews.size() , false , InRenderTargetViews , std::vector<ID3D11DepthStencilView*>()),
+		SizeX(InSizeX),
+		SizeY(InSizeY),
+		SizeZ(InSizeZ)
+	{
 
+	}
+
+	uint32 SizeX;
+	uint32 SizeY;
+	uint32 SizeZ;
 };
 
 class FD3D11UnorderedAccessView:public FRHIUnorderedAccessView

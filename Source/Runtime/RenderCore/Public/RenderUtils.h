@@ -18,4 +18,4 @@ struct FPixelFormatInfo
 	EPixelFormat	UnrealFormat;
 };
 
-extern FPixelFormatInfo GPixelFormats[PF_MAX];
+extern FPixelFormatInfo GPixelFormats[57];

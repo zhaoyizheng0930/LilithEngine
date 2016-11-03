@@ -158,6 +158,11 @@ FD3D11DynamicRHI::FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LE
 
 	GPixelFormats[PF_BC6H].PlatformFormat = DXGI_FORMAT_BC6H_UF16;
 	GPixelFormats[PF_BC7].PlatformFormat = DXGI_FORMAT_BC7_TYPELESS;
+
+	ZeroMemorySize = 1* (1 << 20);
+	ZeroMemory = FMemory::Malloc(ZeroMemorySize);
+	FMemory::MemZero(ZeroMemory);
+
 }
 
 FD3D11DynamicRHI::~FD3D11DynamicRHI()

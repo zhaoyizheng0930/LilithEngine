@@ -69,7 +69,7 @@ void* FD3D11DynamicRHI::RHILockVertexBuffer(FRHIVertexBuffer* VertexBuffer, uint
 	if (desc.Usage == D3D11_USAGE_DYNAMIC)
 	{
 		D3D11_MAPPED_SUBRESOURCE MappedResource;
-		Direct3DDeviceIMContext->Map(D11VertexBuffer->Resource, 0, D3D11_MAP_READ, 0, &MappedResource);
+		Direct3DDeviceIMContext->Map(D11VertexBuffer->Resource, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedResource);
 		LockedData.SetData(MappedResource.pData);
 		LockedData.Pitch = MappedResource.RowPitch;
 	}

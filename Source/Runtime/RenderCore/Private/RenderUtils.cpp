@@ -2,7 +2,7 @@
 #include "RenderUtils.h"
 
 
-FPixelFormatInfo	GPixelFormats[PF_MAX] =
+FPixelFormatInfo	GPixelFormats[57] =
 {
 	// Name						BlockSizeX	BlockSizeY	BlockSizeZ	BlockBytes	NumComponents	PlatformFormat	Supported		UnrealFormat
 

@@ -35,5 +35,8 @@
     <ClInclude Include="Public\EnginePCH.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\PixelFormat.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

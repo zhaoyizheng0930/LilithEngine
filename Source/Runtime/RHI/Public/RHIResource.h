@@ -1,5 +1,7 @@
 #pragma once
 #include "HAL/PlatformIncludes.h"
+#include "PixelFormat.h"
+
 class FRHIResource
 {
 public:
@@ -91,10 +93,11 @@ public:
 class FRHITexture : public FRHIResource 
 {
 public:
-	FRHITexture(uint32 InNumMips,uint32 InNumSamples,uint32 InFlags)
+	FRHITexture(uint32 InNumMips, uint32 InNumSamples, EPixelFormat InFormat, uint32 InFlags)
 		:NumMips(InNumMips),
 		NumSamples(InNumSamples),
-		Flags(InFlags)
+		Flags(InFlags),
+		Format(InFormat)
 	{
 
 	}
@@ -105,10 +108,17 @@ public:
 	virtual class FRHITextureCube* GetTextureCube() { return NULL; }
 	virtual class FRHITextureReference* GetTextureReference() { return NULL; }
 
+	virtual uint32 GetNumMips() {
+		return NumMips;
+	}
+
+	virtual uint32 GetNumSamples() {
+		return NumSamples;
+	}
 private:
 	uint32 NumMips;
 	uint32 NumSamples;
-	//EPixelFormat InFormat;
+	EPixelFormat Format;
 	uint32 Flags;
 };
 
@@ -116,7 +126,7 @@ class FRHITextureReference : public FRHITexture
 {
 public:
 	FRHITextureReference()
-		:FRHITexture(0,0,0)
+		:FRHITexture(0,0, PF_Unknown,0)
 	{
 
 	}
@@ -145,8 +155,8 @@ public:
 class FRHITextureCube : public FRHITexture
 {
 public:
-	FRHITextureCube(uint32 InSize, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
-		:FRHITexture(InNumMips, InNumSamples, InFlags),
+	FRHITextureCube(uint32 InSize, uint32 InNumMips, uint32 InNumSamples, EPixelFormat InFormat, uint32 InFlags)
+		:FRHITexture(InNumMips, InNumSamples, InFormat, InFlags),
 		Size(InSize)
 	{
 
@@ -161,8 +171,8 @@ private:
 class FRHITexture3D : public FRHITexture 
 {
 public:
-	FRHITexture3D(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
-		:FRHITexture(InNumMips, InNumSamples, InFlags),
+	FRHITexture3D(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, EPixelFormat InFormat, uint32 InFlags )
+		:FRHITexture(InNumMips, 1, InFormat , InFlags),
 		SizeX(InSizeX),
 		SizeY(InSizeY),
 		SizeZ(InSizeZ)
@@ -183,8 +193,8 @@ private:
 class FRHITexture2DArray : public FRHITexture 
 {
 public:
-	FRHITexture2DArray(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
-		:FRHITexture(InNumMips, InNumSamples, InFlags),
+	FRHITexture2DArray(uint32 InSizeX, uint32 InSizeY, uint32 InSizeZ, uint32 InNumMips, uint32 InNumSamples,EPixelFormat InFormat, uint32 InFlags)
+		:FRHITexture(InNumMips, InNumSamples, InFormat, InFlags),
 		SizeX(InSizeX),
 		SizeY(InSizeY),
 		SizeZ(InSizeZ)
@@ -202,8 +212,8 @@ private:
 class FRHITexture2D : public FRHITexture 
 {
 public:
-	FRHITexture2D(uint32 InSizeX, uint32 InSizeY , uint32 InNumMips, uint32 InNumSamples, uint32 InFlags)
-		:FRHITexture(InNumMips , InNumSamples , InFlags),
+	FRHITexture2D(uint32 InSizeX, uint32 InSizeY , uint32 InNumMips, uint32 InNumSamples, EPixelFormat InFormat, uint32 InFlags)
+		:FRHITexture(InNumMips , InNumSamples , InFormat, InFlags),
 		SizeX(InSizeX),
 		SizeY(InSizeY)
 	{
