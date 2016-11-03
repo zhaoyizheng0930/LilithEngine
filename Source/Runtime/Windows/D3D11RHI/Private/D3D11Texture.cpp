@@ -247,6 +247,51 @@ TD3D11Texture2D<BaseResourceType>* FD3D11DynamicRHI::CreateD3D11Texture2D(uint32
 	return RHITexture2D;
 }
 
+FD3D11Texture3D* FD3D11DynamicRHI::CreateD3D11Texture3D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flags)
+{
+	ID3D11Texture3D* NewTexture3D = NULL;
+	ID3D11ShaderResourceView* ShaderResourceView = NULL;
+	std::vector<ID3D11RenderTargetView*> RenderTargetViews;
+
+	bool bCreateRTV = false;
+	if (Flags & TexCreate_RenderTargetable)
+	{
+		bCreateRTV = true;
+	}
+	//CreateTexture
+	D3D11_TEXTURE3D_DESC TextureDesc;
+
+	//Init Data support later
+	Direct3DDevice->CreateTexture3D(&TextureDesc,NULL ,&NewTexture3D);
+	//CreateSRV
+	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
+
+
+	Direct3DDevice->CreateShaderResourceView(NewTexture3D , &ShaderResourceViewDesc , &ShaderResourceView);
+	//CreateRTV
+	if (bCreateRTV)
+	{
+		ID3D11RenderTargetView* RenderTargetView = NULL;
+		D3D11_RENDER_TARGET_VIEW_DESC RenderTargetViewDesc;
+		
+		Direct3DDevice->CreateRenderTargetView(NewTexture3D, &RenderTargetViewDesc , &RenderTargetView);
+		RenderTargetViews.push_back(RenderTargetView);
+	}
+
+	FD3D11Texture3D* D11Texture3D = new FD3D11Texture3D(this,
+		NewTexture3D,
+		ShaderResourceView,
+		RenderTargetViews,
+		SizeX,
+		SizeY,
+		SizeZ,
+		NumMips,
+		(EPixelFormat)Format,
+		Flags);
+
+	return D11Texture3D;
+}
+
 uint32 FD3D11DynamicRHI::GetMaxMSAAQuality(int InActualMSAACount)
 {
 	if (InActualMSAACount < 8)
