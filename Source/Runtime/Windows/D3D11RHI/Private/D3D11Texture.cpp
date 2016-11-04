@@ -254,18 +254,42 @@ FD3D11Texture3D* FD3D11DynamicRHI::CreateD3D11Texture3D(uint32 SizeX, uint32 Siz
 	std::vector<ID3D11RenderTargetView*> RenderTargetViews;
 
 	bool bCreateRTV = false;
+	//CreateTexture
+	D3D11_TEXTURE3D_DESC TextureDesc;
+	TextureDesc.Width = SizeX;
+	TextureDesc.Height = SizeY;
+	TextureDesc.Depth = SizeZ;
+	TextureDesc.MipLevels = NumMips;
+	TextureDesc.Format = (DXGI_FORMAT)GPixelFormats[Format].PlatformFormat;
+	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	TextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	TextureDesc.CPUAccessFlags = 0;
+	TextureDesc.MiscFlags = 0;
+
+	if (Flags & TexCreate_GenerateMipCapable)
+	{
+		TextureDesc.MiscFlags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+	}
+
+	if (Flags & TexCreate_UAV)
+	{
+		TextureDesc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
 	if (Flags & TexCreate_RenderTargetable)
 	{
 		bCreateRTV = true;
+		TextureDesc.MiscFlags |= D3D11_BIND_RENDER_TARGET;
 	}
-	//CreateTexture
-	D3D11_TEXTURE3D_DESC TextureDesc;
 
 	//Init Data support later
 	Direct3DDevice->CreateTexture3D(&TextureDesc,NULL ,&NewTexture3D);
 	//CreateSRV
 	D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceViewDesc;
-
+	ShaderResourceViewDesc.Format = FindShaderResourceDXGIFormat((DXGI_FORMAT)GPixelFormats[Format].PlatformFormat, (Flags & TexCreate_SRGB)!= 0);
+	ShaderResourceViewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE3D;
+	ShaderResourceViewDesc.Texture3D.MipLevels = NumMips;
+	ShaderResourceViewDesc.Texture3D.MostDetailedMip = 0;
 
 	Direct3DDevice->CreateShaderResourceView(NewTexture3D , &ShaderResourceViewDesc , &ShaderResourceView);
 	//CreateRTV
@@ -273,7 +297,12 @@ FD3D11Texture3D* FD3D11DynamicRHI::CreateD3D11Texture3D(uint32 SizeX, uint32 Siz
 	{
 		ID3D11RenderTargetView* RenderTargetView = NULL;
 		D3D11_RENDER_TARGET_VIEW_DESC RenderTargetViewDesc;
-		
+		RenderTargetViewDesc.Format = FindShaderResourceDXGIFormat((DXGI_FORMAT)GPixelFormats[Format].PlatformFormat, (Flags & TexCreate_SRGB) != 0);
+		RenderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE3D;
+		RenderTargetViewDesc.Texture3D.FirstWSlice = 0;
+		RenderTargetViewDesc.Texture3D.WSize = SizeZ;
+		RenderTargetViewDesc.Texture3D.MipSlice = 0;
+
 		Direct3DDevice->CreateRenderTargetView(NewTexture3D, &RenderTargetViewDesc , &RenderTargetView);
 		RenderTargetViews.push_back(RenderTargetView);
 	}
@@ -288,6 +317,9 @@ FD3D11Texture3D* FD3D11DynamicRHI::CreateD3D11Texture3D(uint32 SizeX, uint32 Siz
 		NumMips,
 		(EPixelFormat)Format,
 		Flags);
+
+	//Wait for Memory Calculate.
+	//D3D11TextureAllocated();
 
 	return D11Texture3D;
 }
@@ -424,7 +456,63 @@ FRHITexture2DArray* FD3D11DynamicRHI::RHICreateTexture2DArray(uint32 SizeX, uint
 
 FRHITexture3D* FD3D11DynamicRHI::RHICreateTexture3D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 NumSamples, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
 {
+	return CreateD3D11Texture3D(SizeX, SizeY, SizeZ, Format, NumMips, Flags);
+}
 
+FRHITextureCube* FD3D11DynamicRHI::RHICreateTextureCube(uint32 Size, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
+{
+	return CreateD3D11Texture2D<FD3D11TextureCube>(Size , Size , Size , 6 , true , Format , NumMips , 1 , Flags , CreateInfo);
+}
+
+FRHITextureCube* FD3D11DynamicRHI::RHICreateTextureCubeArray(uint32 Size, uint32 ArraySize, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
+{
+	return CreateD3D11Texture2D<FD3D11TextureCube>(Size , Size , 6 * ArraySize, true , true ,Format , NumMips , 1 ,Flags , CreateInfo);
+}
+
+uint64 FD3D11DynamicRHI::RHICalcTexture2DPlatformSize(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign)
+{
+	//CalculateMipMap Support Later
+}
+
+uint64 FD3D11DynamicRHI::RHICalcTexture3DPlatformSize(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign)
+{
+	//CalculateMipMap Support Later
+}
+
+uint64 FD3D11DynamicRHI::RHICalcTextureCubePlatformSize(uint32 Size, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign)
+{
+	//CalculateMipMap Support Later
+}
+
+bool FD3D11DynamicRHI::RHIGetTextureMemoryVisualizeData(FColor* TextureData, int32 SizeX, int32 SizeY, int32 Pitch, int32 PixelSize)
+{
+	//Unreal Alsp didn't support
+	return false;
+}
+
+void FD3D11DynamicRHI::RHIGenerateMips(FRHITexture* Texture)
+{
+	FD3D11TextureBase* TextureBase = (FD3D11TextureBase*)Texture;
+
+	Direct3DDeviceIMContext->GenerateMips(TextureBase->GetShaderResourceView());
+
+}
+
+uint32 FD3D11DynamicRHI::RHIComputeMemorySize(FRHITexture* Texture)
+{
+	FD3D11TextureBase* TextureBase = (FD3D11TextureBase*)Texture;
+	
+	return TextureBase->GetMemorySize();
+}
+
+ETextureReallocationStatus FD3D11DynamicRHI::RHIFinalizeAsyncReallocateTexture2D(FRHITexture2D* Texture2D, bool bBlockUntilCompleted)
+{
+	return TexRealloc_Succeeded;
+}
+
+ETextureReallocationStatus FD3D11DynamicRHI::RHICancelAsyncReallocateTexture2D(FRHITexture2D* Texture2D, bool bBlockUntilCompleted)
+{
+	return TexRealloc_Succeeded;
 }
 
 template <class RHIResourceType>

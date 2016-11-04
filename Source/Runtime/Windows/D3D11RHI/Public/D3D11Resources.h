@@ -223,6 +223,12 @@ public:
 	ID3D11Resource* GetResource() {
 		return Resouece;
 	}
+
+	ID3D11ShaderResourceView* GetShaderResourceView() {
+		return ShaderResourceView;
+	}
+
+	int GetMemorySize() { return MemorySize; }
 protected:
 	FD3D11DynamicRHI* D3DRHI;
 
