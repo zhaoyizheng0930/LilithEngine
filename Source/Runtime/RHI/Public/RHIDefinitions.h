@@ -157,3 +157,14 @@ enum ETextureCreateFlags
 	// RenderTarget will create with delta color compression
 	TexCreate_DeltaColorCompression = 1 << 27,
 };
+
+enum ECubeFace
+{
+	CubeFace_PosX = 0,
+	CubeFace_NegX,
+	CubeFace_PosY,
+	CubeFace_NegY,
+	CubeFace_PosZ,
+	CubeFace_NegZ,
+	CubeFace_MAX
+};

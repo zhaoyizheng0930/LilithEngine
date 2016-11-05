@@ -115,6 +115,10 @@ public:
 	virtual uint32 GetNumSamples() {
 		return NumSamples;
 	}
+
+	virtual EPixelFormat GetPixelFormat() {
+		return Format;
+	}
 private:
 	uint32 NumMips;
 	uint32 NumSamples;

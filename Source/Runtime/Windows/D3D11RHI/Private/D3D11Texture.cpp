@@ -515,14 +515,119 @@ ETextureReallocationStatus FD3D11DynamicRHI::RHICancelAsyncReallocateTexture2D(F
 	return TexRealloc_Succeeded;
 }
 
+void* FD3D11DynamicRHI::RHILockTexture2D(FRHITexture2D* Texture, uint32 MipIndex, EResourceLockMode LockMode, uint32& DestStride, bool bLockWithinMiptail)
+{
+	FD3D11Texture2D* D3D11Texture = (FD3D11Texture2D*)Texture;
+	//ZYZ_TODO:Why Need to Clear SRV,Maybe didn't want someothers sample it.
+	//ConditionalClearShaderResource(Texture);
+	return D3D11Texture->Lock(MipIndex, 0, LockMode, DestStride);
+}
+
+void FD3D11DynamicRHI::RHIUnlockTexture2D(FRHITexture2D* Texture, uint32 MipIndex, bool bLockWithinMiptail)
+{
+	FD3D11Texture2D* D3D11Texture = (FD3D11Texture2D*)Texture;
+	D3D11Texture->Unlock(MipIndex , 0);
+}
+
+void* FD3D11DynamicRHI::RHILockTexture2DArray(FRHITexture2DArray* TextureArray, uint32 TextureIndex, uint32 MipIndex, EResourceLockMode LockMode, uint32& DestStride, bool bLockWithInMiptail)
+{
+	FD3D11Texture2DArray* D3D11TextureArray = (FD3D11Texture2DArray*)TextureArray;
+	//ZYZ_TODO:Why Need to Clear SRV,Maybe didn't want someothers sample it.
+	//ConditionalClearShaderResource(D3D11TextureArray);
+	return D3D11TextureArray->Lock(MipIndex, TextureIndex, LockMode, DestStride);
+}
+
+void FD3D11DynamicRHI::RHIUnlockTexture2DArray(FRHITexture2DArray* TextureArray, uint32 TextureIndex, uint32 MipIndex, bool bLockWithMiptail)
+{
+	FD3D11Texture2DArray* D3D11TextureArray = (FD3D11Texture2DArray*)TextureArray;
+	D3D11TextureArray->Unlock(MipIndex, TextureIndex);
+}
+
+void* FD3D11DynamicRHI::RHILockTextureCubeFace(FRHITextureCube* TextureCube, uint32 FaceIndex, uint32 ArrayIndex, uint32 MipIndex, EResourceLockMode LockMode, uint32& DestStride, bool bLockWithInMiptail)
+{
+	FD3D11TextureCube* D3D11TextureCube = (FD3D11TextureCube*)TextureCube;
+	//ZYZ_TODO:Why Need to Clear SRV,Maybe didn't want someothers sample it.
+	//ConditionalClearShaderResource(D3D11TextureArray);
+	uint32 D3DFace = GetD3D11CubeFace((ECubeFace)FaceIndex);
+	return D3D11TextureCube->Lock(MipIndex , D3DFace+ArrayIndex*6 , LockMode , DestStride);
+}
+
+void FD3D11DynamicRHI::RHIUnLockTextureCubeFace(FRHITextureCube* TextureCube, uint32 FaceIndex, uint32 ArrayIndex, uint32 MipIndex, bool bLockWithinMiptail)
+{
+	FD3D11TextureCube* D3D11TextureCube = (FD3D11TextureCube*)TextureCube;
+	uint32 D3DFace = GetD3D11CubeFace((ECubeFace)FaceIndex);
+	D3D11TextureCube->Unlock(MipIndex, D3DFace + ArrayIndex * 6);
+}
+
+
 template <class RHIResourceType>
 void* TD3D11Texture2D<RHIResourceType>::Lock(uint32 MipIndex, uint32 ArrayIndex, EResourceLockMode LockMode, uint32& DestStride)
 {
+	//Calculate Subresource
+	uint32 Subresource = D3D11CalcSubresource(MipIndex , ArrayIndex , GetNumMips());
+	uint32 BlockSizeX = GPixelFormats[GetPixelFormat()].BlockSizeX;
+	uint32 BlockSizeY = GPixelFormats[GetPixelFormat()].BlockSizeY;
+	uint32 BlockBytes = GPixelFormats[GetPixelFormat()].BlockBytes;
+	uint32 MipSizeX = FMath::Max(BlockSizeX, GetSizeX() >> MipIndex);
+	uint32 MipSizeY = FMath::Max(BlockSizeY, GetSizeY() >> MipIndex);
+	uint32 NumBlockX = (MipSizeX + BlockSizeX - 1) / BlockSizeX;	//BlockSize:Compress format.how many pixels compress to one block
+	uint32 NumBlockY = (MipSizeY + BlockSizeY - 1) / BlockSizeY;
+	uint32 NumBytes = NumBlockX * NumBlockY * BlockBytes;
 
+	//Texture Default Usage is Default so can't write and read
+	FD3D11LockedData LockedData;
+	if (LockMode == RLM_WriteOnly)
+	{
+		LockedData.AllocData(NumBytes);
+		LockedData.Pitch = NumBlocksX * BlockBytes;
+	}
+	else
+	{
+		D3D11_TEXTURE2D_DESC Texture2DDesc;
+		GetResource()->GetDesc(&Texture2DDesc);
+		Texture2DDesc.Width = MipSizeX;
+		Texture2DDesc.Height = MipSizeY;
+		Texture2DDesc.MipLevels = 1;
+		Texture2DDesc.ArraySize = 1;
+		Texture2DDesc.Usage = D3D11_USAGE_STAGING;
+		Texture2DDesc.BindFlags = 0;
+		Texture2DDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+		Texture2DDesc.MiscFlags = 0;
+
+		ID3D11Texture2D* Texture;
+		D3DRHI->Direct3DDevice->CreateTexture2D(&Texture2DDesc, NULL, &Texture);
+		LockedData.StagingResource = Texture;
+
+		D3DRHI->Direct3DDeviceIMContext->CopySubresourceRegion(Texture , 0, 0, 0, 0, GetResource(), Subresource, NULL);
+
+		D3D11_MAPPED_SUBRESOURCE MappedSubResource;
+		D3DRHI->Direct3DDeviceIMContext->Map(Texture, 0, D3D11_MAP_READ, 0, &MappedSubResource);
+		LockedData.SetData(MappedSubResource.pData);
+		LockedData.Pitch = MappedSubResource.RowPitch;
+	}
+
+	FD3D11LockedKey LockedKey(GetResource() , Subresource);
+	D3DRHI->OutstandingLocks.insert(std::make_pair(LockedKey, LockedData));
+	return (void*)LockedData.GetData();
 }
 
 template <class RHIResourceType>
 void TD3D11Texture2D<RHIResourceType>::Unlock(uint32 MipIndex, uint32 ArrayIndex)
 {
+	const uint32 Subresource = D3D11CalcSubresource(MipIndex, ArrayIndex, GetNumMips());
 
+	FD3D11LockedKey LockedKey(GetResource() , Subresource);
+	FD3D11LockedData LockedData = D3DRHI->OutstandingLocks.find(LockedKey);
+
+	if (LockedData.StagingResource)
+	{
+		D3DRHI->Direct3DDeviceIMContext->Unmap(LockedData.StagingResource, 0);
+	}
+	else
+	{
+		D3DRHI->Direct3DDeviceIMContext->UpdateSubresource(GetResource(), Subresource, NULL, LockedData->GetData(), LockedData->Pitch, 0);
+		LockedData->FreeData();
+	}
+
+	D3DRHI->OutstandingLocks.erase(LockedKey);
 }
