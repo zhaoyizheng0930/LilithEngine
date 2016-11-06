@@ -168,7 +168,7 @@ public:
 
 	virtual class FRHITextureCube* GetTextureCube() { return this; }
 
-	uint32 GetSize() { return Size; }
+	uint32 GetSize() const { return Size; }
 private:
 	uint32 Size;
 };
@@ -208,6 +208,11 @@ public:
 
 	virtual FRHITexture2DArray* GetTexture2DArray() { return this; }
 
+	uint32 GetSizeX() const { return SizeX; }
+
+	uint32 GetSizeY() const { return SizeY; }
+
+	uint32 GetSizeZ() const { return SizeZ; }
 private:
 	uint32 SizeX;
 	uint32 SizeY;

@@ -137,6 +137,10 @@ public:
 
 	virtual void RHIUnLockTextureCubeFace(FRHITextureCube* TextureCube, uint32 FaceIndex, uint32 ArrayIndex, uint32 MipIndex, bool bLockWithinMiptail) final override;
 
+	virtual void RHIUpdateTexture2D(FRHITexture2D* Texture2D, uint32 MipLevel, FUpdateTextureRegion2D& Region2D, uint32 SourcePitch, uint8* SourceData) = 0;
+
+	virtual void RHIUpdateTexture3D(FRHITexture3D* Texture3D, uint32 MipLevel, FUpdateTextureRegion3D& Region3D, uint32 SourceRowPitch, uint32 SourceDepthPitch, uint8* SourceData) = 0;
+
 	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHITexture* Texture, uint32 MipLevel)  final override;
 
 	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHIStructureBuffer* StructBuffer, bool bUseUAVCounter, bool bAppendBuffer)  final override;
@@ -159,6 +163,14 @@ public:
 
 	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITextureCube* TextureCube, uint8 MipLevel)  final override;
 
+public:
+	ID3D11Device* GetDevice() { return Direct3DDevice; }
+
+	ID3D11DeviceContext* GetContext() { return Direct3DDeviceIMContext; }
+
+	std::map<FD3D11LockedKey, FD3D11LockedData>& GetOutstandingLocks() {
+		return OutstandingLocks;
+	}
 protected:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;

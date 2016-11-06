@@ -307,6 +307,10 @@ public:
 		:FRHITextureCube(InSizeX, InNumMips , InNumSamples , InPixelFormat, InFlags)
 	{
 	}
+
+	uint32 GetSizeX() const { return GetSize(); }
+	uint32 GetSizeY() const { return GetSize(); } //-V524
+	uint32 GetSizeZ() const { return 0; }
 protected:
 private:
 };

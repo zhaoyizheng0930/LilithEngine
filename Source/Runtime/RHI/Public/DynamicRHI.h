@@ -100,7 +100,7 @@ public:
 	virtual void RHIUnLockTextureCubeFace(FRHITextureCube* TextureCube , uint32 FaceIndex , uint32 ArrayIndex , uint32 MipIndex , bool bLockWithinMiptail ) = 0;
 
 	virtual void RHIUpdateTexture2D(FRHITexture2D* Texture2D , uint32 MipLevel ,FUpdateTextureRegion2D& Region2D ,uint32 SourcePitch,uint8* SourceData ) = 0;
-	virtual void RHIUpdateTexture3D(FRHITexture3D* Texture3D, uint32 MipLevel, FUpdateTextureRegion3D& Region2D, uint32 SourcePitch, uint8* SourceData) = 0;
+	virtual void RHIUpdateTexture3D(FRHITexture3D* Texture3D, uint32 MipLevel, FUpdateTextureRegion3D& Region3D, uint32 SourceRowPitch, uint32 SourceDepthPitch, uint8* SourceData) = 0;
 
 	//ReadSurfaceData
 	//virtual void RHIReadSurfaceData(FTextureRHIParamRef Texture, FIntRect Rect, TArray<FColor>& OutData, FReadSurfaceDataFlags InFlags) = 0;
