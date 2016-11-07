@@ -461,27 +461,30 @@ FRHITexture3D* FD3D11DynamicRHI::RHICreateTexture3D(uint32 SizeX, uint32 SizeY, 
 
 FRHITextureCube* FD3D11DynamicRHI::RHICreateTextureCube(uint32 Size, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
 {
-	return CreateD3D11Texture2D<FD3D11TextureCube>(Size , Size  , 6 ,false, true , Format , NumMips , 1 , Flags , CreateInfo);
+	return  CreateD3D11Texture2D<FD3D11BaseTextureCube>(Size, Size, 6, false, true, Format, NumMips, 1, Flags, CreateInfo);
 }
 
 FRHITextureCube* FD3D11DynamicRHI::RHICreateTextureCubeArray(uint32 Size, uint32 ArraySize, uint8 Format, uint32 NumMips, uint32 Flags, FRHIResourceCreateInfo& CreateInfo)
 {
-	return CreateD3D11Texture2D<FD3D11TextureCube>(Size , Size , 6 * ArraySize, true , true ,Format , NumMips , 1 ,Flags , CreateInfo);
+	return CreateD3D11Texture2D<FD3D11BaseTextureCube>(Size , Size , 6 * ArraySize, true , true ,Format , NumMips , 1 ,Flags , CreateInfo);
 }
 
 uint64 FD3D11DynamicRHI::RHICalcTexture2DPlatformSize(uint32 SizeX, uint32 SizeY, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign)
 {
-	//CalculateMipMap Support Later
+	//ZYZ_TODO:CalculateMipMap Support Later
+	return 0;
 }
 
 uint64 FD3D11DynamicRHI::RHICalcTexture3DPlatformSize(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign)
 {
-	//CalculateMipMap Support Later
+	//ZYZ_TODO:CalculateMipMap Support Later
+	return 0;
 }
 
 uint64 FD3D11DynamicRHI::RHICalcTextureCubePlatformSize(uint32 Size, uint8 Format, uint32 NumMips, uint32 Flag, uint32& OutAlign)
 {
-	//CalculateMipMap Support Later
+	//ZYZ_TODO:CalculateMipMap Support Later
+	return 0;
 }
 
 bool FD3D11DynamicRHI::RHIGetTextureMemoryVisualizeData(FColor* TextureData, int32 SizeX, int32 SizeY, int32 Pitch, int32 PixelSize)

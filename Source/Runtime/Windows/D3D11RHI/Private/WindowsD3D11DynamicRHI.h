@@ -280,3 +280,14 @@ inline DXGI_FORMAT FindDepthStencilDXGIFormat(DXGI_FORMAT InFormat)
 	};
 	return InFormat;
 }
+
+/** Find an appropriate DXGI format unordered access of the raw format. */
+inline DXGI_FORMAT FindUnorderedAccessDXGIFormat(DXGI_FORMAT InFormat)
+{
+	switch (InFormat)
+	{
+	case DXGI_FORMAT_B8G8R8A8_TYPELESS: return DXGI_FORMAT_B8G8R8A8_UNORM;
+	case DXGI_FORMAT_R8G8B8A8_TYPELESS: return DXGI_FORMAT_R8G8B8A8_UNORM;
+	}
+	return InFormat;
+}

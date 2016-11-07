@@ -325,6 +325,7 @@ class FD3D11TextureReference:public FRHITextureReference,public FD3D11TextureBas
 public:
 	FD3D11TextureReference(FD3D11DynamicRHI* InD3DRHI):FRHITextureReference(), FD3D11TextureBase(InD3DRHI , NULL , NULL , 0 
 		 ,false , std::vector<ID3D11RenderTargetView*>() , std::vector<ID3D11DepthStencilView*>()) {}
+
 protected:
 private:
 };
