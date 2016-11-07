@@ -278,6 +278,8 @@ public:
 	void* Lock(uint32 MipIndex, uint32 ArrayIndex, EResourceLockMode LockMode, uint32& DestStride);
 
 	void Unlock(uint32 MipIndex, uint32 ArrayIndex);
+
+	ID3D11Texture2D* GetResource() const { return (ID3D11Texture2D*)FD3D11TextureBase::GetResource(); }
 };
 
 class FD3D11BaseTexture2D : public FRHITexture2D
@@ -368,6 +370,22 @@ public:
 	}
 
 	ID3D11UnorderedAccessView* View;
+	FD3D11BaseShaderResource* Resource;
+protected:
+private:
+};
+
+class FD3D11ShaderResourceView :public FRHIShaderResourceView
+{
+public:
+	FD3D11ShaderResourceView(ID3D11ShaderResourceView* InView, FD3D11BaseShaderResource* InResource)
+		:View(InView),
+		Resource(InResource)
+	{
+
+	}
+
+	ID3D11ShaderResourceView* View;
 	FD3D11BaseShaderResource* Resource;
 protected:
 private:

@@ -55,6 +55,8 @@ public:
 	{
 
 	}
+
+	uint32 GetStride() { return Stride; }
 private:
 	uint32 Stride;
 	uint32 Size;
@@ -119,6 +121,8 @@ public:
 	virtual EPixelFormat GetPixelFormat() {
 		return Format;
 	}
+
+	virtual uint32 GetFlags() { return Flags; }
 private:
 	uint32 NumMips;
 	uint32 NumSamples;
