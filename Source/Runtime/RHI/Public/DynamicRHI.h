@@ -16,6 +16,8 @@ public:
 
 	virtual void Shutdown() = 0;
 
+	virtual void InitD3DDevice() = 0;
+
 public:
 	/////// RHI Methods
 	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) = 0;
@@ -128,7 +130,7 @@ public:
 	virtual bool RHIGetRenderQueryResult(FRHIRenderQuery* RenderQuery, uint64& OutResult, bool bWait) = 0;
 
 	//Viewport-----------------------------------------------------------------------------------------------------------------
-	virtual FRHIViewport* RHICreateViewport(void* WindowsHandle, uint32 SizeX, uint32 SizeY, bool bIsFullScreen/*, EPixelFormat PreferredPixelFormat*/) = 0;
+	virtual FRHIViewport* RHICreateViewport(void* WindowsHandle, uint32 SizeX, uint32 SizeY, bool bIsFullScreen, EPixelFormat PreferredPixelFormat) = 0;
 	virtual void RHIResizeViewport(FRHIViewport* Viewport, uint32 SizeX , uint32 SizeY , bool bIsFullScreen) = 0;
 	virtual FRHITexture* RHIGetViewportBackBuffer(FRHIViewport* Viewport) = 0;
 	virtual void RHIAdvanceFrameForGetViewportBackBuffer() = 0;

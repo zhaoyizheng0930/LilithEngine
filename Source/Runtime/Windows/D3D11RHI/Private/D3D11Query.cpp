@@ -1,5 +1,6 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
+#include "D3D11Viewport.h"
 
 FRHIRenderQuery* FD3D11DynamicRHI::RHICreateRenderQuery(ERenderQueryType QueryType)
 {
@@ -39,4 +40,36 @@ bool FD3D11DynamicRHI::RHIGetRenderQueryResult(FRHIRenderQuery* RenderQuery, uin
 		OutResult = D11RenderQuery->Result;
 	}
 	return bSuccess;
+}
+
+
+void FD3D11EventQuery::IssueEvent()
+{
+	D3DRHI->GetContext()->End(Query);
+}
+
+void FD3D11EventQuery::WaitForCompletion()
+{
+	bool bRenderIsFinished = false;
+	while (D3DRHI->GetContext()->GetData(Query , &bRenderIsFinished ,sizeof(bRenderIsFinished),RQT_Undefined ) && !bRenderIsFinished)
+	{
+	}
+}
+
+// FRenderResource interface.
+void FD3D11EventQuery::InitDynamicRHI()
+{
+	//Create Query
+	D3D11_QUERY_DESC desc;
+	desc.Query = D3D11_QUERY_EVENT;
+	desc.MiscFlags = 0;
+
+	D3DRHI->GetDevice()->CreateQuery(&desc, &Query);
+
+	IssueEvent();
+}
+
+void FD3D11EventQuery::ReleaseDynamicRHI()
+{
+	Query = NULL;
 }

@@ -4,6 +4,7 @@
 #include "DynamicRHI.h"
 #include "D3D11Resources.h"
 #include "Windows/D3D11StateCache.h"
+#include "D3D11Viewport.h"
 #include "D3D11Util.h"
 
 struct FD3D11Adapter
@@ -36,9 +37,9 @@ public:
 	virtual void PostInit();
 
 	virtual void Shutdown();
-private:
 
-	void InitD3DDevice();
+	virtual void InitD3DDevice();
+private:
 
 	void SetupAfterDeviceCreation();
 
@@ -167,6 +168,14 @@ public:
 
 	virtual bool RHIGetRenderQueryResult(FRHIRenderQuery* RenderQuery, uint64& OutResult, bool bWait)  final override;
 
+	virtual FRHIViewport* RHICreateViewport(void* WindowsHandle, uint32 SizeX, uint32 SizeY, bool bIsFullScreen, EPixelFormat PreferredPixelFormat)  final override;
+
+	virtual void RHIResizeViewport(FRHIViewport* Viewport, uint32 SizeX, uint32 SizeY, bool bIsFullScreen)  final override;
+
+	virtual FRHITexture* RHIGetViewportBackBuffer(FRHIViewport* Viewport)  final override;
+
+	virtual void RHIAdvanceFrameForGetViewportBackBuffer()  final override;
+
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
 
@@ -175,6 +184,12 @@ public:
 	std::map<FD3D11LockedKey, FD3D11LockedData>& GetOutstandingLocks() {
 		return OutstandingLocks;
 	}
+
+	IDXGIFactory1* GetFactory() {
+		return DXGIFactory1;
+	}
+
+	std::vector<FD3D11Viewport*> Viewports;
 protected:
 	IDXGIFactory1* DXGIFactory1;
 	D3D_FEATURE_LEVEL FeatureLevel;
