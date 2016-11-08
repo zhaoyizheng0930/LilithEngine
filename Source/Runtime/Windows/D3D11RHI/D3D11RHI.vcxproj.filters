@@ -57,6 +57,15 @@
     <ClCompile Include="Private\D3D11Texture.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\D3D11Viewport.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11SRV.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11Query.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\D3D11RHIPCH.h">

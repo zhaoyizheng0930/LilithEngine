@@ -136,12 +136,15 @@
     <ClCompile Include="Private\Buffer\D3D11UniformBuffer.cpp" />
     <ClCompile Include="Private\Buffer\D3D11VertexBuffer.cpp" />
     <ClCompile Include="Private\D3D11Device.cpp" />
+    <ClCompile Include="Private\D3D11Query.cpp" />
     <ClCompile Include="Private\D3D11Shader.cpp" />
+    <ClCompile Include="Private\D3D11SRV.cpp" />
     <ClCompile Include="Private\D3D11State.cpp" />
     <ClCompile Include="Private\D3D11Texture.cpp" />
     <ClCompile Include="Private\D3D11UAV.cpp" />
     <ClCompile Include="Private\D3D11Util.cpp" />
     <ClCompile Include="Private\D3D11VertexDeclaration.cpp" />
+    <ClCompile Include="Private\D3D11Viewport.cpp" />
     <ClCompile Include="Private\WindowsD3D11Device.cpp" />
   </ItemGroup>
   <ItemGroup>
