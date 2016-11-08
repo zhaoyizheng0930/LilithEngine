@@ -163,6 +163,10 @@ public:
 
 	virtual FRHIShaderResourceView* RHICreateShaderResourceView(FRHITextureCube* TextureCube, uint8 MipLevel)  final override;
 
+	virtual FRHIRenderQuery* RHICreateRenderQuery(ERenderQueryType QueryType)  final override;
+
+	virtual bool RHIGetRenderQueryResult(FRHIRenderQuery* RenderQuery, uint64& OutResult, bool bWait)  final override;
+
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
 
@@ -215,6 +219,8 @@ protected:
 	FD3D11Texture3D* CreateD3D11Texture3D(uint32 SizeX, uint32 SizeY, uint32 SizeZ, uint8 Format, uint32 NumMips, uint32 Flags );
 
 	uint32 GetMaxMSAAQuality(int InActualMSAACount);
+
+	bool GetQueryData(ID3D11Query* Query, void* Data, SIZE_T DataSize, bool bWait, ERenderQueryType QueryType);
 private:
 
 };

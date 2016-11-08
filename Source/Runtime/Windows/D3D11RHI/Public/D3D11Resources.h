@@ -390,3 +390,27 @@ public:
 protected:
 private:
 };
+
+class FD3D11RenderQuery:public FRHIRenderQuery
+{
+public:
+	ID3D11Query* Resource;
+
+	uint64 Result;
+
+	bool bResultIsCached : 1;
+
+	ERenderQueryType Querytype;
+
+	FD3D11RenderQuery(ID3D11Query* InResource , ERenderQueryType InQuerytype)
+		:Resource(InResource),
+		Querytype(InQuerytype),
+		Result(0),
+		bResultIsCached(false)
+	{
+
+	}
+
+protected:
+private:
+};

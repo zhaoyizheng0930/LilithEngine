@@ -657,3 +657,21 @@ void TD3D11Texture2D<RHIResourceType>::Unlock(uint32 MipIndex, uint32 ArrayIndex
 
 	D3DRHI->GetOutstandingLocks().erase(LockedKey);
 }
+
+bool FD3D11DynamicRHI::GetQueryData(ID3D11Query* Query, void* Data, SIZE_T DataSize, bool bWait, ERenderQueryType QueryType)
+{
+	//ZYZ_TODO:Support TimeOut Later
+	HRESULT Result = Direct3DDeviceIMContext->GetData(Query, Data, DataSize, 0);
+	if (Result == S_FALSE/* && bWait*/)
+	{
+		do 
+		{
+			Result = Direct3DDeviceIMContext->GetData(Query, Data, DataSize, 0);
+
+		} while (Result == S_FALSE);
+	}
+	else
+	{
+		return true;
+	}
+}
