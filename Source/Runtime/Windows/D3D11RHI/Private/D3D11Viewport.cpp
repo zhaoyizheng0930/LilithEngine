@@ -33,7 +33,8 @@ FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHa
 	SizeY(InSizeY),
 	bIsFullScreen(bInIsFullscreen),
 	PixelFormat(InPreferredPixelFormat),
-	WindowHandle(InWindowHandle)
+	WindowHandle(InWindowHandle),
+	bIsValid(true)
 {
 	D3DRHI->Viewports.push_back(this);
 
@@ -44,13 +45,20 @@ FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHa
 	//Create SwapChain
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
-	SwapChainDesc.BufferDesc.Width = 
+	SwapChainDesc.BufferDesc.Width = SizeX;
+	SwapChainDesc.BufferDesc.Height = SizeY;
+	SwapChainDesc.BufferDesc.Format = GetRenderTargetFormat(PixelFormat);
+	SwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	SwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 
 	SwapChainDesc.BufferCount = 1;
-	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 	SwapChainDesc.OutputWindow = InWindowHandle;
+
+	// MSAA Sample count
 	SwapChainDesc.SampleDesc.Count = 1;
 	SwapChainDesc.SampleDesc.Quality = 0;
+	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+
 	SwapChainDesc.Windowed = !bIsFullScreen;
 	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -69,22 +77,71 @@ FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHa
 
 FD3D11Viewport::~FD3D11Viewport()
 {
+	SwapChain->SetFullscreenState(false, NULL);
 
+	FrameSyncEvent.ReleaseResource();
+
+	D3DRHI->Viewports.erase(std::find(D3DRHI->Viewports.begin(), D3DRHI->Viewports.end(), this));
 }
 
 void FD3D11Viewport::Resize(uint32 InSizeX, uint32 InSizeY, bool bInIsFullscreen)
 {
+	//release dangling
+	//D3DRHI->RHISetRenderTargets();
 
+	D3DRHI->ClearState();
+
+	D3DRHI->GetContext()->Flush();
+
+	if (CustomPresent != NULL)
+	{
+		CustomPresent->OnBackBufferResize();
+	}
+
+	delete BackBuffer;
+	BackBuffer = NULL;
+
+	if (SizeX != InSizeX || SizeY != InSizeY)
+	{
+		SizeX = InSizeX;
+		SizeY = InSizeY;
+
+		SwapChain->ResizeBuffers(0, SizeX, SizeY, GetRenderTargetFormat(PixelFormat), DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+
+		if (bInIsFullscreen)
+		{
+			DXGI_MODE_DESC ModeDesc;
+			ModeDesc.Width = SizeX;
+			ModeDesc.Height = SizeY;
+			ModeDesc.Format = GetRenderTargetFormat(PixelFormat);
+			ModeDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+			ModeDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+			SwapChain->ResizeTarget(&ModeDesc);
+		}
+	}
+
+	//ZYZ_TODO:Don't know why
+	//if (bIsFullScreen != bInIsFullscreen)
+	//{
+	//	bIsFullScreen = bInIsFullscreen;
+	//	bIsValid = false;
+
+	//	ConditionalResetSwapChain(true);
+	//}
+
+	BackBuffer = GetSwapChainSurface(D3DRHI, PixelFormat, SwapChain);
 }
 
 void FD3D11Viewport::ConditionalResetSwapChain(bool bIgnoreFocus)
 {
-
+	//ZYZ_TODO:Don't know why
 }
 
 bool FD3D11Viewport::Present(bool bLockToVsync)
 {
-
+	bool bNativelyPresented = true;
+	bNativelyPresented = PresentChecked(bLockToVsync ? true : 0);
+	return bNativelyPresented;
 }
 
 FD3D11Texture2D* FD3D11Viewport::GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, EPixelFormat PixelFormat, IDXGISwapChain* SwapChain)
@@ -101,8 +158,13 @@ FD3D11Texture2D* FD3D11Viewport::GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, E
 	D3DRHI->GetDevice()->CreateShaderResourceView(BackBufferTexture, &SRVDesc, &SRV);
 	//CreaterRTVs
 	std::vector<ID3D11RenderTargetView*> RTVs;
-
-
+	ID3D11RenderTargetView* RTV = NULL;
+	D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
+	RTVDesc.Format = DXGI_FORMAT_UNKNOWN;
+	RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	RTVDesc.Texture2D.MipSlice = 0;
+	D3DRHI->GetDevice()->CreateRenderTargetView(BackBufferTexture, &RTVDesc, &RTV);
+	RTVs.push_back(RTV);
 
 	D3D11_TEXTURE2D_DESC BackBufferTextureDesc;
 	BackBufferTexture->GetDesc(&BackBufferTextureDesc);
@@ -111,4 +173,9 @@ FD3D11Texture2D* FD3D11Viewport::GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, E
 	std::vector<ID3D11DepthStencilView*> DSVs;
 
 	return new FD3D11Texture2D(D3DRHI , BackBufferTexture , SRV , 1 ,false , RTVs , DSVs , BackBufferTextureDesc.Width , BackBufferTextureDesc.Height , 1 , 1 , 1 , PixelFormat ,0 );
+}
+
+bool FD3D11Viewport::PresentChecked(int32 SyncInterval)
+{
+
 }

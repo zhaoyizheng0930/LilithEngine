@@ -2,6 +2,21 @@
 #include "D3D11RHI.h"
 #include "D3D11Resources.h"
 
+static DXGI_FORMAT GetRenderTargetFormat(EPixelFormat PixelFormat)
+{
+	DXGI_FORMAT	DXFormat = (DXGI_FORMAT)GPixelFormats[PixelFormat].PlatformFormat;
+	switch (DXFormat)
+	{
+	case DXGI_FORMAT_B8G8R8A8_TYPELESS:		return DXGI_FORMAT_B8G8R8A8_UNORM;
+	case DXGI_FORMAT_BC1_TYPELESS:			return DXGI_FORMAT_BC1_UNORM;
+	case DXGI_FORMAT_BC2_TYPELESS:			return DXGI_FORMAT_BC2_UNORM;
+	case DXGI_FORMAT_BC3_TYPELESS:			return DXGI_FORMAT_BC3_UNORM;
+	case DXGI_FORMAT_R16_TYPELESS:			return DXGI_FORMAT_R16_UNORM;
+	case DXGI_FORMAT_R8G8B8A8_TYPELESS:		return DXGI_FORMAT_R8G8B8A8_UNORM;
+	default: 								return DXFormat;
+	}
+}
+
 class FD3D11EventQuery : public FRenderResource
 {
 public:
@@ -40,6 +55,8 @@ public:
 protected:
 private:
 	FD3D11Texture2D* GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, EPixelFormat PixelFormat, IDXGISwapChain* SwapChain);
+
+	bool PresentChecked(int32 SyncInterval);
 private:
 
 	FD3D11DynamicRHI* D3DRHI;
@@ -49,6 +66,8 @@ private:
 	uint32 SizeY;
 
 	bool bIsFullScreen;
+
+	bool bIsValid;
 
 	HWND WindowHandle;
 
@@ -60,5 +79,6 @@ private:
 
 	FD3D11EventQuery FrameSyncEvent;
 
+	//Seems like use for VR
 	FRHICustomPresent* CustomPresent;
 };

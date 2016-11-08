@@ -245,7 +245,22 @@ private:
 //Others
 class FRHIComputeFence : public FRHIResource {};
 class FRHIViewport : public FRHIResource {};
-class FRHICustomPresent : public FRHIResource {};
+class FRHICustomPresent : public FRHIResource 
+{
+public:
+	FRHICustomPresent(FRHIViewport* InViewportRHI)
+		:ViewportRHI(InViewportRHI)
+	{
+
+	}
+
+	virtual void OnBackBufferResize() = 0;
+
+	virtual bool Present(int32& InOutSyncInterval) = 0;
+
+private:
+	FRHIViewport* ViewportRHI;
+};
 class FRHIRenderQuery : public FRHIResource {};
 
 //RTV

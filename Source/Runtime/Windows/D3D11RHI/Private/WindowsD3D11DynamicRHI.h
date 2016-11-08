@@ -39,11 +39,11 @@ public:
 	virtual void Shutdown();
 
 	virtual void InitD3DDevice();
+
+	virtual void ClearState();
 private:
 
 	void SetupAfterDeviceCreation();
-
-	virtual void ClearState();
 
 	void UpdateMSAASettings();
 
