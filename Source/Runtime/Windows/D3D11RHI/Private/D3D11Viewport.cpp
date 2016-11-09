@@ -32,8 +32,21 @@ void FD3D11DynamicRHI::RHIAdvanceFrameForGetViewportBackBuffer()
 
 }
 
+void FD3D11DynamicRHI::RHITick(float DeltaTime)
+{
+	//ZYZ_TODO:if device removed,ReInit it.
+	//ZYZ_TODO:ConditionalResetSwapChain(FALSE)
+}
 
+void FD3D11DynamicRHI::RHISuspendRendering()
+{
 
+}
+
+void FD3D11DynamicRHI::RHIResumeRendering()
+{
+
+}
 
 //===========================================================================================================================
 FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHandle, uint32 InSizeX, uint32 InSizeY, bool bInIsFullscreen, EPixelFormat InPreferredPixelFormat)

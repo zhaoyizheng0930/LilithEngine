@@ -176,6 +176,17 @@ public:
 
 	virtual void RHIAdvanceFrameForGetViewportBackBuffer()  final override;
 
+	virtual void RHIAcquireThreadOwnership() final override {};
+
+	virtual void RHIReleaseThreadOwnership() final override {};
+
+	virtual void RHIFlushResource() final override {};
+
+	virtual uint32 RHIGetGPUFrameCycles() final override { return 0; };//ZYZ_TODO:GPU Time support later
+	virtual void RHITick(float DeltaTime) final override;
+	virtual void RHISuspendRendering() final override;
+	virtual void RHIResumeRendering() final override;
+
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
 
