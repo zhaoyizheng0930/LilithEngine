@@ -1,6 +1,7 @@
 #pragma once
 #include "D3D11RHI.h"
 #include "D3D11Resources.h"
+#include "RenderUtils.h"
 
 static DXGI_FORMAT GetRenderTargetFormat(EPixelFormat PixelFormat)
 {
@@ -52,6 +53,8 @@ public:
 	void ConditionalResetSwapChain(bool bIgnoreFocus);
 
 	bool Present(bool bLockToVsync);
+
+	FD3D11Texture2D* GetBackBuffer() { return BackBuffer; }
 protected:
 private:
 	FD3D11Texture2D* GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, EPixelFormat PixelFormat, IDXGISwapChain* SwapChain);

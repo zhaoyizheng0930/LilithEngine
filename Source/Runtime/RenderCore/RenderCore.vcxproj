@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\RenderingThread.cpp" />
+    <ClCompile Include="Private\RenderResource.cpp" />
     <ClCompile Include="Private\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\RenderCorePCH.h" />
     <ClInclude Include="Public\RenderingThread.h" />
+    <ClInclude Include="Public\RenderResource.h" />
     <ClInclude Include="Public\RenderUtils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

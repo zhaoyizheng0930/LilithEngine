@@ -57,13 +57,13 @@
     <ClCompile Include="Private\D3D11Texture.cpp">
       <Filter>Private</Filter>
     </ClCompile>
-    <ClCompile Include="Private\D3D11Viewport.cpp">
-      <Filter>Private</Filter>
-    </ClCompile>
     <ClCompile Include="Private\D3D11SRV.cpp">
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="Private\D3D11Query.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11Viewport.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,9 +95,6 @@
     <ClInclude Include="Public\D3D11ConstantBuffer.h">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="Public\RenderResource.h">
-      <Filter>Public</Filter>
-    </ClInclude>
     <ClInclude Include="Private\Windows\D3D11StateCache.h">
       <Filter>Private\Windows</Filter>
     </ClInclude>
@@ -105,6 +102,9 @@
       <Filter>Private</Filter>
     </ClInclude>
     <ClInclude Include="Public\D3D11State.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11Viewport.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

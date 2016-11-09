@@ -159,7 +159,7 @@
     <ClInclude Include="Public\D3D11RHIPCH.h" />
     <ClInclude Include="Public\D3D11State.h" />
     <ClInclude Include="Public\D3D11Util.h" />
-    <ClInclude Include="Public\RenderResource.h" />
+    <ClInclude Include="Public\D3D11Viewport.h" />
     <ClInclude Include="Public\WindowsD3D11Device.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -5,17 +5,26 @@
 
 FRHIViewport* FD3D11DynamicRHI::RHICreateViewport(void* WindowsHandle, uint32 SizeX, uint32 SizeY, bool bIsFullScreen, EPixelFormat PreferredPixelFormat)
 {
+	if (PreferredPixelFormat == EPixelFormat::PF_Unknown)
+	{
+		PreferredPixelFormat = EPixelFormat::PF_A2B10G10R10;
+	}
 
+	return new FD3D11Viewport(this , (HWND)WindowsHandle , SizeX , SizeY , bIsFullScreen , PreferredPixelFormat);
 }
 
 void FD3D11DynamicRHI::RHIResizeViewport(FRHIViewport* Viewport, uint32 SizeX, uint32 SizeY, bool bIsFullScreen)
 {
+	FD3D11Viewport* D11Viewport = (FD3D11Viewport*)Viewport;
 
+	D11Viewport->Resize(SizeX, SizeY, bIsFullScreen);
 }
 
 FRHITexture* FD3D11DynamicRHI::RHIGetViewportBackBuffer(FRHIViewport* Viewport)
 {
+	FD3D11Viewport* D11Viewport = (FD3D11Viewport*)Viewport;
 
+	return D11Viewport->GetBackBuffer();
 }
 
 void FD3D11DynamicRHI::RHIAdvanceFrameForGetViewportBackBuffer()
@@ -34,7 +43,8 @@ FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHa
 	bIsFullScreen(bInIsFullscreen),
 	PixelFormat(InPreferredPixelFormat),
 	WindowHandle(InWindowHandle),
-	bIsValid(true)
+	bIsValid(true),
+	FrameSyncEvent(InD3DRHI)
 {
 	D3DRHI->Viewports.push_back(this);
 
@@ -106,7 +116,7 @@ void FD3D11Viewport::Resize(uint32 InSizeX, uint32 InSizeY, bool bInIsFullscreen
 		SizeX = InSizeX;
 		SizeY = InSizeY;
 
-		SwapChain->ResizeBuffers(0, SizeX, SizeY, GetRenderTargetFormat(PixelFormat), DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
+		SwapChain->ResizeBuffers(1, SizeX, SizeY, GetRenderTargetFormat(PixelFormat), DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH);
 
 		if (bInIsFullscreen)
 		{
@@ -177,5 +187,6 @@ FD3D11Texture2D* FD3D11Viewport::GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, E
 
 bool FD3D11Viewport::PresentChecked(int32 SyncInterval)
 {
-
+	SwapChain->Present(SyncInterval, 0);
+	return 1;
 }
