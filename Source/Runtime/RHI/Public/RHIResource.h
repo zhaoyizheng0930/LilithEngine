@@ -267,6 +267,7 @@ class FRHIRenderQuery : public FRHIResource {};
 class FRHIRenderTargetView : public FRHIResource {};
 class FExclusiveDepthStencil : public FRHIResource {};
 class FRHIDepthRenderTargetView : public FRHIResource {};
+
 class FRHISetRenderTargetsInfo : public FRHIResource {};
 
 //View
