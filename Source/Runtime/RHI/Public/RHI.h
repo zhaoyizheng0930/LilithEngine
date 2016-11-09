@@ -317,3 +317,79 @@ struct FUpdateTextureRegion3D
 	}
 
 };
+
+
+enum class EResourceTransitionAccess
+{
+	EReadable, //transition from write-> read
+	EWritable, //transition from read -> write	
+	ERWBarrier, // Mostly for UAVs.  Transition to read/write state and always insert a resource barrier.
+	ERWNoBarrier, //Mostly UAVs.  Indicates we want R/W access and do not require synchronization for the duration of the RW state.  The initial transition from writable->RWNoBarrier and readable->RWNoBarrier still requires a sync
+	ERWSubResBarrier, //For special cases where read/write happens to different subresources of the same resource in the same call.  Inserts a barrier, but read validation will pass.  Temporary until we pass full subresource info to all transition calls.
+	EMaxAccess,
+};
+enum class EResourceTransitionPipeline
+{
+	EGfxToCompute,
+	EComputeToGfx,
+	EGfxToGfx,
+	EComputeToCompute,
+};
+
+struct FViewportBound
+{
+	float TopLeftX;
+	float TopLeftY;
+	float Width;
+	float Height;
+	float MinDepth;
+	float MaxDepth;
+
+	FViewportBound(float InTopLeftX,float InTopLeftY,float InWidth,float InHeight,float InMinDepth,float InMaxDepth)
+		:TopLeftX(InTopLeftX)
+		,TopLeftY(InTopLeftY)
+		,Width(InWidth)
+		,Height(InHeight)
+		,MinDepth(InMinDepth)
+		,MaxDepth(InMaxDepth)
+	{
+
+	}
+};
+
+struct FResolveRect
+{
+	int32 X1;
+	int32 Y1;
+	int32 X2;
+	int32 Y2;
+
+	FResolveRect(int32 InX1 = -1, int32 InY1 = -1, int32 InX2 = -1, int32 InY2 = -1)
+		:X1(InX1)
+		, X2(InX2)
+		, Y1(InY1)
+		, Y2(InY2)
+	{
+
+	}
+};
+
+struct FResolveParams
+{
+	ECubeFace CubeFace;
+	FResolveRect ResolveRect;
+	int32 MipIndex;
+	int32 SourceArrayIndex;
+	int32 DestArrayIndex;
+	FResolveParams(ECubeFace InCubeFace = CubeFace_PosX, const FResolveRect& InResolveRect = FResolveRect(), int32 InMipIndex = 0,
+		int32 InSourceArrayIndex = 0,
+		int32 InDestArrayIndex = 0)
+		:CubeFace(InCubeFace)
+		,ResolveRect(InResolveRect)
+		,MipIndex(InMipIndex)
+		,SourceArrayIndex(InSourceArrayIndex)
+		,DestArrayIndex(InDestArrayIndex)
+	{
+
+	}
+};

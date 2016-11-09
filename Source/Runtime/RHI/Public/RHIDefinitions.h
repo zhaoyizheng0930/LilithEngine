@@ -168,3 +168,12 @@ enum ECubeFace
 	CubeFace_NegZ,
 	CubeFace_MAX
 };
+
+enum class EAsyncComputeBudget
+{
+	ELeast_0,			//Least amount of GPU allocated to AsyncCompute that still gets 'some' done.
+	EGfxHeavy_1,		//Gfx gets most of the GPU.
+	EBalanced_2,		//Async compute and Gfx share GPU equally.
+	EComputeHeavy_3,	//Async compute can use most of the GPU
+	EAll_4,				//Async compute can use the entire GPU.
+};
