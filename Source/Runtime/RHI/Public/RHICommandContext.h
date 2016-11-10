@@ -105,7 +105,7 @@ public:
 	virtual void RHISubmitCommandsHint() = 0;
 
 	//ResourceBind----------------------------------------------------------------------------------------------------Viewport
-	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* ViewPort) = 0;
+	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) = 0;
 
 	virtual void RHIBeginDrawingViewport(FRHIViewport* Viewport , FRHITexture* RenderTargetRHI) = 0;
 

@@ -48,6 +48,23 @@ void FD3D11DynamicRHI::RHIResumeRendering()
 
 }
 
+void FD3D11DynamicRHI::RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data)
+{
+	D3D11_VIEWPORT* D3DData = (D3D11_VIEWPORT*)Data;
+
+	StateCache.SetViewports(Count , D3DData);
+}
+
+void FD3D11DynamicRHI::RHIBeginDrawingViewport(FRHIViewport* Viewport, FRHITexture* RenderTargetRHI)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPresent, bool bLockVsync)
+{
+
+}
+
 //===========================================================================================================================
 FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHandle, uint32 InSizeX, uint32 InSizeY, bool bInIsFullscreen, EPixelFormat InPreferredPixelFormat)
 	:D3DRHI(InD3DRHI),

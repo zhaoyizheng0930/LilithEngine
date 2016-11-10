@@ -42,6 +42,24 @@ bool FD3D11DynamicRHI::RHIGetRenderQueryResult(FRHIRenderQuery* RenderQuery, uin
 	return bSuccess;
 }
 
+bool FD3D11DynamicRHI::GetQueryData(ID3D11Query* Query, void* Data, SIZE_T DataSize, bool bWait, ERenderQueryType QueryType)
+{
+	//ZYZ_TODO:Support TimeOut Later
+	HRESULT Result = Direct3DDeviceIMContext->GetData(Query, Data, DataSize, 0);
+	if (Result == S_FALSE/* && bWait*/)
+	{
+		do
+		{
+			Result = Direct3DDeviceIMContext->GetData(Query, Data, DataSize, 0);
+
+		} while (Result == S_FALSE);
+	}
+	else
+	{
+		return true;
+	}
+}
+
 
 void FD3D11EventQuery::IssueEvent()
 {
@@ -72,4 +90,34 @@ void FD3D11EventQuery::InitDynamicRHI()
 void FD3D11EventQuery::ReleaseDynamicRHI()
 {
 	Query = NULL;
+}
+
+void FD3D11DynamicRHI::RHIBeginRenderQuery(FRHIRenderQuery* RenderQuery)
+{
+	FD3D11RenderQuery* D11RenderQuery = (FD3D11RenderQuery*)RenderQuery;
+
+	if (D11RenderQuery->Querytype == RQT_Occlusion)
+	{
+		Direct3DDeviceIMContext->Begin(D11RenderQuery->Resource);
+	}
+}
+
+void FD3D11DynamicRHI::RHIEndRenderQuery(FRHIRenderQuery* RenderQuery)
+{
+	FD3D11RenderQuery* D11RenderQuery = (FD3D11RenderQuery*)RenderQuery;
+
+	if (D11RenderQuery->Querytype == RQT_Occlusion)
+	{
+		Direct3DDeviceIMContext->End(D11RenderQuery->Resource);
+	}
+}
+
+void FD3D11DynamicRHI::RHIBeginOcclusionQueryBatch()
+{
+
+}
+
+void FD3D11DynamicRHI::RHIEndOcclusionQueryBatch()
+{
+
 }

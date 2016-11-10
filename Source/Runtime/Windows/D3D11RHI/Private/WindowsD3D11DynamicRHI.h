@@ -188,7 +188,8 @@ public:
 	virtual void RHIResumeRendering() final override;
 
 
-	//Context------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------------Context--------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------
 	virtual void RHIFlushComputeShaderCache();
 
 	virtual void RHIAutomaticCacheFlushAfterComputeShader(bool bEnable);
@@ -196,6 +197,24 @@ public:
 	virtual void RHIClearUAV(FRHIUnorderedAccessView* UAV, uint32* Values);
 
 	virtual void RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITexture* DestTexture, bool bKeepOriginalSurface, const FResolveParams& ResolveParam);
+
+	//Viewport---------------------------------------------------------------------------------------------
+	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) = 0;
+
+	virtual void RHIBeginDrawingViewport(FRHIViewport* Viewport, FRHITexture* RenderTargetRHI) = 0;
+
+	virtual void RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPresent, bool bLockVsync) = 0;
+
+	//ResourceBind---------------------------------------------------------------------------------------------Query
+	virtual void RHIBeginRenderQuery(FRHIRenderQuery* RenderQuery) = 0;
+
+	virtual void RHIEndRenderQuery(FRHIRenderQuery* RenderQuery) = 0;
+
+	virtual void RHIBeginOcclusionQueryBatch() = 0;
+
+	virtual void RHIEndOcclusionQueryBatch() = 0;
+
+
 
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
