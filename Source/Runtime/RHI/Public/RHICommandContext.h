@@ -217,7 +217,37 @@ public:
 	virtual void RHIBindClearMRTValues(bool bClearColor, bool bClearDepth, bool bClearStencil) {}
 
 	//DrawCall-----------------------------------------------------------------------------------------------------
-	virtual void RHIDrawPrimitive() = 0;
+	virtual void RHIDrawPrimitive(uint32 PrimitiveType , uint32 BaseVertexIndex , uint32 NumPrimitives , uint32 NumInstances) = 0;
+
+	virtual void RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer , uint32 ArgumentOffset) = 0;
+
+	virtual void RHIDrawIndexIndirect(FRHIIndexBuffer* IndexBuffer , uint32 PrimitiveType , FRHIStructureBuffer* StructureBuffer ,int32 DrawArgumentIndex , uint32 NumInstances ) = 0;
+
+	virtual void RHIDrawIndexedPrimitive(FRHIIndexBuffer IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances) = 0;
+
+	virtual void RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset) = 0;
+
+
+	virtual void RHIBeginDrawPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData) = 0;
+
+	virtual void RHIEndDrawPrimitiveUP() = 0;
+
+	virtual void RHIBeginDrawIndexedPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData, uint32 MinVertexIndex, uint32 NumIndices, uint32 IndexDataStride, void*& OutIndexData) = 0;
+
+	virtual void RHIEndDrawIndexedPrimitiveUP() = 0;
+
+	//Others-----------------------------------------------------------------------------------------------------
+	virtual void RHIClear(bool bClearColor/*, const FLinearColor& Color*/, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil/*, FIntRect ExcludeRect*/) = 0;
+
+	virtual void RHIClearMRT(bool bClearColor, int32 NumClearColors/*, const FLinearColor* ColorArray*/, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil/*, FIntRect ExcludeRect*/) = 0;
+
+	virtual void RHIEnableDepthBoundTest(bool bEnable, float MinDepth , float MaxDepth) = 0;
+
+	virtual void RHIPushEvent(const char* Name , FColor Color) = 0;
+
+	virtual void RHIPopEvent() = 0;
+
+	virtual void RHIUpdateTextureReference(FRHITextureReference* Texture, FRHITexture* NewTexture) = 0;
 protected:
 private:
 };
