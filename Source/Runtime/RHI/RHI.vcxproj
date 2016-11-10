@@ -142,6 +142,7 @@
     <ClInclude Include="Public\DynamicRHI.h" />
     <ClInclude Include="Public\RHI.h" />
     <ClInclude Include="Public\RHICommandContext.h" />
+    <ClInclude Include="Public\RHICommandList.h" />
     <ClInclude Include="Public\RHIDefinitions.h" />
     <ClInclude Include="Public\RHIPCH.h" />
     <ClInclude Include="Public\RHIResource.h" />

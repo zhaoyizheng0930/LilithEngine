@@ -330,7 +330,6 @@ public:
 			return 3; // old DSAT_ReadOnlyDepthAndStencil
 		}
 		// should never happen
-		check(0);
 		return -1;
 	}
 };

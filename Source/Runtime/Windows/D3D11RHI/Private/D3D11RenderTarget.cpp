@@ -73,7 +73,7 @@ void FD3D11DynamicRHI::RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITe
 					SrcBox.bottom = ResolveParam.ResolveRect.Y2;
 					SrcBox.back = 1;
 
-					Direct3DDeviceIMContext->CopySubresourceRegion(DestTexture2D->GetResource(), 0, ResolveParam.Rect.X1, ResolveParam.Rect.Y1, 0, SourceTexture2D->GetResource(), 0, &SrcBox);
+					Direct3DDeviceIMContext->CopySubresourceRegion(DestTexture2D->GetResource(), 0, ResolveParam.ResolveRect.X1, ResolveParam.ResolveRect.Y1, 0, SourceTexture2D->GetResource(), 0, &SrcBox);
 				}
 				else
 				{
@@ -93,7 +93,7 @@ void FD3D11DynamicRHI::RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITe
 			//MSAA Resolve
 			if (SourceTextureCube->GetNumSamples() > 1 && DestTextureCube->GetNumSamples() <= 1)
 			{
-				Direct3DDeviceIMContext->ResolveSubresource(DestTextureCube->GetResource(), DestSubresource, SourceTextureCube->GetResource(), SourceSubresource, (DXGI_FORMAT)GPixelFormats[DestTextureCube->GetPixelFormat()]->PlatformFormat);
+				Direct3DDeviceIMContext->ResolveSubresource(DestTextureCube->GetResource(), DestSubresource, SourceTextureCube->GetResource(), SourceSubresource, (DXGI_FORMAT)GPixelFormats[DestTextureCube->GetPixelFormat()].PlatformFormat);
 			}
 			else
 			{

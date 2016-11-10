@@ -283,7 +283,7 @@ public:
 
 	void Unlock(uint32 MipIndex, uint32 ArrayIndex);
 
-	ID3D11Texture2D* GetResource() const { return (ID3D11Texture2D*)FD3D11TextureBase::GetResource(); }
+	ID3D11Texture2D* GetResource() const { return (ID3D11Texture2D*)/*FD3D11TextureBase::*/GetResource(); }
 };
 
 class FD3D11BaseTexture2D : public FRHITexture2D

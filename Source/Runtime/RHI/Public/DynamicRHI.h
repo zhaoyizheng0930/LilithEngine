@@ -2,6 +2,7 @@
 #include "RHIResource.h"
 #include "RHI.h"
 #include "Math/LilithMath.h"
+#include "RHICommandList.h"
 #include "RHICommandContext.h"
 
 

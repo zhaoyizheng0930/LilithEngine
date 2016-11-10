@@ -66,6 +66,9 @@
     <ClCompile Include="Private\D3D11Viewport.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\D3D11RenderTarget.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\D3D11RHIPCH.h">
