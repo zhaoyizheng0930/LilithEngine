@@ -284,3 +284,13 @@ void FD3D11DynamicRHI::RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY,
 		Direct3DDeviceIMContext->RSSetScissorRects(1, &rect);
 	}
 }
+
+void FD3D11DynamicRHI::RHIAutomaticCacheFlushAfterComputeShader(bool bEnable)
+{
+	// Nothing to do
+}
+
+void FD3D11DynamicRHI::RHIFlushComputeShaderCache()
+{
+	// Nothing to do
+}

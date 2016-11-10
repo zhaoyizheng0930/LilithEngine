@@ -187,6 +187,16 @@ public:
 	virtual void RHISuspendRendering() final override;
 	virtual void RHIResumeRendering() final override;
 
+
+	//Context------------------------------------------------------------------------------------------------------------------
+	virtual void RHIFlushComputeShaderCache();
+
+	virtual void RHIAutomaticCacheFlushAfterComputeShader(bool bEnable);
+
+	virtual void RHIClearUAV(FRHIUnorderedAccessView* UAV, uint32* Values);
+
+	virtual void RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITexture* DestTexture, bool bKeepOriginalSurface, const FResolveParams& ResolveParam);
+
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
 
@@ -247,6 +257,20 @@ protected:
 	uint32 GetMaxMSAAQuality(int InActualMSAACount);
 
 	bool GetQueryData(ID3D11Query* Query, void* Data, SIZE_T DataSize, bool bWait, ERenderQueryType QueryType);
+
+	template<typename TPixelShader>
+	void ResolveTextureUsingShader(
+		FRHICommandList_RecursiveHazardous& RHICmdList,
+		FD3D11Texture2D* SourceTexture,
+		FD3D11Texture2D* DestTexture,
+		ID3D11RenderTargetView* DestSurfaceRTV,
+		ID3D11DepthStencilView* DestSurfaceDSV,
+		const D3D11_TEXTURE2D_DESC& ResolveTargetDesc,
+		const FResolveRect& SourceRect,
+		const FResolveRect& DestRect,
+		FD3D11DeviceContext* Direct3DDeviceContext,
+		typename TPixelShader::FParameter PixelShaderParameter
+		);
 private:
 
 };

@@ -675,3 +675,20 @@ bool FD3D11DynamicRHI::GetQueryData(ID3D11Query* Query, void* Data, SIZE_T DataS
 		return true;
 	}
 }
+
+template<typename TPixelShader>
+void FD3D11DynamicRHI::ResolveTextureUsingShader(
+	FRHICommandList_RecursiveHazardous& RHICmdList,
+	FD3D11Texture2D* SourceTexture,
+	FD3D11Texture2D* DestTexture,
+	ID3D11RenderTargetView* DestSurfaceRTV,
+	ID3D11DepthStencilView* DestSurfaceDSV,
+	const D3D11_TEXTURE2D_DESC& ResolveTargetDesc,
+	const FResolveRect& SourceRect,
+	const FResolveRect& DestRect,
+	FD3D11DeviceContext* Direct3DDeviceContext,
+	typename TPixelShader::FParameter PixelShaderParameter
+	)
+{
+
+}

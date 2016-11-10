@@ -107,3 +107,10 @@ FRHIUnorderedAccessView* FD3D11DynamicRHI::RHICreateUnorderedAccessView(FRHIVert
 	D11UAV = new FD3D11UnorderedAccessView(UnorderedAccessView, D11VertexBuffer);
 	return D11UAV;
 }
+
+void FD3D11DynamicRHI::RHIClearUAV(FRHIUnorderedAccessView* UAV, uint32* Values)
+{
+	FD3D11UnorderedAccessView* D11UAV = (FD3D11UnorderedAccessView*)UAV;
+
+	Direct3DDeviceIMContext->ClearUnorderedAccessViewUint(D11UAV->View, Values);
+}

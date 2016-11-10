@@ -372,6 +372,11 @@ struct FResolveRect
 	{
 
 	}
+
+	bool IsValid() const
+	{
+		return X1 >= 0 && Y1 >= 0 && X2 - X1 > 0 && Y2 - Y1 > 0;
+	}
 };
 
 struct FResolveParams

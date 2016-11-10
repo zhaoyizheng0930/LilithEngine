@@ -229,6 +229,10 @@ public:
 	}
 
 	int GetMemorySize() { return MemorySize; }
+
+	ID3D11DepthStencilView* GetDepthStencilView(FExclusiveDepthStencil AccessType) {
+		return DepthStencilView[AccessType.GetIndex()];
+	}
 protected:
 	FD3D11DynamicRHI* D3DRHI;
 
