@@ -127,3 +127,13 @@ void FD3D11DynamicRHI::RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITe
 		//NULL 
 	}
 }
+
+void FD3D11DynamicRHI::RHITransitionResources(EResourceTransitionAccess TransitionType, FRHITexture** InTextures, int32 NumTextures)
+{
+
+}
+
+void FD3D11DynamicRHI::RHITransitionResources(EResourceTransitionAccess TransitionType, EResourceTransitionPipeline TransitionPipeline, FRHIUnorderedAccessView* InUAVs, int32 NumUAVs, FRHIComputeFence* WriteComputeFence)
+{
+
+}

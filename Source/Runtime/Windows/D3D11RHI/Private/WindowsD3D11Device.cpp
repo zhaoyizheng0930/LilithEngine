@@ -91,7 +91,9 @@ FD3D11DynamicRHI::FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LE
 	DXGIFactory1(InDXGIFactory1),
 	FeatureLevel(InFeatureLevel),
 	ChosenAdapter(InChosenAdapter),
-	ChosenDescription(InChosenDescription)
+	ChosenDescription(InChosenDescription),
+	NumSimultaneousRenderTargets(0),
+	NumUAVs(0)
 {
 	GTexturePoolSize = 0;
 

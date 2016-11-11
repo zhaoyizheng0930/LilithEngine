@@ -55,14 +55,50 @@ void FD3D11DynamicRHI::RHISetMultipleViewPorts(uint32 Count, FViewportBound* Dat
 	StateCache.SetViewports(Count , D3DData);
 }
 
-void FD3D11DynamicRHI::RHIBeginDrawingViewport(FRHIViewport* Viewport, FRHITexture* RenderTargetRHI)
+void FD3D11DynamicRHI::RHIBeginDrawingViewport(FRHIViewport* Viewport, FRHITexture* RenderTarget)
 {
+	FD3D11Viewport* D11Viewport = (FD3D11Viewport*)Viewport;
 
+	DrawingViewport = D11Viewport;
+
+	if (RenderTarget == NULL)
+	{
+		RenderTarget = D11Viewport->GetBackBuffer();
+		RHITransitionResources(EResourceTransitionAccess::EWritable, &RenderTarget, 1);
+	}
+
+	FRHIRenderTargetView View(RenderTarget);
+	RHISetRenderTarget(1, &View, NULL, 0, NULL);
+
+	//Default disable Scissor rect
+	RHISetScissorRect(false , 0 , 0 , 0 , 0);
 }
 
 void FD3D11DynamicRHI::RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPresent, bool bLockVsync)
 {
+	FD3D11Viewport* D11Viewport = (FD3D11Viewport*)Viewport;
 
+	DrawingViewport = NULL;
+
+	//Clear References
+	CurrentDepthTexture = NULL;
+	CurrentDepthStencilTarget = NULL;
+	CurrentRenderTargets[0] = NULL;
+	for (uint32 RenderTargetIndex = 1; RenderTargetIndex < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++RenderTargetIndex)
+	{
+		CurrentRenderTargets[RenderTargetIndex] = NULL;
+	}
+
+	ClearAllShaderResources();
+
+	CommitRenderTargetsAndUAVs();
+	//vertex Shader Set
+	StateCache.SetVertexShader(nullptr);
+
+	//StreamSource
+	for (uint32 StreamIndex = 0;StreamIndex)
+	{
+	}
 }
 
 //===========================================================================================================================

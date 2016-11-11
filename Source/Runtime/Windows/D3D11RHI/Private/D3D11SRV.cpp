@@ -160,3 +160,74 @@ FRHIShaderResourceView* FD3D11DynamicRHI::RHICreateShaderResourceView(FRHITextur
 	Direct3DDevice->CreateShaderResourceView(D11Texture2DArray->GetResource(), &SRVDesc, &SRV);
 	return new FD3D11ShaderResourceView(SRV, D11Texture2DArray);
 }
+
+template <EShaderFrequency ShaderFrequency>
+void FD3D11DynamicRHI::ClearAllShaderResourcesForFrequency()
+{
+	int maxSRVNum = MaxBoundShaderResourcesIndex[ShaderFrequency];
+	for (int index = maxSRVNum; index >= 0;index--)
+	{
+		if (CurrentResourcesBoundAsSRVs[ShaderFrequency][index])
+		{
+			InternalSetShaderResourceView<ShaderFrequency>(NULL , NULL , index , "");
+		}
+	}
+}
+
+template <EShaderFrequency ShaderFrequency>
+void FD3D11DynamicRHI::InternalSetShaderResourceView(FD3D11BaseShaderResource* Resource, ID3D11ShaderResourceView* SRV, int32 ResourceIndex, std::string SRVName, FD3D11StateCache::ESRV_Type SrvType)
+{
+	StateCache.SetSahderResourceView<ShaderFrequency>(SRV, ResourceIndex , SrvType);
+}
+
+template <EShaderFrequency ShaderFrequency>
+void FD3D11DynamicRHI::ClearShaderResourceViews(FD3D11BaseShaderResource* Resource)
+{
+	for (int index = MaxBoundShaderResourcesIndex[ShaderFrequency]; index >= 0; --index)
+	{
+		if (CurrentResourcesBoundAsSRVs[ShaderFrequency][index] == Resource)
+		{
+			InternalSetShaderResourceView<ShaderFrequency>(nullptr, nullptr, index, "");
+		}
+	}
+}
+
+void FD3D11DynamicRHI::CommitRenderTargetsAndUAVs()
+{
+	//Copy RTV Pointer
+	ID3D11RenderTargetView* RTVs[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+	for (int i = 0; i < NumSimultaneousRenderTargets;i++)
+	{
+		RTVs[i] = CurrentRenderTargets[i];
+	}
+
+	//Copy UAV Pointer
+	uint32 UAVInits[D3D11_PS_CS_UAV_REGISTER_COUNT];
+	ID3D11UnorderedAccessView* UAVs[D3D11_PS_CS_UAV_REGISTER_COUNT];
+	for (int i = 0; i < NumUAVs; i++)
+	{
+		UAVs[i] = CurrentUAVs[i];
+		UAVInits[i] = -1;
+	}
+
+	if (NumUAVs > 0)
+	{
+		Direct3DDeviceIMContext->OMSetRenderTargetsAndUnorderedAccessViews(NumSimultaneousRenderTargets, RTVs, CurrentDepthStencilTarget, NumSimultaneousRenderTargets, NumUAVs
+			, UAVs,UAVInits);
+	}
+	else
+	{
+		Direct3DDeviceIMContext->OMSetRenderTargets(NumSimultaneousRenderTargets, RTVs, CurrentDepthStencilTarget);
+	}
+
+}
+
+void FD3D11DynamicRHI::ClearAllShaderResources()
+{
+	ClearAllShaderResourcesForFrequency<SF_Vertex>();
+	ClearAllShaderResourcesForFrequency<SF_Hull>();
+	ClearAllShaderResourcesForFrequency<SF_Domain>();
+	ClearAllShaderResourcesForFrequency<SF_Pixel>();
+	ClearAllShaderResourcesForFrequency<SF_Geometry>();
+	ClearAllShaderResourcesForFrequency<SF_Compute>();
+}

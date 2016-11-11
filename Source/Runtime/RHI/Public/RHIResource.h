@@ -264,8 +264,26 @@ private:
 class FRHIRenderQuery : public FRHIResource {};
 
 //RTV
-class FRHIRenderTargetView : public FRHIResource {};
-class FRHIDepthRenderTargetView : public FRHIResource {};
+class FRHIRenderTargetView : public FRHIResource 
+{
+public:
+	FRHITexture* Texture;
+	uint32 MipIndex;
+
+	uint32 ArraySliceIndex;
+
+	FRHIRenderTargetView(FRHITexture* InTexture)
+		:Texture(InTexture)
+	{
+
+	}
+
+};
+class FRHIDepthRenderTargetView : public FRHIResource 
+{
+public:
+	FRHITexture* Texture;
+};
 
 class FExclusiveDepthStencil : public FRHIResource 
 {

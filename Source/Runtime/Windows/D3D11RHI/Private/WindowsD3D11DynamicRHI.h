@@ -190,31 +190,33 @@ public:
 
 	//----------------------------------------------------Context--------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------
-	virtual void RHIFlushComputeShaderCache();
+	virtual void RHIFlushComputeShaderCache() final override;
 
-	virtual void RHIAutomaticCacheFlushAfterComputeShader(bool bEnable);
+	virtual void RHIAutomaticCacheFlushAfterComputeShader(bool bEnable) final override;
 
-	virtual void RHIClearUAV(FRHIUnorderedAccessView* UAV, uint32* Values);
+	virtual void RHIClearUAV(FRHIUnorderedAccessView* UAV, uint32* Values) final override;
 
-	virtual void RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITexture* DestTexture, bool bKeepOriginalSurface, const FResolveParams& ResolveParam);
+	virtual void RHICopyToResolveTarget(FRHITexture* SourceTexture, FRHITexture* DestTexture, bool bKeepOriginalSurface, const FResolveParams& ResolveParam) final override;
+
+	virtual void RHITransitionResources(EResourceTransitionAccess TransitionType, FRHITexture** InTextures, int32 NumTextures) final override;//ZYZ_TODO:Implement later
+
+	virtual void RHITransitionResources(EResourceTransitionAccess TransitionType, EResourceTransitionPipeline TransitionPipeline, FRHIUnorderedAccessView* InUAVs, int32 NumUAVs, FRHIComputeFence* WriteComputeFence) final override;//ZYZ_TODO:Implement later
 
 	//Viewport---------------------------------------------------------------------------------------------
-	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) = 0;
+	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) final override;
 
-	virtual void RHIBeginDrawingViewport(FRHIViewport* Viewport, FRHITexture* RenderTargetRHI) = 0;
+	virtual void RHIBeginDrawingViewport(FRHIViewport* Viewport, FRHITexture* RenderTarget) final override;
 
-	virtual void RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPresent, bool bLockVsync) = 0;
+	virtual void RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPresent, bool bLockVsync) final override;
 
 	//ResourceBind---------------------------------------------------------------------------------------------Query
-	virtual void RHIBeginRenderQuery(FRHIRenderQuery* RenderQuery) = 0;
+	virtual void RHIBeginRenderQuery(FRHIRenderQuery* RenderQuery) final override;
 
-	virtual void RHIEndRenderQuery(FRHIRenderQuery* RenderQuery) = 0;
+	virtual void RHIEndRenderQuery(FRHIRenderQuery* RenderQuery) final override;
 
-	virtual void RHIBeginOcclusionQueryBatch() = 0;
+	virtual void RHIBeginOcclusionQueryBatch() final override;
 
-	virtual void RHIEndOcclusionQueryBatch() = 0;
-
-
+	virtual void RHIEndOcclusionQueryBatch() final override;
 
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
@@ -247,7 +249,9 @@ protected:
 	FD3D11TextureBase* CurrentDepthTexture;
 
 	FD3D11BaseShaderResource* CurrentResourcesBoundAsSRVs[SF_NumFrequencies][D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
-
+	int32 MaxBoundShaderResourcesIndex[SF_NumFrequencies];
+	uint32 NumSimultaneousRenderTargets;
+	uint32 NumUAVs;
 	//TRefCountPtr<FD3D11DynamicBuffer> DynamicVB;
 	//TRefCountPtr<FD3D11DynamicBuffer> DynamicIB;
 
@@ -263,6 +267,10 @@ protected:
 
 	void* ZeroMemory;
 	uint32 ZeroMemorySize;
+
+	FD3D11Viewport* DrawingViewport;
+
+
 protected:
 	/** Initializes the constant buffers.  Called once at RHI initialization time. */
 	void InitConstantBuffers();
@@ -290,6 +298,20 @@ protected:
 		FD3D11DeviceContext* Direct3DDeviceContext,
 		typename TPixelShader::FParameter PixelShaderParameter
 		);
+private:
+	//Context Private
+	void CommitRenderTargetsAndUAVs();
+	//Clear                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+	void ClearAllShaderResources();
+
+	template <EShaderFrequency ShaderFrequency>
+	void ClearShaderResourceViews(FD3D11BaseShaderResource* Resource); //Clear One
+
+	template <EShaderFrequency ShaderFrequency>
+	void ClearAllShaderResourcesForFrequency(); //Clear All
+
+	template <EShaderFrequency ShaderFrequency>
+	void InternalSetShaderResourceView(FD3D11BaseShaderResource* Resource, ID3D11ShaderResourceView* SRV, int32 ResourceIndex, std::string SRVName, FD3D11StateCache::ESRV_Type SrvType = FD3D11StateCache::SRV_Unknown);
 private:
 
 };

@@ -2,6 +2,20 @@
 
 #define MaxSimultaneousRenderTargets 8
 
+enum EShaderFrequency
+{
+	SF_Vertex = 0,
+	SF_Hull = 1,
+	SF_Domain = 2,
+	SF_Pixel = 3,
+	SF_Geometry = 4,
+	SF_Compute = 5,
+
+	SF_NumFrequencies = 6,
+
+	SF_NumBits = 3,
+};
+
 enum EResourceLockMode
 {
 	RLM_ReadOnly,

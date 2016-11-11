@@ -14,7 +14,7 @@ public:
 
 	virtual void RHISetAsyncComputeBudget(EAsyncComputeBudget Budget) = 0;
 
-	virtual void RHITransitionResource(EResourceTransitionAccess TransitionType, EResourceTransitionPipeline TransitionPipeline, FRHIUnorderedAccessView* InUAV, int32 NumUAVs, FRHIComputeFence* WriteComputerFence) = 0;
+	virtual void RHITransitionResources(EResourceTransitionAccess TransitionType, EResourceTransitionPipeline TransitionPipeline, FRHIUnorderedAccessView* InUAV, int32 NumUAVs, FRHIComputeFence* WriteComputerFence) = 0;
 
 	virtual void RHISetShaderTexture(FRHIComputeShader* ComputeShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
@@ -107,7 +107,7 @@ public:
 	//ResourceBind----------------------------------------------------------------------------------------------------Viewport
 	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) = 0;
 
-	virtual void RHIBeginDrawingViewport(FRHIViewport* Viewport , FRHITexture* RenderTargetRHI) = 0;
+	virtual void RHIBeginDrawingViewport(FRHIViewport* Viewport , FRHITexture* RenderTarget) = 0;
 
 	virtual void RHIEndDrawingViewport(FRHIViewport* Viewport , bool bPresent , bool bLockVsync) = 0;
 
