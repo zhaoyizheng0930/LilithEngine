@@ -95,9 +95,41 @@ void FD3D11DynamicRHI::RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPrese
 	//vertex Shader Set
 	StateCache.SetVertexShader(nullptr);
 
-	//StreamSource
-	for (uint32 StreamIndex = 0;StreamIndex)
+	//StreamSource   why it's 16. Vertex Cache has 32 slot
+	for (uint32 StreamIndex = 0; StreamIndex < 16;StreamIndex++)
 	{
+		StateCache.SetStreamSource(nullptr , StreamIndex ,0 , 0 );
+	}
+
+	//Index Buffer
+	StateCache.SetIndexBuffer(nullptr , DXGI_FORMAT_R16_UINT , 0);
+
+	//StateCache HullShader
+	StateCache.SetHullSahder(nullptr);
+	StateCache.SetDomainShader(nullptr);
+	StateCache.SetGeometryShader(nullptr);
+	StateCache.SetPixelShader(nullptr);
+	//StateCache.SetComputeShader(nullptr); // Compute Shader is set to NULL after each Dispatch call, so no need to clear it here
+
+	bool bNatyivelyPresente = D11Viewport->Present(bLockVsync);
+
+	if (GNumActiveGPUsForRendering == 1)
+	{
+		if (bNatyivelyPresente)
+		{
+			if (bGFinishCurrentFrame)
+			{
+				//didn't finish
+				D11Viewport->WaitForFrameEventCompletion();
+				D11Viewport->IssueFrameEvent();
+			}
+			else
+			{
+				//finish
+				D11Viewport->IssueFrameEvent();
+				D11Viewport->WaitForFrameEventCompletion();
+			}
+		}
 	}
 }
 

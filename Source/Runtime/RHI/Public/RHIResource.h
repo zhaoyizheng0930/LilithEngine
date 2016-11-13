@@ -244,7 +244,10 @@ private:
 
 //Others
 class FRHIComputeFence : public FRHIResource {};
-class FRHIViewport : public FRHIResource {};
+class FRHIViewport : public FRHIResource 
+{
+
+};
 class FRHICustomPresent : public FRHIResource 
 {
 public:

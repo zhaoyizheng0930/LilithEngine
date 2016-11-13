@@ -32,17 +32,80 @@ public:
 	}
 
 	//StateSet---------------------------------------------------------------------------------
-	//Shader
+	//Shader-----------------------------------------------------------------------VertexShader
 	void SetVertexShader(ID3D11VertexShader* VertexShader)
 	{
 		//Compare Dirty
 		if (CurrentVertexShader != VertexShader)
 		{
+			CurrentVertexShader = VertexShader;
 			Direct3DDeviceIMContext->VSSetShader(VertexShader, nullptr, 0);
 		}
 	}
+	//Shader------------------------------------------------------------------------HullShader
+	void SetHullSahder(ID3D11HullShader* HullShader)
+	{
+		//Compare Dirty
+		if (CurrentHullShader != HullShader)
+		{
+			CurrentHullShader = HullShader;
+			Direct3DDeviceIMContext->HSSetShader(HullShader);
+		}
+	}
+	//Shader------------------------------------------------------------------------Domain
+	void SetDomainShader(ID3D11DomainShader* DomainShader)
+	{
+		//Compare Dirty
+		if (CurrentDoaminShader != DomainShader)
+		{
+			CurrentDoaminShader = DomainShader;
+			Direct3DDeviceIMContext->DSSetShader(DomainShader , nullptr , 0);
+		}
+	}
+	//Shader------------------------------------------------------------------------Geometry
+	void SetGeometryShader(ID3D11GeometryShader* GeometryShader)
+	{
+		//Compare Dirty
+		if (CurrentGeometryShader != GeometryShader)
+		{
+			CurrentGeometryShader = GeometryShader;
+			Direct3DDeviceIMContext->GSSetShader(GeometryShader, nullptr, 0);
+		}
+	}
+	//Shader------------------------------------------------------------------------Pixel
+	void SetPixelShader(ID3D11PixelShader* PixelShader)
+	{
+		//Compare Dirty
+		if (CurrentPixelShader != PixelShader)
+		{
+			CurrentPixelShader = PixelShader;
+			Direct3DDeviceIMContext->PSSetShader(CurrentPixelShader, nullptr, 0);
+		}
+	}
+	//Shader------------------------------------------------------------------------Compute
+	void SetComputeShader(ID3D11ComputeShader* ComputeShader)
+	{
+		if (CurrentComputeShader != ComputeShader)
+		{
+			CurrentComputeShader = ComputeShader;
+			Direct3DDeviceIMContext->CSSetShader(ComputeShader, nullptr, 0);
+		}
+	}
 
-	//Viewport
+	//Stream Source--------------------------------------------------------------------------
+	void SetStreamSource(ID3D11Buffer* VertexBuffer ,uint32 StreamIndex , uint32 Stride , uint32 Offset )
+	{
+		//Cahce State
+		InternalSetStreamSource(VertexBuffer , StreamIndex , Stride , Offset , nullptr);
+	}
+
+	//Index Buffer--------------------------------------------------------------------------
+	void SetIndexBuffer(ID3D11Buffer* IndexBuffer,DXGI_FORMAT Format , uint32 Offset)
+	{
+		InternalSetIndeBuffer(IndexBuffer , Format , Offset , nullptr);
+	}
+
+	//Viewport--------------------------------------------------------------------------
 	void SetViewports(uint32 Count, D3D11_VIEWPORT* Viewports)
 	{
 		//Compare Dirty
@@ -65,10 +128,32 @@ protected:
 private:
 	//Shader Cache
 	ID3D11VertexShader* CurrentVertexShader;
+	ID3D11HullShader* CurrentHullShader;
+	ID3D11DomainShader* CurrentDoaminShader;
+	ID3D11GeometryShader* CurrentGeometryShader;
+	ID3D11PixelShader* CurrentPixelShader;
+	ID3D11ComputeShader* CurrentComputeShader;
 	// Viewport Cache
 	uint32			CurrentNumberOfViewports;
 	D3D11_VIEWPORT  CurrentViewport[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
 
+	//VertexBuffer Cache
+	struct FD3D11VertexBufferState
+	{
+		ID3D11Buffer* VertexBuffer;
+		uint32 Stride;
+		uint32 Offset;
+	}CurrentVertexBuffer[D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT];
+
+	//IndexBuffer Cache
+	struct FD3D11IndexBufferState
+	{
+		ID3D11Buffer* IndexBuffer;
+		DXGI_FORMAT Format;
+		uint32 Offset;
+	}CurrentIndexBuffer;
+
+private:
 
 	template <EShaderFrequency ShaderFrequency>
 	void InternalSetSahderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex)
@@ -81,6 +166,47 @@ private:
 		case SF_Geometry:	Direct3DDeviceIMContext->GSSetShaderResources(ResourceIndex, 1, &SRV); break;
 		case SF_Pixel:		Direct3DDeviceIMContext->PSSetShaderResources(ResourceIndex, 1, &SRV); break;
 		case SF_Compute:	Direct3DDeviceIMContext->CSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		}
+	}
+
+	typedef void(*TSetStreamSourceAlternate)(FD3D11StateCacheBase* StateCache, ID3D11Buffer* VertexBuffer, uint32 StreamIndex, uint32 Stride, uint32 Offset);
+	void InternalSetStreamSource(ID3D11Buffer* VertexBuffer, uint32 StreamIndex, uint32 Stride, uint32 Offset, TSetStreamSourceAlternate AlternatePathFunction)
+	{
+		FD3D11VertexBufferState& CacheVertexBuffer = CurrentVertexBuffer[StreamIndex];
+		//Dirty Compare
+		if (CacheVertexBuffer.VertexBuffer != VertexBuffer || CacheVertexBuffer.Stride != Stride || CacheVertexBuffer.Offset != Offset)
+		{
+			CacheVertexBuffer.VertexBuffer = VertexBuffer;
+			CacheVertexBuffer.Stride = Stride;
+			CacheVertexBuffer.Offset = Offset;
+			if (AlternatePathFunction != NULL)
+			{
+				AlternatePathFunction(this, VertexBuffer, StreamIndex, Stride, Offset);
+			}
+			else
+			{
+				Direct3DDeviceIMContext->IASetVertexBuffers(StreamIndex, 1, &VertexBuffer, &Stride, &Offset);
+			}
+		}
+	}
+
+	typedef void(*TSetIndexBufferAlternate)(FD3D11StateCacheBase* StateCache, ID3D11Buffer* IndexBuffer, DXGI_FORMAT Format, uint32 Offset);
+	void InternalSetIndeBuffer(ID3D11Buffer* IndexBuffer, DXGI_FORMAT Format, uint32 Offset , TSetIndexBufferAlternate AlternatePathFunction)
+	{
+		//Compare Dirty
+		if (CurrentIndexBuffer.IndexBuffer != IndexBuffer || CurrentIndexBuffer.Offset != Offset || CurrentIndexBuffer.Format != Format)
+		{
+			CurrentIndexBuffer.IndexBuffer = IndexBuffer;
+			CurrentIndexBuffer.Offset = Offset;
+			CurrentIndexBuffer.Format = Format;
+			if (AlternatePathFunction == NULL)
+			{
+				Direct3DDeviceIMContext->IASetIndexBuffer(IndexBuffer, Format, Offset);
+			}
+			else
+			{
+				AlternatePathFunction(this, IndexBuffer, Format, Offset);
+			}
 		}
 	}
 };

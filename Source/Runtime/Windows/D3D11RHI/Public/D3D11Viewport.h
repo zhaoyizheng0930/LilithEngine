@@ -55,6 +55,16 @@ public:
 	bool Present(bool bLockToVsync);
 
 	FD3D11Texture2D* GetBackBuffer() { return BackBuffer; }
+
+	void WaitForFrameEventCompletion()
+	{
+		FrameSyncEvent.WaitForCompletion();
+	}
+
+	void IssueFrameEvent()
+	{
+		FrameSyncEvent.IssueEvent();
+	}
 protected:
 private:
 	FD3D11Texture2D* GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, EPixelFormat PixelFormat, IDXGISwapChain* SwapChain);

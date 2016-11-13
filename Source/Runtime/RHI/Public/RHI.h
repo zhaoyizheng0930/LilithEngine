@@ -19,6 +19,11 @@ extern std::wstring GRHIAdapterName;
 extern uint32 GRHIVendorId = 0;
 extern uint32 GRHIDeviceId = 0;
 
+
+int32 GNumActiveGPUsForRendering = 1;
+
+bool bGFinishCurrentFrame = true;
+
 enum ESamplerFilter
 {
 	SF_Point,				//点采样:取最接近的Mipmap上的点
