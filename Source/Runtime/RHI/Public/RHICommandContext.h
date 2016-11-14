@@ -126,7 +126,7 @@ public:
 
 	virtual void RHISetRasterizerState(FRHIRasterizerState* RasterizerState) = 0;
 
-	virtual void RHISetViewport(FRHIViewport* Viewport) = 0;
+	virtual void RHISetViewport(uint32 MinX, uint32 MinY, float MinZ, uint32 MaxX, uint32 MaxY, float MaxZ) = 0;
 
 	virtual void RHISetStereoViewport(uint32 LeftMinX, uint32 RightMinX, uint32 MinY, float MinZ, uint32 LeftMaxX, uint32 RightMaxX, uint32 MaxY, float MaxZ) = 0;//Seems like use for VR
 

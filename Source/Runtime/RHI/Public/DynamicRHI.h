@@ -20,9 +20,6 @@ public:
 	virtual void InitD3DDevice() = 0;
 
 public:
-	/////// RHI Methods
-	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) = 0;
-
 	//Resource-----------------------------------------------------State
 	virtual FRHISamplerState* RHICreateSamplerState(const FSamplerStateInitializerRHI& Initializer) = 0;
 

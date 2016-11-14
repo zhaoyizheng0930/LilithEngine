@@ -32,6 +32,14 @@ public:
 	}
 
 	//StateSet---------------------------------------------------------------------------------
+	void SetRasterizerState(ID3D11RasterizerState* RasterizerState)
+	{
+		if (CurrentRasterizerState != RasterizerState);
+		{
+			CurrentRasterizerState = RasterizerState;
+			Direct3DDeviceIMContext->RSSetState(RasterizerState);
+		}
+	}
 	//Shader-----------------------------------------------------------------------VertexShader
 	void SetVertexShader(ID3D11VertexShader* VertexShader)
 	{
@@ -105,6 +113,16 @@ public:
 		InternalSetIndeBuffer(IndexBuffer , Format , Offset , nullptr);
 	}
 
+	//Inpute Layout---------------------------------------------------------------------------
+	void SetInputLayout(ID3D11InputLayout* InputeLayout)
+	{
+		if (CurrentInputLayout != InputeLayout)
+		{
+			CurrentInputLayout = InputeLayout;
+			Direct3DDeviceIMContext->IASetInputLayout(InputeLayout);
+		}
+	}
+
 	//Viewport--------------------------------------------------------------------------
 	void SetViewports(uint32 Count, D3D11_VIEWPORT* Viewports)
 	{
@@ -114,6 +132,16 @@ public:
 			FMemory::Memcpy(&CurrentViewport[0], Viewports, Count * sizeof(D3D11_VIEWPORT));
 			CurrentNumberOfViewports = Count;
 			Direct3DDeviceIMContext->RSSetViewports(Count, Viewports);
+		}
+	}
+
+	void SetViewport(D3D11_VIEWPORT Viewport)
+	{
+		if (CurrentNumberOfViewports != 1 || FMemory::Memcmp(&CurrentViewport[0], &Viewports, sizeof(D3D11_VIEWPORT)))
+		{
+			FMemory::Memcpy(&CurrentViewport[0], &Viewports, sizeof(D3D11_VIEWPORT));
+			CurrentNumberOfViewports = 1;
+			Direct3DDeviceIMContext->RSSetViewports(1, &Viewport);
 		}
 	}
 
@@ -152,6 +180,12 @@ private:
 		DXGI_FORMAT Format;
 		uint32 Offset;
 	}CurrentIndexBuffer;
+
+	//InputLayout Cache
+	ID3D11InputLayout* CurrentInputLayout;
+
+	//StateCache
+	ID3D11RasterizerState* CurrentRasterizerState;
 
 private:
 

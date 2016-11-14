@@ -48,8 +48,6 @@ private:
 	void UpdateMSAASettings();
 
 public:
-	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) final override;
-
 	virtual FRHISamplerState* RHICreateSamplerState(const FSamplerStateInitializerRHI& Initializer) final override;
 
 	virtual FRHIRasterizerState* RHICreateRasterizerState(const FRasterizerStateInitializerRHI& Initializer) final override;
@@ -230,6 +228,23 @@ public:
 	virtual void RHIBeginOcclusionQueryBatch() final override;
 
 	virtual void RHIEndOcclusionQueryBatch() final override;
+
+	//ResourceBind----------------------------------------------------------------------------------------------VertexBuffer
+	virtual void RHISetStreamSource(uint32 StreamIndex, FRHIVertexBuffer* VertexBuffer, uint32 Stride, uint32 Offset) final override;
+
+	//ResourceBind----------------------------------------------------------------------------------------------FourStates
+	virtual void RHISetRasterizerState(FRHIRasterizerState* RasterizerState) final override;
+
+	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) final override;
+
+	//ResourceBind----------------------------------------------------------------------------------------------ViewportSet
+	virtual void RHISetViewport(uint32 MinX, uint32 MinY, float MinZ, uint32 MaxX, uint32 MaxY, float MaxZ) final override;
+
+	virtual void RHISetStereoViewport(uint32 LeftMinX, uint32 RightMinX, uint32 MinY, float MinZ, uint32 LeftMaxX, uint32 RightMaxX, uint32 MaxY, float MaxZ)  final override;//Seems like use for VR
+
+	//ResourceBind----------------------------------------------------------------------------------------------Shader;ZYZ_TODO:SupportLater
+	virtual void RHISetBoundShaderState(FRHIBoundShaderState* BoundShaderState) final override;
+
 
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }

@@ -264,29 +264,6 @@ void FD3D11DynamicRHI::InitConstantBuffers()
 
 }
 
-
-void FD3D11DynamicRHI::RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY)
-{
-	if (bEnable)
-	{
-		D3D11_RECT rect;
-		rect.bottom = MaxY;
-		rect.top = MinY;
-		rect.left = MinX;
-		rect.right = MaxX;
-		Direct3DDeviceIMContext->RSSetScissorRects(1, &rect);
-	}
-	else
-	{
-		D3D11_RECT rect;
-		rect.bottom = MaxY;
-		rect.top = 0;
-		rect.left = 0;
-		rect.right = MaxX;
-		Direct3DDeviceIMContext->RSSetScissorRects(1, &rect);
-	}
-}
-
 void FD3D11DynamicRHI::RHIAutomaticCacheFlushAfterComputeShader(bool bEnable)
 {
 	// Nothing to do
