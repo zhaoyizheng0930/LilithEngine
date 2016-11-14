@@ -202,6 +202,14 @@ public:
 
 	virtual void RHITransitionResources(EResourceTransitionAccess TransitionType, EResourceTransitionPipeline TransitionPipeline, FRHIUnorderedAccessView* InUAVs, int32 NumUAVs, FRHIComputeFence* WriteComputeFence) final override;//ZYZ_TODO:Implement later
 
+	//Command Hint--------------------------------------------------------------------------------------------
+	virtual void RHISubmitCommandsHint() final override;
+
+	//Frame-------------------------------------------------------------------------------------------------------
+	virtual void RHIBeginFram() final override;
+
+	virtual void RHIEndFram() final override;
+
 	//Viewport---------------------------------------------------------------------------------------------
 	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) final override;
 
@@ -270,7 +278,7 @@ protected:
 
 	FD3D11Viewport* DrawingViewport;
 
-
+	FD3D11ComputeShader* CurrentComputeShader;
 protected:
 	/** Initializes the constant buffers.  Called once at RHI initialization time. */
 	void InitConstantBuffers();

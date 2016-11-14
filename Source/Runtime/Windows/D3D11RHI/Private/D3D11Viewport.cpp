@@ -131,6 +131,8 @@ void FD3D11DynamicRHI::RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPrese
 			}
 		}
 	}
+
+	//Calculate Delta Time;
 }
 
 //===========================================================================================================================

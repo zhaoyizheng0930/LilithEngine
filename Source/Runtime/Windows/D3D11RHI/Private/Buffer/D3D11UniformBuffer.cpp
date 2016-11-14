@@ -37,3 +37,9 @@ FRHIUniformBuffer* FD3D11DynamicRHI::RHICreateUniformBuffer(const void* Contents
 
 	return UniformBuffer;
 }
+
+//ZYZ_TODO:Don't know what the Uniform Buffer Use for.Maybe Just a Const Buffer
+void UniformBufferBeginFrame()
+{
+
+}

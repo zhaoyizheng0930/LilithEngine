@@ -16,13 +16,17 @@ extern void RHIExit();
 extern FDynamicRHI* CreateRHI();
 
 extern std::wstring GRHIAdapterName;
-extern uint32 GRHIVendorId = 0;
-extern uint32 GRHIDeviceId = 0;
+extern uint32 GRHIVendorId;
+extern uint32 GRHIDeviceId;
 
 
-int32 GNumActiveGPUsForRendering = 1;
+extern int32 GNumActiveGPUsForRendering;
 
-bool bGFinishCurrentFrame = true;
+extern bool bGFinishCurrentFrame;
+
+
+extern int32 GNumDrawCallsRHI;
+extern int32 GNumPrimitivesDrawnRHI;
 
 enum ESamplerFilter
 {

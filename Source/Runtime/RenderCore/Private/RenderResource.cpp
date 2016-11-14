@@ -3,5 +3,5 @@
 
 void BeginInitResource(FRenderResource* Resource)
 {
-
+	//ZYZ_TODO:Generate RenderCommand;
 }
