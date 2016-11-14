@@ -28,10 +28,11 @@ void FD3D11DynamicRHI::RHIEndFram()
 
 void FD3D11DynamicRHI::RHIBeginScene()
 {
-
+	//ZYZ_TODO:Calculate Frame count.don't know what are doing for.
+	//ZYZ_TODO:Resource Cache
 }
 
 void FD3D11DynamicRHI::RHIEndScene()
 {
-
+	//ZYZ_TODO:Resource Cache
 }
