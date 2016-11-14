@@ -210,6 +210,11 @@ public:
 
 	virtual void RHIEndFram() final override;
 
+	//Scene------------------------------------------------------------------------------------------------
+	virtual void RHIBeginScene() final override;
+
+	virtual void RHIEndScene() final override;
+
 	//Viewport---------------------------------------------------------------------------------------------
 	virtual void RHISetMultipleViewPorts(uint32 Count, FViewportBound* Data) final override;
 
