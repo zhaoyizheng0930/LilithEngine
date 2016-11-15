@@ -168,3 +168,51 @@ void FD3D11DynamicRHI::RHISetShaderTexture(FRHIPixelShader* PixelShader, uint32 
 		SetShaderResourceView<SF_Pixel>(D11NewTexture, D11NewTexture->GetShaderResourceView(), TextureIndex, "");
 	}
 }
+
+void FD3D11DynamicRHI::RHISetShaderSampler(FRHIVertexShader* VertexShader, uint32 SamplerIndex, FRHISamplerState* NewState)
+{
+	FD3D11VertexShader* D11VertexShader = (FD3D11VertexShader*)VertexShader;
+	FD3D11SamplerState* D11NewState = (FD3D11SamplerState*)NewState;
+
+	StateCache.SetSamplerState<SF_Vertex>(D11NewState->Resource , SamplerIndex);
+}
+
+void FD3D11DynamicRHI::RHISetShaderSampler(FRHIHullShader* HullShader, uint32 SamplerIndex, FRHISamplerState* NewState)
+{
+	FD3D11HullShader* D11HullShader = (FD3D11HullShader*)HullShader;
+	FD3D11SamplerState* D11NewState = (FD3D11SamplerState*)NewState;
+
+	StateCache.SetSamplerState<SF_Hull>(D11NewState->Resource, SamplerIndex);
+}
+
+void FD3D11DynamicRHI::RHISetShaderSampler(FRHIDomainShader* DomainShader, uint32 SamplerIndex, FRHISamplerState* NewState)
+{
+	FD3D11DomainShader* D11DomainShader = (FD3D11DomainShader*)DomainShader;
+	FD3D11SamplerState* D11NewState = (FD3D11SamplerState*)NewState;
+
+	StateCache.SetSamplerState<SF_Domain>(D11NewState->Resource, SamplerIndex);
+}
+
+void FD3D11DynamicRHI::RHISetShaderSampler(FRHIGeometryShader* GeometryShader, uint32 SamplerIndex, FRHISamplerState* NewState)
+{
+	FD3D11GeometryShader* D11GeometryShader = (FD3D11GeometryShader*)GeometryShader;
+	FD3D11SamplerState* D11NewState = (FD3D11SamplerState*)NewState;
+
+	StateCache.SetSamplerState<SF_Geometry>(D11NewState->Resource, SamplerIndex);
+}
+
+void FD3D11DynamicRHI::RHISetShaderSampler(FRHIComputeShader* ComputeShader, uint32 SamplerIndex, FRHISamplerState* NewState)
+{
+	FD3D11ComputeShader* D11ComputeShader = (FD3D11ComputeShader*)ComputeShader;
+	FD3D11SamplerState* D11NewState = (FD3D11SamplerState*)NewState;
+
+	StateCache.SetSamplerState<SF_Compute>(D11NewState->Resource, SamplerIndex);
+}
+
+void FD3D11DynamicRHI::RHISetShaderSampler(FRHIPixelShader* PixelShader, uint32 SamplerIndex, FRHISamplerState* NewState)
+{
+	FD3D11ComputeShader* D11PixelShader = (FD3D11ComputeShader*)PixelShader;
+	FD3D11SamplerState* D11NewState = (FD3D11SamplerState*)NewState;
+
+	StateCache.SetSamplerState<SF_Pixel>(D11NewState->Resource, SamplerIndex);
+}

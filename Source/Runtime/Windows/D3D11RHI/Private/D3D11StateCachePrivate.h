@@ -145,10 +145,18 @@ public:
 		}
 	}
 
+	//SRV--------------------------------------------------------------------------
 	template <EShaderFrequency ShaderFrequency>
 	void SetSahderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex, ESRV_Type SrvType = SRV_Unknown)
 	{
-		InternalSetSahderResourceView<ShaderFrequency>(SRV , ResourceIndex);
+		InternalSetSahderResourceView<ShaderFrequency>(SRV , ResourceIndex, nullptr);
+	}
+
+	//Sampler--------------------------------------------------------------------------
+	template <EShaderFrequency ShaderFrequency>
+	void SetSamplerState(ID3D11SamplerState* SamplerState , uint32 SamplerIndex)
+	{
+		InternalSetSamplerState<ShaderFrequency>(SamplerState, SamplerIndex, nullptr);
 	}
 
 protected:
@@ -161,6 +169,13 @@ private:
 	ID3D11GeometryShader* CurrentGeometryShader;
 	ID3D11PixelShader* CurrentPixelShader;
 	ID3D11ComputeShader* CurrentComputeShader;
+
+	// Shader Resource Views Cache
+	ID3D11ShaderResourceView* CurrentShaderResourceViews[SF_NumFrequencies][D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
+
+	// Shader Sampler State Cache
+	ID3D11SamplerState* CurrentSamplerStates[SF_NumFrequencies][D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT];
+
 	// Viewport Cache
 	uint32			CurrentNumberOfViewports;
 	D3D11_VIEWPORT  CurrentViewport[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
@@ -189,20 +204,6 @@ private:
 
 private:
 
-	template <EShaderFrequency ShaderFrequency>
-	void InternalSetSahderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex)
-	{
-		switch (ShaderFrequency)
-		{
-		case SF_Vertex:		Direct3DDeviceIMContext->VSSetShaderResources(ResourceIndex, 1, &SRV); break;
-		case SF_Hull:		Direct3DDeviceIMContext->HSSetShaderResources(ResourceIndex, 1, &SRV); break;
-		case SF_Domain:		Direct3DDeviceIMContext->DSSetShaderResources(ResourceIndex, 1, &SRV); break;
-		case SF_Geometry:	Direct3DDeviceIMContext->GSSetShaderResources(ResourceIndex, 1, &SRV); break;
-		case SF_Pixel:		Direct3DDeviceIMContext->PSSetShaderResources(ResourceIndex, 1, &SRV); break;
-		case SF_Compute:	Direct3DDeviceIMContext->CSSetShaderResources(ResourceIndex, 1, &SRV); break;
-		}
-	}
-
 	typedef void(*TSetStreamSourceAlternate)(FD3D11StateCacheBase* StateCache, ID3D11Buffer* VertexBuffer, uint32 StreamIndex, uint32 Stride, uint32 Offset);
 	void InternalSetStreamSource(ID3D11Buffer* VertexBuffer, uint32 StreamIndex, uint32 Stride, uint32 Offset, TSetStreamSourceAlternate AlternatePathFunction)
 	{
@@ -213,7 +214,7 @@ private:
 			CacheVertexBuffer.VertexBuffer = VertexBuffer;
 			CacheVertexBuffer.Stride = Stride;
 			CacheVertexBuffer.Offset = Offset;
-			if (AlternatePathFunction != NULL)
+			if (AlternatePathFunction != nullptr)
 			{
 				AlternatePathFunction(this, VertexBuffer, StreamIndex, Stride, Offset);
 			}
@@ -233,7 +234,7 @@ private:
 			CurrentIndexBuffer.IndexBuffer = IndexBuffer;
 			CurrentIndexBuffer.Offset = Offset;
 			CurrentIndexBuffer.Format = Format;
-			if (AlternatePathFunction == NULL)
+			if (AlternatePathFunction == nullptr)
 			{
 				Direct3DDeviceIMContext->IASetIndexBuffer(IndexBuffer, Format, Offset);
 			}
@@ -243,4 +244,89 @@ private:
 			}
 		}
 	}
+
+	typedef void(*TSetSahderResourceViewAlternate)(ID3D11ShaderResourceView* SRV, uint32 SamplerIndex);
+	template <EShaderFrequency ShaderFrequency>
+	void InternalSetShaderResourceView(ID3D11ShaderResourceView* SRV, uint32 SamplerIndex, TSetSahderResourceViewAlternate AlternatePathFunction)
+	{
+		//Compare Dirty
+		if (CurrentShaderResourceViews[ShaderFrequency][SamplerIndex] != SRV)
+		{
+			CurrentShaderResourceViews[ShaderFrequency][SamplerIndex] = SRV;
+			if (AlternatePathFunction == nullptr)
+			{
+				InternalSetShaderResourceView<ShaderFrequency>(SRV, SamplerIndex);
+			}
+			else
+			{
+				AlternatePathFunction(SRV , SamplerIndex);
+			}
+		}
+	}
+
+	typedef void(*TSetSamplerStateAlternate)(ID3D11SamplerState* SamplerState, uint32 ResourceIndex);
+	template <EShaderFrequency ShaderFrequency>
+	void InternalSetSamplerState(ID3D11SamplerState* SamplerState, uint32 ResourceIndex, TSetSamplerStateAlternate AlternatePathFunction)
+	{
+		//Compare Dirty
+		if (CurrentSamplerStates[ShaderFrequency][ResourceIndex] != SamplerState)
+		{
+			CurrentSamplerStates[ShaderFrequency][ResourceIndex] = SamplerState;
+			if (AlternatePathFunction == nullptr)
+			{
+				InternalSetSamplerState<ShaderFrequency>(SamplerState, ResourceIndex);
+			}
+			else
+			{
+				AlternatePathFunction(SamplerState , ResourceIndex);
+			}
+		}
+	}
+
+private:
+	//Shader Template
+	template <EShaderFrequency ShaderFrequency>
+	void InternalSetShaderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex)
+	{
+		switch (ShaderFrequency)
+		{
+		case SF_Vertex:		Direct3DDeviceIMContext->VSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		case SF_Hull:		Direct3DDeviceIMContext->HSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		case SF_Domain:		Direct3DDeviceIMContext->DSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		case SF_Geometry:	Direct3DDeviceIMContext->GSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		case SF_Pixel:		Direct3DDeviceIMContext->PSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		case SF_Compute:	Direct3DDeviceIMContext->CSSetShaderResources(ResourceIndex, 1, &SRV); break;
+		}
+	}
+
+	template <EShaderFrequency ShaderFrequency>
+	void InternalSetSamplerState(ID3D11SamplerState* SamplerState, uint32 SamplerIndex)
+	{
+		//Compare Dirty
+		switch (ShaderFrequency)
+		{
+		case SF_Vertex:		Direct3DDeviceIMContext->VSSetSamplers(SamplerIndex, 1, &SamplerState); break;
+		case SF_Hull:		Direct3DDeviceIMContext->HSSetSamplers(SamplerIndex, 1, &SamplerState); break;
+		case SF_Domain:		Direct3DDeviceIMContext->DSSetSamplers(SamplerIndex, 1, &SamplerState); break;
+		case SF_Geometry:	Direct3DDeviceIMContext->GSSetSamplers(SamplerIndex, 1, &SamplerState); break;
+		case SF_Pixel:		Direct3DDeviceIMContext->PSSetSamplers(SamplerIndex, 1, &SamplerState); break;
+		case SF_Compute:	Direct3DDeviceIMContext->CSSetSamplers(SamplerIndex, 1, &SamplerState); break;
+		}
+	}
+
+	template <EShaderFrequency ShaderFrequency>
+	void InternalSetSetConstantBuffer(ID3D11Buffer*& ConstantBuffer , uint32 SlotIndex)
+	{
+		//Compare Dirty
+		switch (ShaderFrequency)
+		{
+		case SF_Vertex:		Direct3DDeviceIMContext->VSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer) break;
+		case SF_Hull:		Direct3DDeviceIMContext->HSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
+		case SF_Domain:		Direct3DDeviceIMContext->DSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
+		case SF_Geometry:	Direct3DDeviceIMContext->GSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
+		case SF_Pixel:		Direct3DDeviceIMContext->PSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
+		case SF_Compute:	Direct3DDeviceIMContext->CSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
+		}
+	}
+
 };
