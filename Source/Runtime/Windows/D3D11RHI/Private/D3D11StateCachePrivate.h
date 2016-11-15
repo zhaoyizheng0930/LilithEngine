@@ -149,7 +149,7 @@ public:
 	template <EShaderFrequency ShaderFrequency>
 	void SetSahderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex, ESRV_Type SrvType = SRV_Unknown)
 	{
-		InternalSetSahderResourceView<ShaderFrequency>(SRV , ResourceIndex, nullptr);
+		InternalSetShaderResourceView<ShaderFrequency>(SRV , ResourceIndex, nullptr);
 	}
 
 	//Sampler--------------------------------------------------------------------------

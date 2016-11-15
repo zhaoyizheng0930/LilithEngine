@@ -10,8 +10,23 @@
 class FD3D11BaseShaderResource
 {
 public:
+	FD3D11BaseShaderResource()
+	{
+		bDirty = false;
+	}
+
+	void SetDirty(bool bInDirty, uint32 CurrentFrame)
+	{
+		bDirty = bInDirty;
+	}
+
+	bool IsDirty() const
+	{
+		return bDirty;
+	}
 protected:
 private:
+	bool bDirty;
 };
 
 class FD3D11VertexDeclaration:public FRHIVertexDeclaration

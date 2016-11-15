@@ -216,3 +216,69 @@ void FD3D11DynamicRHI::RHISetShaderSampler(FRHIPixelShader* PixelShader, uint32 
 
 	StateCache.SetSamplerState<SF_Pixel>(D11NewState->Resource, SamplerIndex);
 }
+
+void FD3D11DynamicRHI::RHISetUAVParameter(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV)
+{
+	FD3D11UnorderedAccessView* D11UAV = (FD3D11UnorderedAccessView*)UAV;
+
+	if (D11UAV)
+	{
+		//ZYZ_TODO:Don't know why
+		//ConditionalClearShaderResource(UAV->Resource);
+
+		D11UAV->Resource->SetDirty(true , 0);
+	}
+	uint32 InitialCount = -1;
+	Direct3DDeviceIMContext->CSSetUnorderedAccessViews(UAVIndex, 1, &(D11UAV->View), &InitialCount);
+}
+
+void FD3D11DynamicRHI::RHISetUAVParameter(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV, uint32 InitialCount)
+{
+	FD3D11UnorderedAccessView* D11UAV = (FD3D11UnorderedAccessView*)UAV;
+
+	if (D11UAV)
+	{
+		//ZYZ_TODO:Don't know why
+		//ConditionalClearShaderResource(UAV->Resource);
+
+		D11UAV->Resource->SetDirty(true, 0);
+	}
+
+	Direct3DDeviceIMContext->CSSetUnorderedAccessViews(UAVIndex, 1, &(D11UAV->View), &InitialCount);
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIVertexShader* VertexShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
+	SetShaderResourceView<SF_Pixel>(D11ShaderResource->Resource, D11ShaderResource->View , SRVIndex , "");
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIHullShader* HullShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
+	SetShaderResourceView<SF_Hull>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIDomainShader* DomainShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
+	SetShaderResourceView<SF_Domain>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIGeometryShader* GeometryShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
+	SetShaderResourceView<SF_Geometry>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIComputeShader* ComputeShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
+	SetShaderResourceView<SF_Compute>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIPixelShader* PixelShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
+	SetShaderResourceView<SF_Pixel>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
+}
