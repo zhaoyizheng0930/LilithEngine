@@ -123,6 +123,20 @@ public:
 		}
 	}
 
+	//ConstantBuffer
+	template<EShaderFrequency ShaderFrequency>
+	void SetConstantBuffer(ID3D11Buffer* CanstantBuffer , uint32 SlotIndex)
+	{
+		FD3D11ConstantBufferState& CBuffer = CurrentConstantBuffers[ShaderFrequency][SlotIndex].Buffer
+		if (CBuffer.Buffer != CanstantBuffer || CBuffer.FirstConstant != 0 || CBuffer.NumConstants != D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT)
+		{
+			CBuffer.Buffer = CanstantBuffer;
+			CBuffer.FirstConstant = 0;
+			CBuffer.NumConstants = D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
+			InternalSetSetConstantBuffer<ShaderFrequency>(CanstantBuffer, SlotIndex);
+		}
+	}
+
 	//Viewport--------------------------------------------------------------------------
 	void SetViewports(uint32 Count, D3D11_VIEWPORT* Viewports)
 	{
@@ -198,6 +212,14 @@ private:
 
 	//InputLayout Cache
 	ID3D11InputLayout* CurrentInputLayout;
+
+	//Constant Buffer
+	struct FD3D11ConstantBufferState
+	{
+		ID3D11Buffer* Buffer;
+		uint32 FirstConstant;
+		uint32 NumConstants;
+	} CurrentConstantBuffers[SF_NumFrequencies][D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
 
 	//StateCache
 	ID3D11RasterizerState* CurrentRasterizerState;

@@ -282,3 +282,35 @@ void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIPixelShader* PixelS
 	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
 	SetShaderResourceView<SF_Pixel>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
 }
+
+void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIVertexShader* VertexShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
+{
+	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
+
+	StateCache.SetConstantBuffer<SF_Vertex>(D11Buffer->Resource, BufferIndex);
+}
+
+void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIHullShader* HullShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
+{
+
+}
+
+void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIDomainShader* DomainShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
+{
+
+}
+
+void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIGeometryShader* GeometryShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
+{
+
+}
+
+void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIComputeShader* ComputeShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
+{
+
+}
+
+void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIPixelShader* PixelShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
+{
+
+}
