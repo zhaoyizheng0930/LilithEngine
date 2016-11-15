@@ -245,6 +245,18 @@ public:
 	//ResourceBind----------------------------------------------------------------------------------------------Shader;ZYZ_TODO:SupportLater
 	virtual void RHISetBoundShaderState(FRHIBoundShaderState* BoundShaderState) final override;
 
+	//ResourceBind----------------------------------------------------------------------------------------------ShaderTexture
+	virtual void RHISetShaderTexture(FRHIVertexShader* VertexShader, uint32 TextureIndex, FRHITexture* NewTexture) final override;
+
+	virtual void RHISetShaderTexture(FRHIHullShader* HullShader, uint32 TextureIndex, FRHITexture* NewTexture) final override;
+
+	virtual void RHISetShaderTexture(FRHIDomainShader* DomainShader, uint32 TextureIndex, FRHITexture* NewTexture) final override;
+
+	virtual void RHISetShaderTexture(FRHIGeometryShader* GeometryShader, uint32 TextureIndex, FRHITexture* NewTexture) final override;
+
+	virtual void RHISetShaderTexture(FRHIComputeShader* ComputeShader, uint32 TextureIndex, FRHITexture* NewTexture) final override;
+
+	virtual void RHISetShaderTexture(FRHIPixelShader* PixelShader, uint32 TextureIndex, FRHITexture* NewTexture) final override;
 
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
@@ -337,6 +349,12 @@ private:
 
 	template <EShaderFrequency ShaderFrequency>
 	void ClearAllShaderResourcesForFrequency(); //Clear All
+
+	template <EShaderFrequency ShaderFrequency>
+	void SetShaderResourceView(FD3D11BaseShaderResource* Resource, ID3D11ShaderResourceView* SRV, int32 ResourceIndex, std::string SRVName, FD3D11StateCache::ESRV_Type SrvType = FD3D11StateCache::SRV_Unknown)
+	{
+		InternalSetShaderResourceView<ShaderFrequency>(Resource, SRV, ResourceIndex, SRVName, SrvType);
+	}
 
 	template <EShaderFrequency ShaderFrequency>
 	void InternalSetShaderResourceView(FD3D11BaseShaderResource* Resource, ID3D11ShaderResourceView* SRV, int32 ResourceIndex, std::string SRVName, FD3D11StateCache::ESRV_Type SrvType = FD3D11StateCache::SRV_Unknown);

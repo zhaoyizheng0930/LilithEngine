@@ -57,7 +57,7 @@ public:
 		if (CurrentHullShader != HullShader)
 		{
 			CurrentHullShader = HullShader;
-			Direct3DDeviceIMContext->HSSetShader(HullShader);
+			Direct3DDeviceIMContext->HSSetShader(HullShader, nullptr, 0);
 		}
 	}
 	//Shader------------------------------------------------------------------------Domain
@@ -137,9 +137,9 @@ public:
 
 	void SetViewport(D3D11_VIEWPORT Viewport)
 	{
-		if (CurrentNumberOfViewports != 1 || FMemory::Memcmp(&CurrentViewport[0], &Viewports, sizeof(D3D11_VIEWPORT)))
+		if (CurrentNumberOfViewports != 1 || FMemory::Memcmp(&CurrentViewport[0], (void*)&Viewport, sizeof(D3D11_VIEWPORT)))
 		{
-			FMemory::Memcpy(&CurrentViewport[0], &Viewports, sizeof(D3D11_VIEWPORT));
+			FMemory::Memcpy(&CurrentViewport[0], &Viewport, sizeof(D3D11_VIEWPORT));
 			CurrentNumberOfViewports = 1;
 			Direct3DDeviceIMContext->RSSetViewports(1, &Viewport);
 		}

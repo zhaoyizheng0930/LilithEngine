@@ -227,11 +227,29 @@ public:
 	ID3D11ShaderResourceView* GetShaderResourceView() {
 		return ShaderResourceView;
 	}
-
+	
+	ID3D11RenderTargetView* GetRenderTargetView(int32 MipIndex, int32 ArraySliceIndex)
+	{
+		int32 ArrayIndex = MipIndex;
+		if (bCreatedRTVsPerSlice)
+		{
+			ArrayIndex = MipIndex * RTVArraySize + ArraySliceIndex;
+		}
+		if (RenderTargetViews.size() > ArrayIndex)
+		{
+			return RenderTargetViews[ArrayIndex];
+		}
+		return NULL;
+	}
+	
 	int GetMemorySize() { return MemorySize; }
 
 	ID3D11DepthStencilView* GetDepthStencilView(FExclusiveDepthStencil AccessType) {
 		return DepthStencilView[AccessType.GetIndex()];
+	}
+
+	bool HasDepthStencilView() {
+		return (DepthStencilView.size() > 0);
 	}
 protected:
 	FD3D11DynamicRHI* D3DRHI;

@@ -72,3 +72,99 @@ void FD3D11DynamicRHI::RHISetBoundShaderState(FRHIBoundShaderState* BoundShaderS
 
 	//What are Uniform Buffer Use for!!
 }
+
+void FD3D11DynamicRHI::RHISetShaderTexture(FRHIVertexShader* VertexShader, uint32 TextureIndex, FRHITexture* NewTexture)
+{
+	FD3D11VertexShader* D11VertexShader = (FD3D11VertexShader*)VertexShader;
+	FD3D11TextureBase* D11NewTexture = (FD3D11Texture*)NewTexture;
+
+	if (D11NewTexture == NULL || D11NewTexture->GetRenderTargetView(0,0) || D11NewTexture->HasDepthStencilView())
+	{
+		//if this texture use for RTV or SRV. it can't be a SRV. Unreal said it can be a dynamic StateCache,Why?
+		assert(0);
+	}
+	else
+	{
+		SetShaderResourceView<SF_Vertex>(D11NewTexture , D11NewTexture->GetShaderResourceView() , TextureIndex , "");
+	}
+}
+
+void FD3D11DynamicRHI::RHISetShaderTexture(FRHIHullShader* HullShader, uint32 TextureIndex, FRHITexture* NewTexture)
+{
+	FD3D11HullShader* D11HullShader = (FD3D11HullShader*)HullShader;
+	FD3D11TextureBase* D11NewTexture = (FD3D11Texture*)NewTexture;
+
+	if (D11NewTexture == NULL || D11NewTexture->GetRenderTargetView(0, 0) || D11NewTexture->HasDepthStencilView())
+	{
+		//if this texture use for RTV or SRV. it can't be a SRV. Unreal said it can be a dynamic StateCache,Why?
+		assert(0);
+	}
+	else
+	{
+		SetShaderResourceView<SF_Hull>(D11NewTexture, D11NewTexture->GetShaderResourceView(), TextureIndex, "");
+	}
+}
+
+void FD3D11DynamicRHI::RHISetShaderTexture(FRHIDomainShader* DomainShader, uint32 TextureIndex, FRHITexture* NewTexture)
+{
+	FD3D11HullShader* D11DomainShader = (FD3D11HullShader*)DomainShader;
+	FD3D11TextureBase* D11NewTexture = (FD3D11Texture*)NewTexture;
+
+	if (D11NewTexture == NULL || D11NewTexture->GetRenderTargetView(0, 0) || D11NewTexture->HasDepthStencilView())
+	{
+		//if this texture use for RTV or SRV. it can't be a SRV. Unreal said it can be a dynamic StateCache,Why?
+		assert(0);
+	}
+	else
+	{
+		SetShaderResourceView<SF_Domain>(D11NewTexture, D11NewTexture->GetShaderResourceView(), TextureIndex, "");
+	}
+}
+
+void FD3D11DynamicRHI::RHISetShaderTexture(FRHIGeometryShader* GeometryShader, uint32 TextureIndex, FRHITexture* NewTexture)
+{
+	FD3D11HullShader* D11GeometryShader = (FD3D11HullShader*)GeometryShader;
+	FD3D11TextureBase* D11NewTexture = (FD3D11Texture*)NewTexture;
+
+	if (D11NewTexture == NULL || D11NewTexture->GetRenderTargetView(0, 0) || D11NewTexture->HasDepthStencilView())
+	{
+		//if this texture use for RTV or SRV. it can't be a SRV. Unreal said it can be a dynamic StateCache,Why?
+		assert(0);
+	}
+	else
+	{
+		SetShaderResourceView<SF_Geometry>(D11NewTexture, D11NewTexture->GetShaderResourceView(), TextureIndex, "");
+	}
+}
+
+void FD3D11DynamicRHI::RHISetShaderTexture(FRHIComputeShader* ComputeShader, uint32 TextureIndex, FRHITexture* NewTexture)
+{
+	FD3D11ComputeShader* D11ComputeShader = (FD3D11ComputeShader*)ComputeShader;
+	FD3D11TextureBase* D11NewTexture = (FD3D11Texture*)NewTexture;
+
+	if (D11NewTexture == NULL || D11NewTexture->GetRenderTargetView(0, 0) || D11NewTexture->HasDepthStencilView())
+	{
+		//if this texture use for RTV or SRV. it can't be a SRV. Unreal said it can be a dynamic StateCache,Why?
+		assert(0);
+	}
+	else
+	{
+		SetShaderResourceView<SF_Compute>(D11NewTexture, D11NewTexture->GetShaderResourceView(), TextureIndex, "");
+	}
+}
+
+void FD3D11DynamicRHI::RHISetShaderTexture(FRHIPixelShader* PixelShader, uint32 TextureIndex, FRHITexture* NewTexture)
+{
+	FD3D11PixelShader* D11ComputeShader = (FD3D11PixelShader*)PixelShader;
+	FD3D11TextureBase* D11NewTexture = (FD3D11Texture*)NewTexture;
+
+	if (D11NewTexture == NULL || D11NewTexture->GetRenderTargetView(0, 0) || D11NewTexture->HasDepthStencilView())
+	{
+		//if this texture use for RTV or SRV. it can't be a SRV. Unreal said it can be a dynamic StateCache,Why?
+		assert(0);
+	}
+	else
+	{
+		SetShaderResourceView<SF_Pixel>(D11NewTexture, D11NewTexture->GetShaderResourceView(), TextureIndex, "");
+	}
+}

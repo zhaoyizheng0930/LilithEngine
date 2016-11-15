@@ -19,6 +19,10 @@
 #include <algorithm>
 #include <map>
 
+#ifdef _DEBUG
+	#include <assert.h>
+#endif
+
 //Generic Platform Include
 #include "../GenericPlatform/GenericPlatformMemory.h"
 #include "../GenericPlatform/GenericPlatformProcess.h"

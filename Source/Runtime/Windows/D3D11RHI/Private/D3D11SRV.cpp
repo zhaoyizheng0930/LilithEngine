@@ -177,6 +177,29 @@ void FD3D11DynamicRHI::ClearAllShaderResourcesForFrequency()
 template <EShaderFrequency ShaderFrequency>
 void FD3D11DynamicRHI::InternalSetShaderResourceView(FD3D11BaseShaderResource* Resource, ID3D11ShaderResourceView* SRV, int32 ResourceIndex, std::string SRVName, FD3D11StateCache::ESRV_Type SrvType)
 {
+	FD3D11BaseShaderResource* D11SRV = CurrentResourcesBoundAsSRVs[ShaderFrequency][ResourceIndex];
+	int& MaxResource = MaxBoundShaderResourcesIndex[ShaderFrequency];
+
+	if (Resource)
+	{
+		MaxResource = FMath::Max(ResourceIndex , MaxResource);
+		D11SRV = Resource;
+	}
+	else if (D11SRV != nullptr)
+	{
+		//Clear
+		D11SRV = nullptr;
+
+		if (ResourceIndex == MaxResource)
+		{
+			do
+			{
+				MaxResource--;
+			} while (MaxResource >= 0 && CurrentResourcesBoundAsSRVs[ShaderFrequency][MaxResource] == nullptr);
+		}
+
+	}
+
 	StateCache.SetSahderResourceView<ShaderFrequency>(SRV, ResourceIndex , SrvType);
 }
 

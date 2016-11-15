@@ -135,17 +135,17 @@ public:
 	virtual void RHISetBoundShaderState(FRHIBoundShaderState* BoundShaderState) = 0;
 
 	//ResourceBind------------------------------------------------------------------------------------------------SRV Set
-	virtual void RHISetShaderTexture(FRHIVertexShader* VertexShader, uint32 TextureIndex, FRHITexture NewTexture) = 0;
+	virtual void RHISetShaderTexture(FRHIVertexShader* VertexShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
-	virtual void RHISetShaderTexture(FRHIHullShader* HullShader, uint32 TextureIndex, FRHITexture NewTexture) = 0;
+	virtual void RHISetShaderTexture(FRHIHullShader* HullShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
-	virtual void RHISetShaderTexture(FRHIDomainShader* DomainShader, uint32 TextureIndex, FRHITexture NewTexture) = 0;
+	virtual void RHISetShaderTexture(FRHIDomainShader* DomainShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
-	virtual void RHISetShaderTexture(FRHIGeometryShader* GeometryShader, uint32 TextureIndex, FRHITexture NewTexture) = 0;
+	virtual void RHISetShaderTexture(FRHIGeometryShader* GeometryShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
-	virtual void RHISetShaderTexture(FRHIComputeShader* ComputeShader, uint32 TextureIndex, FRHITexture NewTexture) = 0;
+	virtual void RHISetShaderTexture(FRHIComputeShader* ComputeShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
-	virtual void RHISetShaderTexture(FRHIPixelShader* PixelShader, uint32 TextureIndex, FRHITexture NewTexture) = 0;
+	virtual void RHISetShaderTexture(FRHIPixelShader* PixelShader, uint32 TextureIndex, FRHITexture* NewTexture) = 0;
 
 	//ResourceBind------------------------------------------------------------------------------------------------SRV Sampler Set
 	virtual void RHISetShaderSampler(FRHIVertexShader* VertexShader , uint32 SamplerIndex , FRHISamplerState* NewState) = 0;

@@ -189,7 +189,14 @@ void FD3D11DynamicRHI::Shutdown()
 
 void FD3D11DynamicRHI::ClearState()
 {
+	StateCache.ClearState();
 
+	FMemory::Memzero(CurrentResourcesBoundAsSRVs, sizeof(CurrentResourcesBoundAsSRVs));
+
+	for(int32 Frequency = 0;Frequency < SF_NumFrequencies;Frequency++)
+	{
+		MaxBoundShaderResourcesIndex[Frequency] = -1;
+	}
 }
 
 void FD3D11DynamicRHI::UpdateMSAASettings()
