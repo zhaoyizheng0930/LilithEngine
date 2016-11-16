@@ -288,29 +288,57 @@ void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIVertexShader* VertexShader,
 	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
 
 	StateCache.SetConstantBuffer<SF_Vertex>(D11Buffer->Resource, BufferIndex);
+
+	BoundUniformBuffers[SF_Vertex][BufferIndex] = D11Buffer;
+	DirtyUniformBuffers[SF_Vertex] |= (1 << BufferIndex);
 }
 
 void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIHullShader* HullShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
 {
+	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
 
+	StateCache.SetConstantBuffer<SF_Hull>(D11Buffer->Resource, BufferIndex);
+
+	BoundUniformBuffers[SF_Hull][BufferIndex] = D11Buffer;
+	DirtyUniformBuffers[SF_Hull] |= (1 << BufferIndex);
 }
 
 void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIDomainShader* DomainShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
 {
+	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
 
+	StateCache.SetConstantBuffer<SF_Domain>(D11Buffer->Resource, BufferIndex);
+
+	BoundUniformBuffers[SF_Domain][BufferIndex] = D11Buffer;
+	DirtyUniformBuffers[SF_Domain] |= (1 << BufferIndex);
 }
 
 void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIGeometryShader* GeometryShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
 {
+	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
 
+	StateCache.SetConstantBuffer<SF_Geometry>(D11Buffer->Resource, BufferIndex);
+
+	BoundUniformBuffers[SF_Geometry][BufferIndex] = D11Buffer;
+	DirtyUniformBuffers[SF_Geometry] |= (1 << BufferIndex);
 }
 
 void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIComputeShader* ComputeShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
 {
+	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
 
+	StateCache.SetConstantBuffer<SF_Compute>(D11Buffer->Resource, BufferIndex);
+
+	BoundUniformBuffers[SF_Compute][BufferIndex] = D11Buffer;
+	DirtyUniformBuffers[SF_Compute] |= (1 << BufferIndex);
 }
 
 void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIPixelShader* PixelShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
 {
+	FD3D11UniformBuffer* D11Buffer = (FD3D11UniformBuffer*)Buffer;
 
+	StateCache.SetConstantBuffer<SF_Pixel>(D11Buffer->Resource, BufferIndex);
+
+	BoundUniformBuffers[SF_Pixel][BufferIndex] = D11Buffer;
+	DirtyUniformBuffers[SF_Pixel] |= (1 << BufferIndex);
 }

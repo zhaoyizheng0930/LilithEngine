@@ -332,12 +332,16 @@ protected:
 	ID3D11DepthStencilView* CurrentDepthStencilTarget;
 	FD3D11TextureBase* CurrentDepthTexture;
 
+	//SRVDirty
 	FD3D11BaseShaderResource* CurrentResourcesBoundAsSRVs[SF_NumFrequencies][D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT];
 	int32 MaxBoundShaderResourcesIndex[SF_NumFrequencies];
 	uint32 NumSimultaneousRenderTargets;
 	uint32 NumUAVs;
 	//TRefCountPtr<FD3D11DynamicBuffer> DynamicVB;
 	//TRefCountPtr<FD3D11DynamicBuffer> DynamicIB;
+	//CBuffer Dirty
+	FD3D11UniformBuffer* BoundUniformBuffers[SF_NumFrequencies][14];
+	uint16 DirtyUniformBuffers[SF_NumFrequencies];
 
 	/** Global D3D11 lock list */
 	std::map<FD3D11LockedKey, FD3D11LockedData> OutstandingLocks;
