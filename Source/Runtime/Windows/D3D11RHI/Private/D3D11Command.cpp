@@ -40,6 +40,23 @@ void FD3D11DynamicRHI::RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY,
 	}
 }
 
+void FD3D11DynamicRHI::RHISetDepthStencilState(FRHIDepthStencilState* NewState, uint32 StencilRef)
+{
+	FD3D11DepthStencilState* D11DSV = (FD3D11DepthStencilState*)NewState;
+
+	//ZYZ_TODO:Don't know why.
+	//ValidateExclusiveDepthStencilAccess(NewState->AccessType);
+
+	StateCache.SetDepthStencilState(D11DSV->Resource , StencilRef);
+}
+
+void FD3D11DynamicRHI::RHISetBlendState(FRHIBlendState* NewState, const FLinearColor& BlendFactor)
+{
+	FD3D11BlendState* D11BlendState = (FD3D11BlendState*)NewState;
+
+	StateCache.SetBlendState(D11BlendState->Resource , &BlendFactor , 0xffffffff);
+}
+
 void FD3D11DynamicRHI::RHISetViewport(uint32 MinX, uint32 MinY, float MinZ, uint32 MaxX, uint32 MaxY, float MaxZ)
 {
 	if (MinX <= D3D11_VIEWPORT_BOUNDS_MAX && MinY <= D3D11_VIEWPORT_BOUNDS_MAX && MaxX <= D3D11_VIEWPORT_BOUNDS_MAX && MaxY <= D3D11_VIEWPORT_BOUNDS_MAX)

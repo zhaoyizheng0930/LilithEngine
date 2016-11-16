@@ -166,13 +166,35 @@ public:
 		InternalSetShaderResourceView<ShaderFrequency>(SRV , ResourceIndex, nullptr);
 	}
 
-	//Sampler--------------------------------------------------------------------------
+	//State--------------------------------------------------------------------------Sampler
 	template <EShaderFrequency ShaderFrequency>
 	void SetSamplerState(ID3D11SamplerState* SamplerState , uint32 SamplerIndex)
 	{
 		InternalSetSamplerState<ShaderFrequency>(SamplerState, SamplerIndex, nullptr);
 	}
 
+	//State--------------------------------------------------------------------------DepthState
+	void SetDepthStencilState(ID3D11DepthStencilState* DepthStencilState, uint32 RefStencil)
+	{
+		if (CurrentDepthStencilState != DepthStencilState || CurrentReferenceStencil != RefStencil)
+		{
+			CurrentDepthStencilState = DepthStencilState;
+			CurrentReferenceStencil = RefStencil;
+			Direct3DDeviceIMContext->OMSetDepthStencilState(DepthStencilState, RefStencil);
+		}
+	}
+
+	//State---------------------------------------------------------------------------BlendState
+	void SetBlendState(ID3D11BlendState* BlendState , const float Color[4] , uint32 SampleMask)
+	{
+		if (CurrentBlendState != BlendState || CurrentBlendSampleMask != CurrentBlendSampleMask || FMemory::Memcmp(CurrentBlendFactor , Color , sizeof(CurrentBlendFactor)))
+		{
+			CurrentBlendState = BlendState;
+			CurrentBlendSampleMask = SampleMask;
+			FMemory::Memcpy(CurrentBlendFactor, Color, sizeof(CurrentBlendFactor));
+			Direct3DDeviceIMContext->OMSetBlendState(BlendState, Color, SampleMask);
+		}
+	}
 protected:
 	ID3D11DeviceContext* Direct3DDeviceIMContext;
 private:
@@ -222,8 +244,15 @@ private:
 	} CurrentConstantBuffers[SF_NumFrequencies][D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
 
 	//StateCache
+	//RasterizerState
 	ID3D11RasterizerState* CurrentRasterizerState;
-
+	//DepthStencilState
+	ID3D11DepthStencilState* CurrentDepthStencilState;
+	uint32 CurrentReferenceStencil;
+	//BlendState
+	ID3D11BlendState* CurrentBlendState;
+	uint32 CurrentBlendSampleMask;
+	float CurrentBlendFactor[4];
 private:
 
 	typedef void(*TSetStreamSourceAlternate)(FD3D11StateCacheBase* StateCache, ID3D11Buffer* VertexBuffer, uint32 StreamIndex, uint32 Stride, uint32 Offset);
