@@ -299,6 +299,196 @@ void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIPixelShader* PixelS
 	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
 	SetShaderResourceView<SF_Pixel>(D11ShaderResource->Resource, D11ShaderResource->View, SRVIndex, "");
 }
+struct FRTVDesc
+{
+	uint32 Width;
+	uint32 Height;
+	DXGI_SAMPLE_DESC SampleDesc;
+};
+
+FRTVDesc GetRenderTargetViewDesc(ID3D11RenderTargetView* RenderTargetView)
+{
+	D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
+	RenderTargetView->GetDesc(&RTVDesc);
+	FRTVDesc Result;
+	uint32 MipIndex = 0;
+	switch (RTVDesc.ViewDimension)
+	{
+	case D3D11_RTV_DIMENSION_TEXTURE1DARRAY:break;
+	case D3D11_RTV_DIMENSION_TEXTURE2D:
+	case D3D11_RTV_DIMENSION_TEXTURE2DARRAY:
+	case D3D11_RTV_DIMENSION_TEXTURE2DMS:
+	case D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY:
+		ID3D11Texture2D* Texture2D = nullptr;
+		RenderTargetView->GetResource((ID3D11Resource**)Texture2D);
+		D3D11_TEXTURE2D_DESC Texture2DDesc;
+		Texture2D->GetDesc(&Texture2DDesc);
+		Result.Height = Texture2DDesc.Height;
+		Result.Width = Texture2DDesc.Width;
+		Result.SampleDesc = Texture2DDesc.SampleDesc;
+		if (RTVDesc.ViewDimension == D3D11_RTV_DIMENSION_TEXTURE2D || RTVDesc.ViewDimension == D3D11_RTV_DIMENSION_TEXTURE2DARRAY)
+		{
+			MipIndex = RTVDesc.Texture2D.MipSlice;
+		}
+		break;
+	case D3D11_RTV_DIMENSION_TEXTURE3D:break;
+		ID3D11Texture3D* Texture3D = nullptr;
+		RenderTargetView->GetResource((ID3D11Resource**)Texture3D);
+		D3D11_TEXTURE3D_DESC Texture3DDesc;
+		Texture3D->GetDesc(&Texture3DDesc);
+		Result.Height = Texture3DDesc.Height;
+		Result.Width = Texture3DDesc.Width;
+		Result.SampleDesc.Count = 1;
+		Result.SampleDesc.Quality = 0;
+		MipIndex = RTVDesc.Texture3D.MipSlice;
+	default:
+		break;
+	}
+
+	Result.Height >>= MipIndex;
+	Result.Width >>= MipIndex;
+	return Result;
+}
+
+void FD3D11DynamicRHI::RHISetRenderTarget(uint32 NumSimulataneousRenderTargets, const FRHIRenderTargetView* NewRenderTarget, const FRHIDepthRenderTargetView* NewDepthStencilTarget, uint32 NumUAVs, FRHIUnorderedAccessView** UAVs)
+{
+	//DSV---------------------------------------------------------------------------------------------------------------
+	FD3D11TextureBase* D11DepthStencilTarget = (FD3D11TextureBase*)(NewDepthStencilTarget->Texture->GetTextureBaseRHI());
+	bool bTargetChanged = false;
+	//ZYZ_TODO: Set the appropriate depth stencil view depending on whether depth writes are enabled or not
+	ID3D11DepthStencilView* DSV;
+	if (D11DepthStencilTarget)
+	{
+		CurrentDSVAccessType = NewDepthStencilTarget->GetDepthStencilAccess();
+		DSV = D11DepthStencilTarget->GetDepthStencilView(CurrentDSVAccessType);
+
+		//ZYZ_TODO:Don't know why
+		//ConditionalClearShaderResource(NewDepthStencilTarget);
+	}
+	//Compare Dirty
+	if (CurrentDepthStencilTarget != DSV)
+	{
+		CurrentDepthTexture = D11DepthStencilTarget;
+		CurrentDepthStencilTarget = DSV;
+		bTargetChanged = true;
+	}
+
+	//ZYZ_TODO:Set GPUAccess Dirty.Don't know what these used for
+	if (D11DepthStencilTarget)
+	{
+		uint32 CurrentFrame = PresentCounter;
+		const EResourceTransitionAccess CurrentAccess = D11DepthStencilTarget->GetCurrentGPUAccess();
+		const uint32 LastFrameWritten = D11DepthStencilTarget->GetLastFrameWritten();
+		const bool bReadable = CurrentAccess == EResourceTransitionAccess::EReadable;
+		const bool bDepthWrite = NewDepthStencilTarget->GetDepthStencilAccess().IsDepthWrite();
+		const bool bAccessValid = !bReadable ||
+			LastFrameWritten != CurrentFrame ||
+			!bDepthWrite;
+
+		if (!bAccessValid || (bReadable && bDepthWrite))
+		{
+			D11DepthStencilTarget->SetCurrentGPUAccess(EResourceTransitionAccess::EWritable);
+		}
+
+		if (bDepthWrite)
+		{
+			D11DepthStencilTarget->SetDirty(true, CurrentFrame);
+		}
+	}
+
+	//RTV---------------------------------------------------------------------------------------------------------------
+	ID3D11RenderTargetView* NewRenderTargetView[MaxSimultaneousRenderTargets];
+	for (int RenderTargetIndex = 0; RenderTargetIndex < MaxSimultaneousRenderTargets;RenderTargetIndex++)
+	{
+		ID3D11RenderTargetView* MipRendertargetView = NULL;
+		if (RenderTargetIndex <NumSimulataneousRenderTargets && NewRenderTarget[RenderTargetIndex].Texture != nullptr)
+		{
+			FD3D11TextureBase* D11RenderTargetBase = (FD3D11TextureBase*)(NewRenderTarget[RenderTargetIndex].Texture->GetTextureBaseRHI());
+			int32 RTMipLevel = NewRenderTarget[RenderTargetIndex].MipIndex;
+			int32 RTSliceIndex = NewRenderTarget[RenderTargetIndex].ArraySliceIndex;
+			MipRendertargetView = D11RenderTargetBase->GetRenderTargetView(RTMipLevel, RTSliceIndex);
+			if (D11RenderTargetBase)
+			{
+				uint32 CurrentFrame = PresentCounter;
+				const EResourceTransitionAccess CurrentAccess = D11RenderTargetBase->GetCurrentGPUAccess();
+				const uint32 LastFrameWritten = D11RenderTargetBase->GetLastFrameWritten();
+				const bool bReadable = CurrentAccess == EResourceTransitionAccess::EReadable;
+				const bool bAccessValid = !bReadable || LastFrameWritten != CurrentFrame;
+
+				if (!bAccessValid || bReadable)
+				{
+					D11RenderTargetBase->SetCurrentGPUAccess(EResourceTransitionAccess::EWritable);
+				}
+				D11RenderTargetBase->SetDirty(true, CurrentFrame);
+			}
+
+			// Unbind any shader views of the render target that are bound.
+			//ConditionalClearShaderResource(NewRenderTarget);
+		}
+
+		NewRenderTargetView[RenderTargetIndex] = MipRendertargetView;
+
+		//SetCache
+		if (CurrentRenderTargets[RenderTargetIndex] != MipRendertargetView)
+		{
+			CurrentRenderTargets[RenderTargetIndex] = MipRendertargetView;
+			bTargetChanged = true;
+		}
+	}
+
+	//UAV---------------------------------------------------------------------------------------------------------
+	for (uint32 UAVIndex = 0; UAVIndex < MaxSimultaneousUAVs; UAVIndex++)
+	{
+		ID3D11UnorderedAccessView* UAV = NULL;
+		if (UAVIndex < NumUAVs && UAVs[UAVIndex] != NULL)
+		{
+			FD3D11UnorderedAccessView* RHIUAV = (FD3D11UnorderedAccessView*)UAVs[UAVIndex];
+			UAV = RHIUAV->View;
+			if (UAV)
+			{
+				const EResourceTransitionAccess CurrentUAVAccess = RHIUAV->Resource->GetCurrentGPUAccess();
+				const bool UAVDirty = RHIUAV->Resource->IsDirty();
+				const bool bAccessPass = (CurrentUAVAccess == EResourceTransitionAccess::ERWBarrier && !UAVDirty) || (CurrentUAVAccess == EResourceTransitionAccess::ERWNoBarrier);
+
+				RHIUAV->Resource->SetDirty(true, PresentCounter);
+			}
+
+			// Unbind any shader views of the UAV's resource.
+			//ConditionalClearShaderResource(RHIUAV->Resource);
+		}
+
+		if (CurrentUAVs[UAVIndex] != UAV)
+		{
+			CurrentUAVs[UAVIndex] = UAV;
+			bTargetChanged = true;
+		}
+	}
+
+	if (bTargetChanged)
+	{
+		CommitRenderTargetsAndUAVs();
+	}
+
+	//ViewPort Set to Full Size of render target 0
+	if (NewRenderTargetView[0])
+	{
+		FRTVDesc desc = GetRenderTargetViewDesc(NewRenderTargetView[0]);
+		RHISetViewport(0, 0, 0, desc.Width,desc.Height , 1);
+	}
+	else if (DSV)
+	{
+		ID3D11Texture2D* Texture;
+		DSV->GetResource((ID3D11Resource**)Texture);
+		D3D11_TEXTURE2D_DESC Texture2DDesc;
+		Texture->GetDesc(&Texture2DDesc);
+		RHISetViewport(0, 0, 0, Texture2DDesc.Width, Texture2DDesc.Height, 1.0f);
+	}
+}
+
+void FD3D11DynamicRHI::RHISetRenderTargetAndClear(FRHISetRenderTargetsInfo* RenderTargetInfo)
+{
+	//ZYZ_TODO:Support later
+}
 
 void FD3D11DynamicRHI::RHISetShaderUniformBuffer(FRHIVertexShader* VertexShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer)
 {

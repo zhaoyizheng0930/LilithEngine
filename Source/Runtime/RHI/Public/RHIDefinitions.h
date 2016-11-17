@@ -2,6 +2,8 @@
 
 #define MaxSimultaneousRenderTargets 8
 
+#define MaxSimultaneousUAVs 8
+
 enum EShaderFrequency
 {
 	SF_Vertex = 0,

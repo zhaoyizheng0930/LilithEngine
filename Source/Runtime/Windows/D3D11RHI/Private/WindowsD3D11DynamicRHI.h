@@ -6,7 +6,6 @@
 #include "Windows/D3D11StateCache.h"
 #include "D3D11Viewport.h"
 #include "D3D11Util.h"
-#include "Math/Color.h"
 
 struct FD3D11Adapter
 {
@@ -233,7 +232,7 @@ public:
 	//ResourceBind----------------------------------------------------------------------------------------------VertexBuffer
 	virtual void RHISetStreamSource(uint32 StreamIndex, FRHIVertexBuffer* VertexBuffer, uint32 Stride, uint32 Offset) final override;
 
-	//ResourceBind----------------------------------------------------------------------------------------------FourStates
+	//FourStates----------------------------------------------------------------------------------------------
 	virtual void RHISetRasterizerState(FRHIRasterizerState* RasterizerState) final override;
 
 	virtual void RHISetScissorRect(bool bEnable, uint32 MinX, uint32 MinY, uint32 MaxX, uint32 MaxY) final override;
@@ -294,6 +293,11 @@ public:
 
 	virtual void RHISetShaderResourceViewParameter(FRHIPixelShader* PixelShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)  final override;
 
+	//ResourceBind----------------------------------------------------------------------------------------------RTV
+	virtual void RHISetRenderTarget(uint32 NumSimulataneousRenderTargets, const FRHIRenderTargetView* NewRenderTarget, const FRHIDepthRenderTargetView* NewDepthStencilTarget, uint32 NumUAVs, FRHIUnorderedAccessView** UAVs)  final override;
+
+	virtual void RHISetRenderTargetAndClear(FRHISetRenderTargetsInfo* RenderTargetInfo)  final override;
+
 	//ResourceBind----------------------------------------------------------------------------------------------UniformBuffer(C buffer)
 	virtual void RHISetShaderUniformBuffer(FRHIVertexShader* VertexShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer) final override;
 
@@ -320,7 +324,16 @@ public:
 
 	virtual void RHISetShaderParameter(FRHIPixelShader* PixelShader, uint32 BufferIndex, uint32 BaseIndex, uint32 NumBytes, const void* NewValue) final override;
 
-	//ResourceBind----------------------------------------------------------------------------------------------Set C Buffer
+	//DrawCall----------------------------------------------------------------------------------------------------------------------------------
+	virtual void RHIDrawPrimitive(uint32 PrimitiveType, uint32 BaseVertexIndex, uint32 NumPrimitives, uint32 NumInstances) final override;
+
+	virtual void RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)  final override;
+
+	virtual void RHIDrawIndexIndirect(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, FRHIStructureBuffer* StructureBuffer, int32 DrawArgumentIndex, uint32 NumInstances) final override;
+
+	virtual void RHIDrawIndexedPrimitive(FRHIIndexBuffer IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances)  final override;
+
+	virtual void RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)  final override;
 
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
@@ -346,10 +359,13 @@ protected:
 	FD3D11DeviceContext* Direct3DDeviceIMContext;
 
 	FD3D11StateCache StateCache;
-
+	//RTV Cache
 	ID3D11RenderTargetView* CurrentRenderTargets[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+	//UAV Cache
 	ID3D11UnorderedAccessView* CurrentUAVs[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
+	//DSV Cache
 	ID3D11DepthStencilView* CurrentDepthStencilTarget;
+	FExclusiveDepthStencil CurrentDSVAccessType;
 	FD3D11TextureBase* CurrentDepthTexture;
 
 	//SRVDirty
@@ -379,6 +395,8 @@ protected:
 	FD3D11Viewport* DrawingViewport;
 
 	FD3D11ComputeShader* CurrentComputeShader;
+
+	uint32 PresentCounter;
 protected:
 	/** Initializes the constant buffers.  Called once at RHI initialization time. */
 	void InitConstantBuffers();

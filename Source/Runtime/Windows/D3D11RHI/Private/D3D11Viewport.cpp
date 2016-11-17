@@ -78,6 +78,8 @@ void FD3D11DynamicRHI::RHIEndDrawingViewport(FRHIViewport* Viewport, bool bPrese
 {
 	FD3D11Viewport* D11Viewport = (FD3D11Viewport*)Viewport;
 
+	PresentCounter++;
+
 	DrawingViewport = NULL;
 
 	//Clear References

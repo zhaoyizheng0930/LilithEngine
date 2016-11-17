@@ -13,20 +13,45 @@ public:
 	FD3D11BaseShaderResource()
 	{
 		bDirty = false;
+		LastFrameWritten = -1;
 	}
 
 	void SetDirty(bool bInDirty, uint32 CurrentFrame)
 	{
 		bDirty = bInDirty;
+		LastFrameWritten = CurrentFrame;
 	}
 
 	bool IsDirty() const
 	{
 		return bDirty;
 	}
+	
+	void SetCurrentGPUAccess(EResourceTransitionAccess Access)
+	{
+		if (Access == EResourceTransitionAccess::EReadable)
+		{
+			bDirty = false;
+		}
+		CurrentGPUAccess = Access;
+	}
+
+	EResourceTransitionAccess GetCurrentGPUAccess() const
+	{
+		return CurrentGPUAccess;
+	}
+
+	uint32 GetLastFrameWritten() const
+	{
+		return LastFrameWritten;
+	}
 protected:
 private:
 	bool bDirty;
+
+	uint32 LastFrameWritten;
+
+	EResourceTransitionAccess CurrentGPUAccess;
 };
 
 class FD3D11VertexDeclaration:public FRHIVertexDeclaration
@@ -317,6 +342,11 @@ public:
 	void Unlock(uint32 MipIndex, uint32 ArrayIndex);
 
 	ID3D11Texture2D* GetResource() const { return (ID3D11Texture2D*)/*FD3D11TextureBase::*/GetResource(); }
+
+	virtual void* GetTextureBaseRHI() override final
+	{
+		return static_cast<FD3D11TextureBase*>(this);
+	}
 };
 
 class FD3D11BaseTexture2D : public FRHITexture2D
@@ -365,6 +395,10 @@ public:
 	FD3D11TextureReference(FD3D11DynamicRHI* InD3DRHI):FRHITextureReference(), FD3D11TextureBase(InD3DRHI , NULL , NULL , 0 
 		 ,false , std::vector<ID3D11RenderTargetView*>() , std::vector<ID3D11DepthStencilView*>()) {}
 
+	virtual void* GetTextureBaseRHI() override final
+	{
+		return static_cast<FD3D11TextureBase*>(this);
+	}
 protected:
 private:
 };
@@ -391,6 +425,11 @@ public:
 
 	}
 
+	virtual void* GetTextureBaseRHI() override final
+	{
+		return static_cast<FD3D11TextureBase*>(this);
+	}
+
 	uint32 SizeX;
 	uint32 SizeY;
 	uint32 SizeZ;
@@ -410,6 +449,7 @@ public:
 	FD3D11BaseShaderResource* Resource;
 protected:
 private:
+	bool 
 };
 
 class FD3D11ShaderResourceView :public FRHIShaderResourceView

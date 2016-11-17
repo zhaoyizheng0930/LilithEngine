@@ -122,6 +122,11 @@ public:
 		return Format;
 	}
 
+	virtual void* GetTextureBaseRHI()
+	{
+		return nullptr;
+	}
+
 	virtual uint32 GetFlags() { return Flags; }
 private:
 	uint32 NumMips;
@@ -267,7 +272,7 @@ private:
 class FRHIRenderQuery : public FRHIResource {};
 
 //RTV
-class FRHIRenderTargetView : public FRHIResource 
+class FRHIRenderTargetView 
 {
 public:
 	FRHITexture* Texture;
@@ -282,13 +287,18 @@ public:
 	}
 
 };
-class FRHIDepthRenderTargetView : public FRHIResource 
+class FRHIDepthRenderTargetView 
 {
 public:
 	FRHITexture* Texture;
+
+	FExclusiveDepthStencil GetDepthStencilAccess() const { return DepthStencilAccess; }
+
+private:
+	FExclusiveDepthStencil DepthStencilAccess;
 };
 
-class FExclusiveDepthStencil : public FRHIResource 
+class FExclusiveDepthStencil 
 {
 public:
 	enum Type
@@ -353,6 +363,17 @@ public:
 		// should never happen
 		return -1;
 	}
+
+	inline bool IsDepthWrite() const
+	{
+		return ExtractDepth() == DepthWrite;
+	}
+private:
+	inline Type ExtractDepth() const
+	{
+		return (Type)(Value & DepthMask);
+	}
+
 };
 
 class FRHISetRenderTargetsInfo : public FRHIResource {};

@@ -1,4 +1,6 @@
 #pragma once
+#include "Math/Color.h"
+
 class IRHIComputeContext
 {
 public:
@@ -207,7 +209,7 @@ public:
 	//ResourceBind------------------------------------------------------------------------------------------------State Set
 	virtual void RHISetDepthStencilState(FRHIDepthStencilState* NewState, uint32 StencilRef) = 0;
 
-	virtual void RHISetBlendState(FRHIBlendState* NewState/*, const FLinearColor& BlendFactor*/) = 0;
+	virtual void RHISetBlendState(FRHIBlendState* NewState, const FLinearColor& BlendFactor) = 0;
 
 	//ResourceBind------------------------------------------------------------------------------------------------RTV
 	virtual void RHISetRenderTarget(uint32 NumSimulataneousRenderTargets,const FRHIRenderTargetView* NewRenderTarget ,const FRHIDepthRenderTargetView* NewDepthStencilTarget ,uint32 NumUAVs , FRHIUnorderedAccessView** UAVs ) = 0;
