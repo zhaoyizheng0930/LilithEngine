@@ -579,3 +579,34 @@ void FD3D11DynamicRHI::RHISetShaderParameter(FRHIPixelShader* PixelShader, uint3
 {
 	PSConstantBuffers[BufferIndex]->UpdateConstant((const uint8*)NewValue, BaseIndex, NumBytes);
 }
+
+void FD3D11DynamicRHI::RHIDrawPrimitive(uint32 PrimitiveType, uint32 BaseVertexIndex, uint32 NumPrimitives, uint32 NumInstances)
+{
+	//CommitResource
+
+	//CommitShaderConstants
+
+	//PrimitiveTopology
+
+	//DrawCall
+}
+
+void FD3D11DynamicRHI::RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIDrawIndexIndirect(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, FRHIStructureBuffer* StructureBuffer, int32 DrawArgumentIndex, uint32 NumInstances)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIDrawIndexedPrimitive(FRHIIndexBuffer IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)
+{
+
+}
