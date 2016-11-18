@@ -15,3 +15,7 @@ http://www.3dgep.com/forward-plus/
 
 
 https://www.nvidia.com/docs/IO/8228/BatchBatchBatch.pdf 
+
+http://www.cnblogs.com/mikewolf2002/archive/2012/11/24/2785441.html
+
+http://gamedevs.org/uploads/interactive-order-independent-transparency.pdf
