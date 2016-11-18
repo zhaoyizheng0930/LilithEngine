@@ -97,6 +97,7 @@ FRHIBoundShaderState* FD3D11DynamicRHI::RHICreateBoundShaderState(FRHIVertexDecl
 }
 
 FD3D11BoundShaderState::FD3D11BoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader, ID3D11Device* Direct3DDevice)
+	:CacheLink(InVertexDeclaration , InVertexShader , InPixelShader , InHullShader,InDomainShader,InGeometryShader,this)
 {
 	FD3D11VertexDeclaration* D11VertexDeclaration = (FD3D11VertexDeclaration*)InVertexDeclaration;
 	FD3D11VertexShader* D11VertexShader = (FD3D11VertexShader*)InVertexShader;

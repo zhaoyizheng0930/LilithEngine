@@ -1,0 +1,4 @@
+//Get lowest Bit
+const uint32 LowestBitMask = (DirtyBits)& (-(int32)DirtyBits);
+const int32 BufferIndex = FMath::FloorLog2(LowestBitMask);
+DirtyBits ^= LowestBitMask;

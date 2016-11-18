@@ -2,6 +2,7 @@
 #include "RHIResource.h"
 #include "ShaderCore.h"
 #include "D3D11Definitions.h"
+#include "BoundShaderStateCache.h"
 
 /**
 * A rendering resource which is owned by the rendering thread.
@@ -140,9 +141,16 @@ private:
 class FD3D11BoundShaderState : public FRHIBoundShaderState
 {
 public:
-	FD3D11BoundShaderState() { }
 	FD3D11BoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader, ID3D11Device* Direct3DDevice);
 	~FD3D11BoundShaderState() {}
+
+	FCachedBoundShaderStateLink CacheLink;
+
+	FD3D11VertexShader* GetVertexShader() { return (FD3D11VertexShader*)CacheLink.GetVertexShader(); }
+	FD3D11PixelShader* GetPixelShader() { return (FD3D11PixelShader*)CacheLink.GetPixelShader(); }
+	FD3D11HullShader* GetHullShader() { return (FD3D11HullShader*)CacheLink.GetHullShader(); }
+	FD3D11DomainShader* GetDomainShader() { return (FD3D11DomainShader*)CacheLink.GetDomainShader(); }
+	FD3D11GeometryShader* GetGeometryShader() { return (FD3D11GeometryShader*)CacheLink.GetGeometryShader(); }
 
 
 	ID3D11InputLayout* InputeLayout;

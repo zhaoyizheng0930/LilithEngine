@@ -245,6 +245,37 @@ void FD3D11DynamicRHI::CommitRenderTargetsAndUAVs()
 
 }
 
+void FD3D11DynamicRHI::CommitGraphicResourceTables()
+{
+	FD3D11BoundShaderState* CurrentBoundShaderState = (FD3D11BoundShaderState*)BoundShaderStateHistory.GetLast();
+
+	if (CurrentBoundShaderState->VertexShader)
+	{
+		SetResourcesFromTables(CurrentBoundShaderState->GetVertexShader());
+	}
+	if (CurrentBoundShaderState->PixelShader)
+	{
+		SetResourcesFromTables(CurrentBoundShaderState->GetPixelShader());
+	}
+	if (CurrentBoundShaderState->DomainShader)
+	{
+		SetResourcesFromTables(CurrentBoundShaderState->GetDomainShader());
+	}
+	if (CurrentBoundShaderState->HullShader)
+	{
+		SetResourcesFromTables(CurrentBoundShaderState->GetHullShader());
+	}
+	if (CurrentBoundShaderState->GeometryShader)
+	{
+		SetResourcesFromTables(CurrentBoundShaderState->GetGeometryShader());
+	}
+}
+
+void FD3D11DynamicRHI::CommitNonComputeShaderConstants()
+{
+
+}
+
 void FD3D11DynamicRHI::ClearAllShaderResources()
 {
 	ClearAllShaderResourcesForFrequency<SF_Vertex>();

@@ -298,7 +298,7 @@ public:
 
 	virtual void RHISetRenderTargetAndClear(FRHISetRenderTargetsInfo* RenderTargetInfo)  final override;
 
-	//ResourceBind----------------------------------------------------------------------------------------------UniformBuffer(C buffer)
+	//ResourceBind--------ZYZ_TODO:can't used!!!!!!---no ResourceCommit--------------------------------------------------------------------------------------UniformBuffer(Shader Resource)
 	virtual void RHISetShaderUniformBuffer(FRHIVertexShader* VertexShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer) final override;
 
 	virtual void RHISetShaderUniformBuffer(FRHIHullShader* HullShader, uint32 BufferIndex, FRHIUniformBuffer* Buffer) final override;
@@ -397,6 +397,8 @@ protected:
 	FD3D11ComputeShader* CurrentComputeShader;
 
 	uint32 PresentCounter;
+
+	TBoundShaderStateHistory<1000> BoundShaderStateHistory;
 protected:
 	/** Initializes the constant buffers.  Called once at RHI initialization time. */
 	void InitConstantBuffers();
@@ -425,8 +427,14 @@ protected:
 		typename TPixelShader::FParameter PixelShaderParameter
 		);
 private:
-	//Context Private
+	//Context Private-----------------------------------------------------------------CommitResource
 	void CommitRenderTargetsAndUAVs();
+
+	void CommitGraphicResourceTables();//Uniform Buffer
+
+	void CommitNonComputeShaderConstants();//Uniform Buffer
+
+	template <class ShaderType> void SetResourcesFromTables(const ShaderType* RESTRICT);
 	//Clear                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 	void ClearAllShaderResources();
 

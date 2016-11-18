@@ -12,3 +12,6 @@ http://aigo.iteye.com/blog/1888609
 http://blog.csdn.net/sinat_24229853/article/category/5844643
 
 http://www.3dgep.com/forward-plus/
+
+
+https://www.nvidia.com/docs/IO/8228/BatchBatchBatch.pdf 

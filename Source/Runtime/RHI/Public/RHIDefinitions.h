@@ -1,5 +1,7 @@
 #pragma once
 
+//RHI Def Come from Unreal
+
 #define MaxSimultaneousRenderTargets 8
 
 #define MaxSimultaneousUAVs 8
@@ -192,4 +194,47 @@ enum class EAsyncComputeBudget
 	EBalanced_2,		//Async compute and Gfx share GPU equally.
 	EComputeHeavy_3,	//Async compute can use most of the GPU
 	EAll_4,				//Async compute can use the entire GPU.
+};
+
+enum EPrimitiveType
+{
+	PT_TriangleList,
+	PT_TriangleStrip,
+	PT_LineList,
+	PT_QuadList,
+	PT_PointList,
+	PT_1_ControlPointPatchList,
+	PT_2_ControlPointPatchList,
+	PT_3_ControlPointPatchList,
+	PT_4_ControlPointPatchList,
+	PT_5_ControlPointPatchList,
+	PT_6_ControlPointPatchList,
+	PT_7_ControlPointPatchList,
+	PT_8_ControlPointPatchList,
+	PT_9_ControlPointPatchList,
+	PT_10_ControlPointPatchList,
+	PT_11_ControlPointPatchList,
+	PT_12_ControlPointPatchList,
+	PT_13_ControlPointPatchList,
+	PT_14_ControlPointPatchList,
+	PT_15_ControlPointPatchList,
+	PT_16_ControlPointPatchList,
+	PT_17_ControlPointPatchList,
+	PT_18_ControlPointPatchList,
+	PT_19_ControlPointPatchList,
+	PT_20_ControlPointPatchList,
+	PT_21_ControlPointPatchList,
+	PT_22_ControlPointPatchList,
+	PT_23_ControlPointPatchList,
+	PT_24_ControlPointPatchList,
+	PT_25_ControlPointPatchList,
+	PT_26_ControlPointPatchList,
+	PT_27_ControlPointPatchList,
+	PT_28_ControlPointPatchList,
+	PT_29_ControlPointPatchList,
+	PT_30_ControlPointPatchList,
+	PT_31_ControlPointPatchList,
+	PT_32_ControlPointPatchList,
+	PT_Num,
+	PT_NumBits = 6
 };
