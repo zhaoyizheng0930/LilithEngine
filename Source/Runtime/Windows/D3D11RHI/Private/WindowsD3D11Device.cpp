@@ -165,6 +165,12 @@ FD3D11DynamicRHI::FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LE
 	ZeroMemory = FMemory::Malloc(ZeroMemorySize);
 	FMemory::MemZero(ZeroMemory);
 
+	//Create Dynamic Buffer
+	uint32 DynamicVBSizes[] = { 128,1024,64 * 1024,1024 * 1024,0 };
+	DynamicVB = new FD3D11DynamicBuffer(this , D3D11_BIND_VERTEX_BUFFER , DynamicVBSizes);
+	uint32 DynamicIBSizes[] = { 128,1024,64 * 1024,1024 * 1024,0 };
+	DynamicIB = new FD3D11DynamicBuffer(this , D3D11_BIND_INDEX_BUFFER , DynamicIBSizes);
+
 }
 
 FD3D11DynamicRHI::~FD3D11DynamicRHI()

@@ -378,9 +378,17 @@ protected:
 	uint32 NumSimultaneousRenderTargets;
 	uint32 NumUAVs;
 	//DynamicBuffer
-
 	FD3D11DynamicBuffer* DynamicVB;
 	FD3D11DynamicBuffer* DynamicIB;
+	//StateFor begin/end draw primitive up interface
+	uint32 PendingNumVertices;
+	uint32 PendingVertexDataStride;
+	uint32 PendingPrimitiveType;
+	uint32 PendingNumPrimitives;
+	uint32 PendingMinVertexIndex;
+	uint32 PendingNumIndices;
+	uint32 PendingIndexDataStride;
+
 	//CBuffer Dirty
 	FD3D11UniformBuffer* BoundUniformBuffers[SF_NumFrequencies][14];
 	uint16 DirtyUniformBuffers[SF_NumFrequencies];

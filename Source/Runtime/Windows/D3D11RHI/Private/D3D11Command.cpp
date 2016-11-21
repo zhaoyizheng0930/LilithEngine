@@ -797,20 +797,74 @@ void FD3D11DynamicRHI::RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRH
 
 void FD3D11DynamicRHI::RHIBeginDrawPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData)
 {
-
+	//Cache draw call param
+	PendingPrimitiveType = PrimitiveType;
+	PendingNumPrimitives = NumPrimitives;
+	PendingNumVertices = NumVertices;
+	PendingVertexDataStride = VertexDataStride;
+	//Output Buffer
+	OutVertexData = DynamicVB->Lock(NumVertices * VertexDataStride);
 }
 
 void FD3D11DynamicRHI::RHIEndDrawPrimitiveUP()
 {
+	//Unmap
+	ID3D11Buffer* Buffer = DynamicVB->Unlock();
+
+	//ZYZ_TODO:Don't know why
+	//CommitGraphicsResourceTables();
+	//CommitNonComputeShaderConstants();
+	//DrawCall
+	StateCache.SetStreamSource(Buffer, 0, PendingVertexDataStride, 0);
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PendingPrimitiveType, bUseTesslation));
+	Direct3DDeviceIMContext->Draw(PendingNumVertices, 0);
+
+	//Clear Cache Param;
+	PendingPrimitiveType = 0;
+	PendingNumPrimitives = 0;
+	PendingNumVertices = 0;
+	PendingVertexDataStride = 0;
 
 }
 
 void FD3D11DynamicRHI::RHIBeginDrawIndexedPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData, uint32 MinVertexIndex, uint32 NumIndices, uint32 IndexDataStride, void*& OutIndexData)
 {
+	//Cache Param
+	PendingNumVertices = NumVertices;
+	PendingVertexDataStride = VertexDataStride;
+	PendingPrimitiveType = PrimitiveType;
+	PendingNumPrimitives = NumPrimitives;
+	PendingMinVertexIndex = MinVertexIndex;
+	PendingNumIndices = NumIndices;
+	PendingIndexDataStride = IndexDataStride;
 
+	//Map Buffer
+	OutIndexData = DynamicIB->Lock(NumIndices * IndexDataStride);
+	OutVertexData = DynamicVB->Lock(NumVertices * VertexDataStride);
 }
 
 void FD3D11DynamicRHI::RHIEndDrawIndexedPrimitiveUP()
 {
+	//Unmap data
+	ID3D11Buffer* IndexBuffer = DynamicIB->Unlock();
+	ID3D11Buffer* VertexBuffer = DynamicVB->Unlock();
 
+	//ZYZ_TODO:Don't know why
+	//CommitGraphicsResourceTables();
+	//CommitNonComputeShaderConstants();
+	//Draw
+	StateCache.SetIndexBuffer(IndexBuffer, PendingIndexDataStride == sizeof(uint16) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT, 0);
+	StateCache.SetStreamSource(VertexBuffer, PendingMinVertexIndex, PendingVertexDataStride, 0);
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PendingPrimitiveType, bUseTesslation));
+
+	Direct3DDeviceIMContext->DrawIndexed(PendingNumVertices, 0, PendingMinVertexIndex);
+
+	//ClearCache
+	PendingNumVertices = 0;
+	PendingVertexDataStride = 0;
+	PendingPrimitiveType = 0;
+	PendingNumPrimitives = 0;
+	PendingMinVertexIndex = 0;
+	PendingNumIndices = 0;
+	PendingIndexDataStride = 0;
 }
