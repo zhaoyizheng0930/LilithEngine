@@ -868,3 +868,43 @@ void FD3D11DynamicRHI::RHIEndDrawIndexedPrimitiveUP()
 	PendingNumIndices = 0;
 	PendingIndexDataStride = 0;
 }
+
+void FD3D11DynamicRHI::RHIClear(bool bClearColor, const FLinearColor& Color, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect)
+{
+	RHIClearMRTImpl(bClearColor , 1 , & Color , bClearDepth , Depth , bClearStencil , Stencil , ExcludeRect , true , EForceFullScreenClear::EDoNotForce);
+}
+
+void FD3D11DynamicRHI::RHIClearMRT(bool bClearColor, int32 NumClearColors, const FLinearColor* ColorArray, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect)
+{
+	RHIClearMRTImpl(bClearColor, NumClearColors, ColorArray, bClearDepth, Depth, bClearStencil, Stencil, ExcludeRect, true, EForceFullScreenClear::EDoNotForce);
+}
+
+void FD3D11DynamicRHI::RHIEnableDepthBoundTest(bool bEnable, float MinDepth, float MaxDepth)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIPushEvent(const char* Name, FColor Color)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIPopEvent()
+{
+
+}
+
+void FD3D11DynamicRHI::RHIUpdateTextureReference(FRHITextureReference* Texture, FRHITexture* NewTexture)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIClearMRTImpl(bool bClearColor, int32 NumClearColors, const FLinearColor* ColorArray, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect, bool bForceShaderClear, EForceFullScreenClear ForceFullScreen)
+{
+	//don't force shaders clears for the moment.
+	bForceShaderClear = false;
+
+	FD3D11BoundRenderTargets BoundedRenderTarget(Direct3DDeviceIMContext);
+
+
+}

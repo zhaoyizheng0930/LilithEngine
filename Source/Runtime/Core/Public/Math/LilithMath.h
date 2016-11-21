@@ -2,6 +2,7 @@
 
 #include "HAL/PlatformIncludes.h"
 
+#include "IntRect.h"
 
 class FMath :public FPlatformMath
 {

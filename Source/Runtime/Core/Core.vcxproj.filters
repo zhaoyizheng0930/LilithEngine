@@ -159,6 +159,12 @@
     <ClInclude Include="Public\Math\Color.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Math\IntRect.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Math\IntPoint.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp">

@@ -131,3 +131,21 @@ private:
 
 	int32 LockedBufferIndex;
 };
+
+class FD3D11BoundRenderTargets
+{
+public:
+	FD3D11BoundRenderTargets(ID3D11DeviceContext* InDeviceContext);
+
+	virtual ~FD3D11BoundRenderTargets();
+
+	ID3D11RenderTargetView* GetRenderTargetView(uint32 RenderTargetIndex) { return RenderTargetViews[RenderTargetIndex]; }
+	ID3D11DepthStencilView* GetDepthStencilView() { return DepthStencilViews; }
+	uint32 GetNumActiveTargets() { return NumActiveTargets; }
+protected:
+private:
+	ID3D11RenderTargetView* RenderTargetViews[MaxSimultaneousRenderTargets];
+	ID3D11DepthStencilView* DepthStencilViews;
+
+	uint32 NumActiveTargets;
+};

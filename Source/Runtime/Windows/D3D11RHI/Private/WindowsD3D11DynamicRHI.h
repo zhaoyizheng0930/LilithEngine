@@ -339,6 +339,19 @@ public:
 
 	virtual void RHIEndDrawIndexedPrimitiveUP() final override;
 
+	//Others-----------------------------------------------------------------------------------------------------
+	virtual void RHIClear(bool bClearColor, const FLinearColor& Color, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect) final override;
+
+	virtual void RHIClearMRT(bool bClearColor, int32 NumClearColors, const FLinearColor* ColorArray, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect) final override;
+
+	virtual void RHIEnableDepthBoundTest(bool bEnable, float MinDepth, float MaxDepth) final override;
+
+	virtual void RHIPushEvent(const char* Name, FColor Color) final override;
+
+	virtual void RHIPopEvent() final override;
+
+	virtual void RHIUpdateTextureReference(FRHITextureReference* Texture, FRHITexture* NewTexture) final override;
+
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
 
@@ -468,6 +481,14 @@ private:
 
 	template <EShaderFrequency ShaderFrequency>
 	void InternalSetShaderResourceView(FD3D11BaseShaderResource* Resource, ID3D11ShaderResourceView* SRV, int32 ResourceIndex, std::string SRVName, FD3D11StateCache::ESRV_Type SrvType = FD3D11StateCache::SRV_Unknown);
+
+	//Clear Privite--------------------------------------------------------------------------------------------------------------------------------------
+	enum class EForceFullScreenClear
+	{
+		EDoNotForce,
+		EForce
+	};
+	virtual void RHIClearMRTImpl(bool bClearColor, int32 NumClearColors, const FLinearColor* ColorArray, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect, bool bForceShaderClear, EForceFullScreenClear ForceFullScreen);
 private:
 
 };

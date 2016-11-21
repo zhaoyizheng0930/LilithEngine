@@ -239,9 +239,9 @@ public:
 	virtual void RHIEndDrawIndexedPrimitiveUP() = 0;
 
 	//Others-----------------------------------------------------------------------------------------------------
-	virtual void RHIClear(bool bClearColor/*, const FLinearColor& Color*/, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil/*, FIntRect ExcludeRect*/) = 0;
+	virtual void RHIClear(bool bClearColor, const FLinearColor& Color, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect) = 0;
 
-	virtual void RHIClearMRT(bool bClearColor, int32 NumClearColors/*, const FLinearColor* ColorArray*/, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil/*, FIntRect ExcludeRect*/) = 0;
+	virtual void RHIClearMRT(bool bClearColor, int32 NumClearColors, const FLinearColor* ColorArray, bool bClearDepth, float Depth, bool bClearStencil, uint32 Stencil, FIntRect ExcludeRect) = 0;
 
 	virtual void RHIEnableDepthBoundTest(bool bEnable, float MinDepth , float MaxDepth) = 0;
 

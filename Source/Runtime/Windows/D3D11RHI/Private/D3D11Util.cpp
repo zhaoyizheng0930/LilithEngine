@@ -99,3 +99,33 @@ void FD3D11DynamicBuffer::ReleaseRHI()
 	}
 	Buffers.clear();
 }
+
+FD3D11BoundRenderTargets::FD3D11BoundRenderTargets(ID3D11DeviceContext* InDeviceContext)
+{
+	//Get RenderTarget And DepthStencil
+	InDeviceContext->OMGetRenderTargets(MaxSimultaneousRenderTargets, &RenderTargetViews[0], &DepthStencilViews);
+	//GetRenderTargetNum
+	NumActiveTargets = 0;
+	for (; NumActiveTargets < MaxSimultaneousRenderTargets; NumActiveTargets++)
+	{
+		if (RenderTargetViews[NumActiveTargets] == NULL)
+		{
+			break;
+		}
+	}
+}
+
+FD3D11BoundRenderTargets::~FD3D11BoundRenderTargets()
+{
+	//Clear RenderTarget
+	for (int i = 0; i < NumActiveTargets;i++)
+	{
+		RenderTargetViews[i]->Release();
+	}
+
+	//Clear DepthStencil
+	if (DepthStencilViews)
+	{
+		DepthStencilViews->Release();
+	}
+}
