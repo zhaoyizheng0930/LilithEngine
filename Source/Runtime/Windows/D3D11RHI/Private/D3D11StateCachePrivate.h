@@ -137,6 +137,16 @@ public:
 		}
 	}
 
+	//SetPrimitiveTopology
+	void SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY PrimitiveTopology)
+	{
+		if (CurrentPrimitiveTopology != PrimitiveTopology)
+		{
+			CurrentPrimitiveTopology = PrimitiveTopology;
+			Direct3DDeviceIMContext->IASetPrimitiveTopology(CurrentPrimitiveTopology);
+		}
+	}
+
 	//Viewport--------------------------------------------------------------------------
 	void SetViewports(uint32 Count, D3D11_VIEWPORT* Viewports)
 	{
@@ -242,6 +252,9 @@ private:
 		uint32 FirstConstant;
 		uint32 NumConstants;
 	} CurrentConstantBuffers[SF_NumFrequencies][D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
+
+	//D3D11_PRIMITIVE_TOPOLOGY
+	D3D11_PRIMITIVE_TOPOLOGY CurrentPrimitiveTopology;
 
 	//StateCache
 	//RasterizerState

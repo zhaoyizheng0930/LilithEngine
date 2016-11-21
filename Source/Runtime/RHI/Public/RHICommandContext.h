@@ -220,12 +220,12 @@ public:
 
 	//DrawCall-----------------------------------------------------------------------------------------------------
 	virtual void RHIDrawPrimitive(uint32 PrimitiveType , uint32 BaseVertexIndex , uint32 NumPrimitives , uint32 NumInstances) = 0;
-
+	//Indirect mean Draw GPU Primitive
 	virtual void RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer , uint32 ArgumentOffset) = 0;
 
 	virtual void RHIDrawIndexIndirect(FRHIIndexBuffer* IndexBuffer , uint32 PrimitiveType , FRHIStructureBuffer* StructureBuffer ,int32 DrawArgumentIndex , uint32 NumInstances ) = 0;
 
-	virtual void RHIDrawIndexedPrimitive(FRHIIndexBuffer IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances) = 0;
+	virtual void RHIDrawIndexedPrimitive(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances) = 0;
 
 	virtual void RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset) = 0;
 

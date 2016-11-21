@@ -327,13 +327,21 @@ public:
 	//DrawCall----------------------------------------------------------------------------------------------------------------------------------
 	virtual void RHIDrawPrimitive(uint32 PrimitiveType, uint32 BaseVertexIndex, uint32 NumPrimitives, uint32 NumInstances) final override;
 
-	virtual void RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)  final override;
+	virtual void RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)  final override;//Indirect mean Draw GPU Primitive
 
 	virtual void RHIDrawIndexIndirect(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, FRHIStructureBuffer* StructureBuffer, int32 DrawArgumentIndex, uint32 NumInstances) final override;
 
-	virtual void RHIDrawIndexedPrimitive(FRHIIndexBuffer IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances)  final override;
+	virtual void RHIDrawIndexedPrimitive(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances)  final override;
 
 	virtual void RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)  final override;
+	//DrawPrimitiveUp
+	virtual void RHIBeginDrawPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData) final override;
+
+	virtual void RHIEndDrawPrimitiveUP() final override;
+
+	virtual void RHIBeginDrawIndexedPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData, uint32 MinVertexIndex, uint32 NumIndices, uint32 IndexDataStride, void*& OutIndexData) final override;
+
+	virtual void RHIEndDrawIndexedPrimitiveUP() final override;
 
 public:
 	ID3D11Device* GetDevice() { return Direct3DDevice; }
@@ -397,6 +405,8 @@ protected:
 	FD3D11ComputeShader* CurrentComputeShader;
 
 	uint32 PresentCounter;
+
+	bool bUseTesslation;
 
 	TBoundShaderStateHistory<1000> BoundShaderStateHistory;
 protected:

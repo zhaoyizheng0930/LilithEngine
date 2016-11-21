@@ -1,5 +1,6 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
+#include "RHIUtilities.h"
 
 void FD3D11DynamicRHI::RHISubmitCommandsHint()
 {
@@ -628,6 +629,77 @@ inline int32 SetShaderResourcesFromBuffer_Sampler(FD3D11DynamicRHI* D3D11RHI, FD
 
 }
 
+static D3D11_PRIMITIVE_TOPOLOGY GetD3D11PrimitiveType(uint32 PrimitiveType, bool bUsingTessellation)
+{
+	if (bUsingTessellation)
+	{
+		switch (PrimitiveType)
+		{
+		case PT_1_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_1_CONTROL_POINT_PATCHLIST;
+		case PT_2_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
+
+			// This is the case for tessellation without AEN or other buffers, so just flip to 3 CPs
+		case PT_TriangleList: return D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
+
+		case PT_LineList:
+		case PT_TriangleStrip:
+		case PT_QuadList:
+		case PT_PointList:
+			//UE_LOG(LogD3D11RHI, Fatal, TEXT("Invalid type specified for tessellated render, probably missing a case in FStaticMeshSceneProxy::GetMeshElement"));
+			break;
+		default:
+			// Other cases are valid.
+			break;
+		};
+	}
+
+	switch (PrimitiveType)
+	{
+	case PT_TriangleList: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	case PT_TriangleStrip: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+	case PT_LineList: return D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+	case PT_PointList: return D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+
+		// ControlPointPatchList types will pretend to be TRIANGLELISTS with a stride of N 
+		// (where N is the number of control points specified), so we can return them for
+		// tessellation and non-tessellation. This functionality is only used when rendering a 
+		// default material with something that claims to be tessellated, generally because the 
+		// tessellation material failed to compile for some reason.
+	case PT_3_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
+	case PT_4_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST;
+	case PT_5_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_5_CONTROL_POINT_PATCHLIST;
+	case PT_6_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_6_CONTROL_POINT_PATCHLIST;
+	case PT_7_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_7_CONTROL_POINT_PATCHLIST;
+	case PT_8_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_8_CONTROL_POINT_PATCHLIST;
+	case PT_9_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_9_CONTROL_POINT_PATCHLIST;
+	case PT_10_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_10_CONTROL_POINT_PATCHLIST;
+	case PT_11_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_11_CONTROL_POINT_PATCHLIST;
+	case PT_12_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_12_CONTROL_POINT_PATCHLIST;
+	case PT_13_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_13_CONTROL_POINT_PATCHLIST;
+	case PT_14_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_14_CONTROL_POINT_PATCHLIST;
+	case PT_15_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_15_CONTROL_POINT_PATCHLIST;
+	case PT_16_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST;
+	case PT_17_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_17_CONTROL_POINT_PATCHLIST;
+	case PT_18_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_18_CONTROL_POINT_PATCHLIST;
+	case PT_19_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_19_CONTROL_POINT_PATCHLIST;
+	case PT_20_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_20_CONTROL_POINT_PATCHLIST;
+	case PT_21_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_21_CONTROL_POINT_PATCHLIST;
+	case PT_22_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_22_CONTROL_POINT_PATCHLIST;
+	case PT_23_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_23_CONTROL_POINT_PATCHLIST;
+	case PT_24_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_24_CONTROL_POINT_PATCHLIST;
+	case PT_25_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_25_CONTROL_POINT_PATCHLIST;
+	case PT_26_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_26_CONTROL_POINT_PATCHLIST;
+	case PT_27_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_27_CONTROL_POINT_PATCHLIST;
+	case PT_28_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_28_CONTROL_POINT_PATCHLIST;
+	case PT_29_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_29_CONTROL_POINT_PATCHLIST;
+	case PT_30_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_30_CONTROL_POINT_PATCHLIST;
+	case PT_31_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_31_CONTROL_POINT_PATCHLIST;
+	case PT_32_ControlPointPatchList: return D3D11_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST;
+	//default: UE_LOG(LogD3D11RHI, Fatal, TEXT("Unknown primitive type: %u"), PrimitiveType);
+	};
+
+	return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+}
 
 void FD3D11DynamicRHI::RHIDrawPrimitive(uint32 PrimitiveType, uint32 BaseVertexIndex, uint32 NumPrimitives, uint32 NumInstances)
 {
@@ -636,26 +708,109 @@ void FD3D11DynamicRHI::RHIDrawPrimitive(uint32 PrimitiveType, uint32 BaseVertexI
 	//ZYZ_TODO:CommitShaderConstants Uniform Buffer
 	//CommitNonComputeShaderConstants();
 	//PrimitiveTopology
-
+	uint32 VertexCount = GetVertexCountForPrimitiveCount(NumPrimitives , PrimitiveType);
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PrimitiveType , bUseTesslation));
 	//DrawCall
+	if (NumInstances > 1)
+	{
+		Direct3DDeviceIMContext->DrawInstanced(VertexCount , NumInstances , BaseVertexIndex , 0);
+	}
+	else
+	{
+		Direct3DDeviceIMContext->Draw(VertexCount , BaseVertexIndex);
+	}
 }
 
 void FD3D11DynamicRHI::RHIDrawPrimitiveIndirect(uint32 PrimitiveType, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)
 {
+	FD3D11VertexBuffer* D11Vertextbuffer = (FD3D11VertexBuffer*)ArgumentBuffer;
+	//ZYZ_TODO:CommitResource Uniform Buffer
+	//CommitGraphicResourceTables();
+	//ZYZ_TODO:CommitShaderConstants Uniform Buffer
+	//CommitNonComputeShaderConstants();
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PrimitiveType, bUseTesslation));
+
+	Direct3DDeviceIMContext->DrawInstancedIndirect(D11Vertextbuffer->Resource, ArgumentOffset);
 
 }
 
 void FD3D11DynamicRHI::RHIDrawIndexIndirect(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, FRHIStructureBuffer* StructureBuffer, int32 DrawArgumentIndex, uint32 NumInstances)
 {
+	FD3D11IndexBuffer* D11IndexBuffer = (FD3D11IndexBuffer*)IndexBuffer;
+	FD3D11StructureBuffer* D11StructureBuffer = (FD3D11StructureBuffer*)StructureBuffer;
 
+	//ZYZ_TODO:CommitResource Uniform Buffer
+	//CommitGraphicResourceTables();
+	//ZYZ_TODO:CommitShaderConstants Uniform Buffer
+	//CommitNonComputeShaderConstants();
+
+	uint32 SizeFormat = sizeof(DXGI_FORMAT);
+	DXGI_FORMAT Format = D11IndexBuffer->GetStride() == sizeof(uint16) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+
+	StateCache.SetIndexBuffer(D11IndexBuffer->Resource, Format, 0);
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PrimitiveType , bUseTesslation));
+
+	if (NumInstances > 1)
+	{
+		Direct3DDeviceIMContext->DrawIndexedInstancedIndirect(D11StructureBuffer->Resource, DrawArgumentIndex * 5 * sizeof(uint32));
+	}
 }
 
-void FD3D11DynamicRHI::RHIDrawIndexedPrimitive(FRHIIndexBuffer IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances)
+void FD3D11DynamicRHI::RHIDrawIndexedPrimitive(FRHIIndexBuffer* IndexBuffer, uint32 PrimitiveType, int32 BaseVertexIndex, uint32 FirstInstance, uint32 NumVertices, uint32 StartIndex, uint32 NumPrimitives, uint32 NumInstances)
+{
+	FD3D11IndexBuffer* D11Indexbuffer = (FD3D11IndexBuffer*)IndexBuffer;
+
+	//ZYZ_TODO:CommitResource Uniform Buffer
+	//CommitGraphicResourceTables();
+	//ZYZ_TODO:CommitShaderConstants Uniform Buffer
+	//CommitNonComputeShaderConstants();
+
+	DXGI_FORMAT Format = D11Indexbuffer->GetStride() == sizeof(uint16)?DXGI_FORMAT_R16_UINT:DXGI_FORMAT_R32_UINT;
+
+	StateCache.SetIndexBuffer(D11Indexbuffer->Resource, Format, 0);
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PrimitiveType, bUseTesslation));
+
+	uint32 IndexCount = GetVertexCountForPrimitiveCount(NumPrimitives, PrimitiveType);
+
+	if (NumInstances > 1 || FirstInstance != 0)
+	{
+		Direct3DDeviceIMContext->DrawIndexedInstanced(IndexCount , NumInstances , StartIndex , BaseVertexIndex , FirstInstance);
+	}
+	else
+	{
+		Direct3DDeviceIMContext->DrawIndexed(IndexCount , StartIndex , BaseVertexIndex);
+	}
+}
+
+void FD3D11DynamicRHI::RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)
+{
+	FD3D11IndexBuffer* D11IndexBuffer = (FD3D11IndexBuffer*)IndexBuffer;
+	FD3D11VertexBuffer* D11VertexBuffer = (FD3D11VertexBuffer*)ArgumentBuffer;
+
+	DXGI_FORMAT Format = D11IndexBuffer->GetStride() == sizeof(uint16) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+
+	StateCache.SetIndexBuffer(D11IndexBuffer->Resource, Format, 0);
+	StateCache.SetPrimitiveTopology(GetD3D11PrimitiveType(PrimitiveType , bUseTesslation));
+
+	Direct3DDeviceIMContext->DrawIndexedInstancedIndirect(D11VertexBuffer->Resource, ArgumentOffset);
+}
+
+void FD3D11DynamicRHI::RHIBeginDrawPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData)
 {
 
 }
 
-void FD3D11DynamicRHI::RHIDrawIndexedPrimitiveIndirect(uint32 PrimitiveType, FRHIIndexBuffer* IndexBuffer, FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)
+void FD3D11DynamicRHI::RHIEndDrawPrimitiveUP()
+{
+
+}
+
+void FD3D11DynamicRHI::RHIBeginDrawIndexedPrimitiveUP(uint32 PrimitiveType, uint32 NumPrimitives, uint32 NumVertices, uint32 VertexDataStride, void*& OutVertexData, uint32 MinVertexIndex, uint32 NumIndices, uint32 IndexDataStride, void*& OutIndexData)
+{
+
+}
+
+void FD3D11DynamicRHI::RHIEndDrawIndexedPrimitiveUP()
 {
 
 }
