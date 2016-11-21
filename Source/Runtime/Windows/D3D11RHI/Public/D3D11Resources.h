@@ -457,7 +457,7 @@ public:
 	FD3D11BaseShaderResource* Resource;
 protected:
 private:
-	bool 
+	
 };
 
 class FD3D11ShaderResourceView :public FRHIShaderResourceView

@@ -1,7 +1,7 @@
 #pragma once
 #include "D3D11RHI.h"
-#include "D3D11Resources.h"
 #include "RenderUtils.h"
+#include "D3D11Resources.h"
 
 static DXGI_FORMAT GetRenderTargetFormat(EPixelFormat PixelFormat)
 {

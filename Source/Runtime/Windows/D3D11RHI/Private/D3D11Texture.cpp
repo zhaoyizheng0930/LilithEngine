@@ -1,5 +1,4 @@
 #include "D3D11RHIPCH.h"
-#include "D3D11Resources.h"
 #include "WindowsD3D11DynamicRHI.h"
 #include "RenderUtils.h"
 

@@ -36,12 +36,21 @@
     <ClInclude Include="Public\RHICommandList.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\BoundShaderStateCache.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\RHIUtilities.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\DynamicRHI.cpp">
       <Filter>Private</Filter>
     </ClCompile>
     <ClCompile Include="Private\WindowsDynamicRHI.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\BoundShaderStateCache.cpp">
       <Filter>Private</Filter>
     </ClCompile>
   </ItemGroup>

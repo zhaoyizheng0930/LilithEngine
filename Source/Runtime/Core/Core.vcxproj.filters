@@ -156,6 +156,9 @@
     <ClInclude Include="Public\Template\TypeHash.h">
       <Filter>Public</Filter>
     </ClInclude>
+    <ClInclude Include="Public\Math\Color.h">
+      <Filter>Public</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\Core.cpp">

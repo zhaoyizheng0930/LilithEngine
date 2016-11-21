@@ -1,15 +1,6 @@
 #pragma once
 #include "RHIResource.h"
 
-typedef std::map<FBoundShaderStateKey, FCachedBoundShaderStateLink*> FBoundShaderStateCacheMap;
-
-extern FBoundShaderStateCacheMap GBoundShaderStateCache;
-
-static FBoundShaderStateCacheMap& GetBoundShaderStateCache()
-{
-	return GBoundShaderStateCache;
-}
-
 ///** Lazily initialized bound shader state cache singleton. */
 //static FBoundShaderStateCache_Threadsafe& GetBoundShaderStateCache_Threadsafe()
 //{
@@ -36,6 +27,16 @@ public:
 	FRHIDomainShader*   GetDomainShader() const { return DomainShader; }
 	FRHIGeometryShader* GetGeometryShader() const { return GeometryShader; }
 
+	bool operator ==(const FBoundShaderStateKey& A)
+	{
+		return A.VertexDeclaration == VertexDeclaration&&
+			A.VertexShader == VertexShader&&
+			A.PixelShader == PixelShader&&
+			A.HullShader == HullShader&&
+			A.DomainShader == DomainShader&&
+			A.GeometryShader == GeometryShader;
+	}
+
 protected:
 private:
 
@@ -50,25 +51,9 @@ private:
 class FCachedBoundShaderStateLink
 {
 public:
-	FCachedBoundShaderStateLink(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIPixelShader* InPixelShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FD3D11BoundShaderState* InBoundShaderState, bool bAddToSingleThreadedCache = true)
-		:Key(InVertexDeclaration, InVertexShader, InPixelShader, InHullShader, InDomainShader, InGeometryShader),
-		BoundShaderState(InBoundShaderState),
-		bAddToSingleThreadCache(bAddToSingleThreadedCache)
-	{
-		if (bAddToSingleThreadCache)
-		{
-			GetBoundShaderStateCache().insert(std::make_pair(Key, this));
-		}
-	}
+	FCachedBoundShaderStateLink(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIPixelShader* InPixelShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIBoundShaderState* InBoundShaderState, bool bAddToSingleThreadedCache = true);
 
-	~FCachedBoundShaderStateLink()
-	{
-		if (bAddToSingleThreadCache)
-		{
-			GetBoundShaderStateCache().erase(Key);
-			bAddToSingleThreadCache = false;
-		}
-	}
+	virtual ~FCachedBoundShaderStateLink();
 
 	FRHIVertexShader* GetVertexShader() { return (FRHIVertexShader*)Key.GetVertexShader(); }
 	FRHIPixelShader* GetPixelShader() { return (FRHIPixelShader*)Key.GetVertexShader(); }

@@ -1,6 +1,5 @@
 #include "D3D11RHIPCH.h"
 #include "../WindowsD3D11DynamicRHI.h"
-#include "D3D11Util.h"
 
 
 FRHIVertexBuffer* FD3D11DynamicRHI::RHICreateVertexBuffer(uint32 Size, uint32 InUsage, FRHIResourceCreateInfo& CreateInfo)

@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Public\BoundShaderStateCache.h" />
     <ClInclude Include="Public\DynamicRHI.h" />
     <ClInclude Include="Public\RHI.h" />
     <ClInclude Include="Public\RHICommandContext.h" />
@@ -146,8 +147,10 @@
     <ClInclude Include="Public\RHIDefinitions.h" />
     <ClInclude Include="Public\RHIPCH.h" />
     <ClInclude Include="Public\RHIResource.h" />
+    <ClInclude Include="Public\RHIUtilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Private\BoundShaderStateCache.cpp" />
     <ClCompile Include="Private\DynamicRHI.cpp" />
     <ClCompile Include="Private\WindowsDynamicRHI.cpp" />
   </ItemGroup>

@@ -1,6 +1,5 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
-#include "D3D11Viewport.h"
 
 FRHIRenderQuery* FD3D11DynamicRHI::RHICreateRenderQuery(ERenderQueryType QueryType)
 {

@@ -1,6 +1,5 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
-#include "D3D11Viewport.h"
 #include "RenderResource.h"
 
 FRHIViewport* FD3D11DynamicRHI::RHICreateViewport(void* WindowsHandle, uint32 SizeX, uint32 SizeY, bool bIsFullScreen, EPixelFormat PreferredPixelFormat)

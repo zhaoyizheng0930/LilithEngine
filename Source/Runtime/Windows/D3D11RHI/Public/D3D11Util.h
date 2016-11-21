@@ -1,6 +1,7 @@
 #pragma once
 #include "Template/TypeHash.h"
 #include "HAL/Memory/LilithMemory.h"
+#include "RenderResource.h"
 
 class FD3D11LockedKey
 {
@@ -99,3 +100,34 @@ FORCEINLINE uint32 GetD3D11CubeFace(ECubeFace Face)
 		return 5;//D3DCUBEMAP_FACE_NEGATIVE_Z;
 	};
 }
+
+class FD3D11DynamicRHI;
+
+class FD3D11DynamicBuffer:public FRenderResource
+{
+public:
+	enum { MAX_BUFFER_SIZES = 4 };
+
+	FD3D11DynamicBuffer(FD3D11DynamicRHI* InD3DRHI,D3D11_BIND_FLAG InBindFlag , uint32* InBufferSizes);
+
+	~FD3D11DynamicBuffer();
+
+	void* Lock(uint32 Size);
+
+	ID3D11Buffer* Unlock();
+
+	virtual void InitRHI() override;
+
+	virtual void ReleaseRHI() override;
+protected:
+private:
+	std::vector<uint32> BufferSize;
+
+	std::vector<ID3D11Buffer*> Buffers;
+
+	FD3D11DynamicRHI* D3DRHI;
+
+	D3D11_BIND_FLAG BindFlag;
+
+	int32 LockedBufferIndex;
+};

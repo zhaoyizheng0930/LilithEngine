@@ -287,16 +287,6 @@ public:
 	}
 
 };
-class FRHIDepthRenderTargetView 
-{
-public:
-	FRHITexture* Texture;
-
-	FExclusiveDepthStencil GetDepthStencilAccess() const { return DepthStencilAccess; }
-
-private:
-	FExclusiveDepthStencil DepthStencilAccess;
-};
 
 class FExclusiveDepthStencil 
 {
@@ -374,6 +364,17 @@ private:
 		return (Type)(Value & DepthMask);
 	}
 
+};
+
+class FRHIDepthRenderTargetView
+{
+public:
+	FRHITexture* Texture;
+
+	FExclusiveDepthStencil GetDepthStencilAccess() const { return DepthStencilAccess; }
+
+private:
+	FExclusiveDepthStencil DepthStencilAccess;
 };
 
 class FRHISetRenderTargetsInfo : public FRHIResource {};

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "RHIResource.h"
 
 
 class FRenderResource
@@ -19,6 +19,7 @@ public:
 	virtual void ReleaseDynamicRHI() {}
 
 	virtual void ReleaseResource() {}
+	virtual void ReleaseRHI() {};
 protected:
 	bool bInitialized;
 private:

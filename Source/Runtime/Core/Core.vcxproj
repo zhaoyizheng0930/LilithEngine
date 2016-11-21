@@ -169,6 +169,7 @@
     <ClInclude Include="Public\HAL\Thread\ThreadManager.h" />
     <ClInclude Include="Public\HAL\Thread\WindowsEvent.h" />
     <ClInclude Include="Public\HAL\Thread\WindowsRunnableThread.h" />
+    <ClInclude Include="Public\Math\Color.h" />
     <ClInclude Include="Public\Math\LilithMath.h" />
     <ClInclude Include="Public\Template\TypeHash.h" />
     <ClInclude Include="Public\Windows\WindowsApplication.h" />

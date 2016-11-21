@@ -2,10 +2,6 @@
 #include "RHI.h"
 #include "D3D11RHI.h"
 #include "DynamicRHI.h"
-#include "D3D11Resources.h"
-#include "Windows/D3D11StateCache.h"
-#include "D3D11Viewport.h"
-#include "D3D11Util.h"
 
 struct FD3D11Adapter
 {
@@ -381,8 +377,10 @@ protected:
 	int32 MaxBoundShaderResourcesIndex[SF_NumFrequencies];
 	uint32 NumSimultaneousRenderTargets;
 	uint32 NumUAVs;
-	//TRefCountPtr<FD3D11DynamicBuffer> DynamicVB;
-	//TRefCountPtr<FD3D11DynamicBuffer> DynamicIB;
+	//DynamicBuffer
+
+	FD3D11DynamicBuffer* DynamicVB;
+	FD3D11DynamicBuffer* DynamicIB;
 	//CBuffer Dirty
 	FD3D11UniformBuffer* BoundUniformBuffers[SF_NumFrequencies][14];
 	uint16 DirtyUniformBuffers[SF_NumFrequencies];
