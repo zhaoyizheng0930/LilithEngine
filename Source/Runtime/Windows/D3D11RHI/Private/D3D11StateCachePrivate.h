@@ -1,6 +1,7 @@
 #pragma once
 #include "RHIDefinitions.h"
 #include "HAL/Memory/LilithMemory.h"
+#include "RHI.h"
 
 class FD3D11StateCacheBase
 {
@@ -40,6 +41,11 @@ public:
 			Direct3DDeviceIMContext->RSSetState(RasterizerState);
 		}
 	}
+
+	void GetRasterizerState(ID3D11RasterizerState** RasterizerState)
+	{
+		*RasterizerState = CurrentRasterizerState;
+	}
 	//Shader-----------------------------------------------------------------------VertexShader
 	void SetVertexShader(ID3D11VertexShader* VertexShader)
 	{
@@ -49,6 +55,12 @@ public:
 			CurrentVertexShader = VertexShader;
 			Direct3DDeviceIMContext->VSSetShader(VertexShader, nullptr, 0);
 		}
+	}
+
+	void SetVertexShader(ID3D11VertexShader** VertexShader)
+	{
+		//Compare Dirty
+		*VertexShader = CurrentVertexShader;
 	}
 	//Shader------------------------------------------------------------------------HullShader
 	void SetHullSahder(ID3D11HullShader* HullShader)
@@ -60,6 +72,11 @@ public:
 			Direct3DDeviceIMContext->HSSetShader(HullShader, nullptr, 0);
 		}
 	}
+
+	void SetHullSahder(ID3D11HullShader** HullShader)
+	{
+		*HullShader = CurrentHullShader;
+	}
 	//Shader------------------------------------------------------------------------Domain
 	void SetDomainShader(ID3D11DomainShader* DomainShader)
 	{
@@ -69,6 +86,11 @@ public:
 			CurrentDoaminShader = DomainShader;
 			Direct3DDeviceIMContext->DSSetShader(DomainShader , nullptr , 0);
 		}
+	}
+
+	void SetDomainShader(ID3D11DomainShader** DomainShader)
+	{
+		*DomainShader = CurrentDoaminShader;
 	}
 	//Shader------------------------------------------------------------------------Geometry
 	void SetGeometryShader(ID3D11GeometryShader* GeometryShader)
@@ -80,6 +102,11 @@ public:
 			Direct3DDeviceIMContext->GSSetShader(GeometryShader, nullptr, 0);
 		}
 	}
+
+	void SetGeometryShader(ID3D11GeometryShader** GeometryShader)
+	{
+		*GeometryShader = CurrentGeometryShader
+	}
 	//Shader------------------------------------------------------------------------Pixel
 	void SetPixelShader(ID3D11PixelShader* PixelShader)
 	{
@@ -89,6 +116,11 @@ public:
 			CurrentPixelShader = PixelShader;
 			Direct3DDeviceIMContext->PSSetShader(CurrentPixelShader, nullptr, 0);
 		}
+	}
+
+	void GetPixelShader(ID3D11PixelShader** PixelShader)
+	{
+		*PixelShader = CurrentPixelShader;
 	}
 	//Shader------------------------------------------------------------------------Compute
 	void SetComputeShader(ID3D11ComputeShader* ComputeShader)
@@ -100,6 +132,10 @@ public:
 		}
 	}
 
+	void SetComputeShader(ID3D11ComputeShader** ComputeShader)
+	{
+		*ComputeShader = CurrentComputeShader;
+	}
 	//Stream Source--------------------------------------------------------------------------
 	void SetStreamSource(ID3D11Buffer* VertexBuffer ,uint32 StreamIndex , uint32 Stride , uint32 Offset )
 	{
@@ -123,6 +159,10 @@ public:
 		}
 	}
 
+	void SetInputLayout(ID3D11InputLayout** InputeLayout)
+	{
+		*InputeLayout = CurrentInputLayout;
+	}
 	//ConstantBuffer
 	template<EShaderFrequency ShaderFrequency>
 	void SetConstantBuffer(ID3D11Buffer* CanstantBuffer , uint32 SlotIndex)
@@ -134,6 +174,15 @@ public:
 			CBuffer.FirstConstant = 0;
 			CBuffer.NumConstants = D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT;
 			InternalSetSetConstantBuffer<ShaderFrequency>(CanstantBuffer, SlotIndex);
+		}
+	}
+
+	template<EShaderFrequency ShaderFrequency>
+	void GetConstantBuffer(uint32 SlotIndex , uint32 ResourceCount, ID3D11Buffer** CanstantBuffer)
+	{
+		for (uint32 i = 0; i < ResourceCount;i++)
+		{
+			CanstantBuffer[i] = CurrentConstantBuffers[i + SlotIndex].Buffer;
 		}
 	}
 
@@ -167,6 +216,25 @@ public:
 			CurrentNumberOfViewports = 1;
 			Direct3DDeviceIMContext->RSSetViewports(1, &Viewport);
 		}
+	}
+
+	D3D11_VIEWPORT* GetViewports(uint32* Count, D3D11_VIEWPORT *Viewports)
+	{
+		if (Viewports)
+		{
+			uint32 NeedCopyCount = (uint32)*Count;
+			uint32 CopyNumberOfViewport = FMath::Min(NeedCopyCount, CurrentNumberOfViewports);
+			CopyNumberOfViewport = FMath::Min(CopyNumberOfViewport, (uint32)D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE);
+			if (CopyNumberOfViewport > 0)
+			{
+				FMemory::Memcpy(Viewports, Viewports, sizeof(D3D11_VIEWPORT) *CopyNumberOfViewport);
+			}
+			if (NeedCopyCount > CopyNumberOfViewport)
+			{
+				FMemory::Memset(&Viewports[CopyNumberOfViewport], 0, sizeof(D3D11_VIEWPORT) *(NeedCopyCount - CopyNumberOfViewport));
+			}
+		}
+		*Count = CurrentNumberOfViewports;
 	}
 
 	//SRV--------------------------------------------------------------------------

@@ -466,6 +466,7 @@ private:
 	template <class ShaderType> void SetResourcesFromTables(const ShaderType* RESTRICT);
 	//Clear                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 	void ClearAllShaderResources();
+	void ConditionalClearShaderResource(FD3D11BaseShaderResource* Resource);//Clear Resource ref,ALL Shader ref this resource will be clean
 
 	template <EShaderFrequency ShaderFrequency>
 	void ClearShaderResourceViews(FD3D11BaseShaderResource* Resource); //Clear One

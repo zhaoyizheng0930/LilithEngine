@@ -112,6 +112,22 @@ enum ERasterizerCullMode	//光栅化剔除模式，指背面剔除
 
 struct FRasterizerStateInitializerRHI
 {
+	FRasterizerStateInitializerRHI()
+	{
+
+	}
+
+	FRasterizerStateInitializerRHI(ERasterizerFillMode InFillMode , ERasterizerCullMode InCullMode , float InDepthBias , float InSlopeScaleDepthBias , bool bInAllowMSAA , bool bInEnableLineAA)
+		:FillMode(InFillMode),
+		CullMode(InCullMode),
+		DepthBias(InDepthBias),
+		SlopeScaleDepthBias(InSlopeScaleDepthBias),
+		bAllowMSAA(bInAllowMSAA),
+		bEnableLineAA(bInEnableLineAA)
+	{
+
+	}
+
 	ERasterizerFillMode FillMode;
 	ERasterizerCullMode CullMode;
 	float DepthBias;
@@ -152,6 +168,32 @@ enum EStencilOp
 
 struct FDepthStencilStateInitializerRHI
 {
+	FDepthStencilStateInitializerRHI() {}
+
+	FDepthStencilStateInitializerRHI(bool bInEnableDepthWrite, ECompareFunction InDepthTest)
+		:bEnableDepthWrite(bInEnableDepthWrite)
+		, DepthTest(InDepthTest)
+	{}
+
+	FDepthStencilStateInitializerRHI(bool bInEnableDepthWrite , ECompareFunction InDepthTest , 
+		bool bInEnableFrontFaceStencil , ECompareFunction InFrontFaceDepthTest , EStencilOp InFrontFaceStencilFailStencilOp , EStencilOp InFrontFaceDepthFailStencilOp , EStencilOp InFrontFacePassStencilOp,
+		bool bInEnableBackFaceStencil , ECompareFunction InBackFaceDepthTest , EStencilOp InBackFaceStencilFailStencilOp , EStencilOp InBackFaceDepthFailStencilOp , EStencilOp InBackFacePassStencilOp,
+		uint8 InStencilReadMask , uint8 InStencilWriteMask)
+		:bEnableDepthWrite(bInEnableDepthWrite)
+		, DepthTest(InDepthTest)
+		, bEnableFrontFaceStencil(bInEnableFrontFaceStencil)
+		, FrontFaceDepthTest(InFrontFaceDepthTest)
+		, FrontFaceStencilFailStencilOp(InFrontFaceStencilFailStencilOp)
+		, FrontFaceDepthFailStencilOp(InFrontFaceDepthFailStencilOp)
+		, FrontFacePassStencilOp(InFrontFacePassStencilOp)
+		, bEnableBackFaceStencil(bInEnableBackFaceStencil)
+		, BackFaceDepthTest(InBackFaceDepthTest)
+		, BackFaceStencilFailStencilOp(InBackFaceStencilFailStencilOp)
+		, BackFaceDepthFailStencilOp(InBackFaceDepthFailStencilOp)
+		, BackFacePassStencilOp(InBackFacePassStencilOp)
+		, StencilReadMask(InStencilReadMask)
+		, StencilWriteMask(InStencilWriteMask)
+	{}
 	bool bEnableDepthWrite;
 	ECompareFunction DepthTest;
 

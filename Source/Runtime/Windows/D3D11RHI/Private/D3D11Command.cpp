@@ -906,5 +906,138 @@ void FD3D11DynamicRHI::RHIClearMRTImpl(bool bClearColor, int32 NumClearColors, c
 
 	FD3D11BoundRenderTargets BoundedRenderTarget(Direct3DDeviceIMContext);
 
+	//FExclusiveDepthStencil
+	FExclusiveDepthStencil RequestedAccess;
+	RequestedAccess.SetDepthStencilWrite(bClearDepth, bClearStencil);
 
+	D3D11_VIEWPORT* ViewPort;
+	uint32 Count = 1;
+	StateCache.GetViewports(&Count , ViewPort);
+
+	//if Clear Sub Screen
+	bool bUseDrawClear = false;
+	if (ViewPort->TopLeftX > 0 || ViewPort->TopLeftY > 0)
+	{
+		bUseDrawClear = true;
+	}
+	uint32 ScissorRectsCount = 1;
+	D3D11_RECT ScissorRect;
+	Direct3DDeviceIMContext->RSGetScissorRects(&ScissorRectsCount , &ScissorRect);
+	if (ScissorRect.left > 0 || ScissorRect.right <ViewPort->Width || ScissorRect.top > 0 || ScissorRect.bottom < ViewPort->Height)
+	{
+		bUseDrawClear = true;
+	}
+
+	//Confirm RTV if it's a Full Screen
+	if (!bUseDrawClear)
+	{
+		uint32 Width = 0;
+		uint32 Height = 0;
+		if (BoundedRenderTarget.GetRenderTargetView(0))
+		{
+			FRTVDesc RTVDesc = GetRenderTargetViewDesc(BoundedRenderTarget.GetRenderTargetView(0));
+			Width = RTVDesc.Width;
+			Height = RTVDesc.Height;
+		}
+		else if(BoundedRenderTarget.GetDepthStencilView())
+		{
+			ID3D11DepthStencilView* DSV = BoundedRenderTarget.GetDepthStencilView();
+			ID3D11Texture2D* DSVTex;
+			DSV->GetResource((ID3D11Resource**)&DSVTex);
+			D3D11_TEXTURE2D_DESC DSVTexDesc;
+			DSVTex->GetDesc(&DSVTexDesc);
+			Width = DSVTexDesc.Width;
+			Height = DSVTexDesc.Height;
+			DSVTex->Release();
+
+			//ZYZ_TODO:if it's has mipmap.Support it later
+		}
+
+		if (ViewPort->TopLeftX > 0 || ViewPort->TopLeftY > 0 || ViewPort->Height < Height || ViewPort->Width < Width)
+		{
+			bUseDrawClear = true;
+		}
+	}
+
+	if (ForceFullScreen == EForceFullScreenClear::EForce)
+	{
+		bUseDrawClear = false;
+	}
+
+
+	if (bUseDrawClear)//ClearSubScreen
+	{ 
+		if (CurrentDepthTexture)
+		{
+			//clear All texture ref to this depth buffer
+			ConditionalClearShaderResource(CurrentDepthTexture);
+		}
+
+		//Set three State
+		//BlendState
+		FBlendStateInitializerRHI BlendStateInit;
+		BlendStateInit.RenderTargets[0].AlphaBlendOp = BO_Add;
+		BlendStateInit.RenderTargets[0].AlphaSrcBlend = BF_One;
+		BlendStateInit.RenderTargets[0].AlphaDestBlend = BF_Zero;
+		BlendStateInit.RenderTargets[0].ColorBlendOp = BO_Add;
+		BlendStateInit.RenderTargets[0].ColorSrcBlend = BF_One;
+		BlendStateInit.RenderTargets[0].ColorDestBlend = BF_Zero;
+		BlendStateInit.RenderTargets[0].ColorWriteMask = CW_RGBA;
+		FRHIBlendState* BlendState = RHICreateBlendState(BlendStateInit);
+		//RasterizerState
+		FRasterizerStateInitializerRHI RasterizerStateInit(FM_Solid , CM_CCW , 0 , 0 , false , false);
+		FRHIRasterizerState* RasterizerState = RHICreateRasterizerState(RasterizerStateInit);
+		//DepthState
+		FRHIDepthStencilState* DepthStencilState = NULL;
+		FDepthStencilStateInitializerRHI DepthStencilInit;
+		if (bClearDepth && bClearStencil)
+		{
+			FDepthStencilStateInitializerRHI DepthStencilInit(true, CF_Always,
+				true, CF_Always, SO_Replace, SO_Replace, SO_Replace,
+				false, CF_Always, SO_Replace, SO_Replace, SO_Replace,
+				0xff, 0xff);
+			DepthStencilState = RHICreateDepthStencilState(DepthStencilInit);
+		}
+		else if (bClearDepth)
+		{
+			FDepthStencilStateInitializerRHI DepthStencilInit(false, CF_Always);
+			DepthStencilState = RHICreateDepthStencilState(DepthStencilInit);
+		}
+		else if (bClearStencil)
+		{
+			FDepthStencilStateInitializerRHI DepthStencilInit(false, CF_Always,
+				true, CF_Always, SO_Replace, SO_Replace, SO_Replace,
+				false, CF_Always, SO_Replace, SO_Replace, SO_Replace,
+				0xff, 0xff);
+			DepthStencilState = RHICreateDepthStencilState(DepthStencilInit);
+		}
+
+		//CaptureDeviceState
+
+	}
+	else//ClearFullScreen just clear RTV or DSV
+	{
+		//ClearColor
+		if (bClearColor && BoundedRenderTarget.GetNumActiveTargets() > 0)
+		{
+			//Clear All RenderTarget
+			for (int i = 0; i < BoundedRenderTarget.GetNumActiveTargets();i++)
+			{
+				Direct3DDeviceIMContext->ClearRenderTargetView(BoundedRenderTarget.GetRenderTargetView(i), (float*)&ColorArray[i]);
+			}
+		}
+		if ((bClearDepth || bClearStencil) && BoundedRenderTarget.GetDepthStencilView())
+		{
+			uint32 ClearFlag = 0;
+			if (bClearDepth)
+			{
+				ClearFlag |= D3D11_CLEAR_DEPTH;
+			}
+			if (bClearStencil)
+			{
+				ClearFlag |= D3D11_CLEAR_STENCIL;
+			}
+			Direct3DDeviceIMContext->ClearDepthStencilView(BoundedRenderTarget.GetDepthStencilView(), ClearFlag, Depth, Stencil);
+		}
+	}
 }

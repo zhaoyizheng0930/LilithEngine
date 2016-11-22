@@ -354,6 +354,29 @@ public:
 		return -1;
 	}
 
+	inline void SetDepthWrite()
+	{
+		Value = (Type)(ExtractStencil() | DepthWrite);
+	}
+	inline void SetStencilWrite()
+	{
+		Value = (Type)(ExtractDepth() | StencilWrite);
+	}
+
+	inline void SetDepthStencilWrite(bool bDepth, bool bStencil)
+	{
+		Value = DepthNop_StencilNop;
+
+		if (bDepth)
+		{
+			SetDepthWrite();
+		}
+		if (bStencil)
+		{
+			SetStencilWrite();
+		}
+	}
+
 	inline bool IsDepthWrite() const
 	{
 		return ExtractDepth() == DepthWrite;
@@ -362,6 +385,11 @@ private:
 	inline Type ExtractDepth() const
 	{
 		return (Type)(Value & DepthMask);
+	}
+
+	inline Type ExtractStencil() const
+	{
+		return (Type)(Value & StencilMask);
 	}
 
 };

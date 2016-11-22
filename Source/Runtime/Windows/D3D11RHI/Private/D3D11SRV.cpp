@@ -285,3 +285,13 @@ void FD3D11DynamicRHI::ClearAllShaderResources()
 	ClearAllShaderResourcesForFrequency<SF_Geometry>();
 	ClearAllShaderResourcesForFrequency<SF_Compute>();
 }
+
+void FD3D11DynamicRHI::ConditionalClearShaderResource(FD3D11BaseShaderResource* Resource)
+{
+	ClearShaderResourceViews<SF_Vertex>(Resource);
+	ClearShaderResourceViews<SF_Hull>(Resource);
+	ClearShaderResourceViews<SF_Domain>(Resource);
+	ClearShaderResourceViews<SF_Pixel>(Resource);
+	ClearShaderResourceViews<SF_Geometry>(Resource);
+	ClearShaderResourceViews<SF_Compute>(Resource);
+}
