@@ -132,9 +132,9 @@ public:
 
 	virtual void RHIUnLockTextureCubeFace(FRHITextureCube* TextureCube, uint32 FaceIndex, uint32 ArrayIndex, uint32 MipIndex, bool bLockWithinMiptail) final override;
 
-	virtual void RHIUpdateTexture2D(FRHITexture2D* Texture2D, uint32 MipLevel, FUpdateTextureRegion2D& Region2D, uint32 SourcePitch, uint8* SourceData) = 0;
+	virtual void RHIUpdateTexture2D(FRHITexture2D* Texture2D, uint32 MipLevel, FUpdateTextureRegion2D& Region2D, uint32 SourcePitch, uint8* SourceData) final override;
 
-	virtual void RHIUpdateTexture3D(FRHITexture3D* Texture3D, uint32 MipLevel, FUpdateTextureRegion3D& Region3D, uint32 SourceRowPitch, uint32 SourceDepthPitch, uint8* SourceData) = 0;
+	virtual void RHIUpdateTexture3D(FRHITexture3D* Texture3D, uint32 MipLevel, FUpdateTextureRegion3D& Region3D, uint32 SourceRowPitch, uint32 SourceDepthPitch, uint8* SourceData) final override;
 
 	virtual FRHIUnorderedAccessView* RHICreateUnorderedAccessView(FRHITexture* Texture, uint32 MipLevel)  final override;
 
@@ -184,6 +184,19 @@ public:
 
 	//----------------------------------------------------Context--------------------------------------------------------------
 	//-------------------------------------------------------------------------------------------------------------------------
+	virtual void RHISetComputeShader(FRHIComputeShader* ComputerShader) final override;
+
+	virtual void RHIDispatchComputeShader(uint32 ThreadGroupCountX, uint32 ThreadGroupCountY, uint32 ThreadGroupCountZ) final override;
+
+	virtual void RHIDispatchIndirectComputeShader(FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset) final override;
+
+	virtual void RHISetShaderResourceViewParam(FRHIComputeShader* ComputeShader, uint32 SRVIndex, FRHIShaderResourceView* SRV) final override;
+
+	virtual void PushEvent(char* Name, FColor Color) final override;
+
+	virtual void PopEvent() final override;
+
+
 	virtual void RHIFlushComputeShaderCache() final override;
 
 	virtual void RHIAutomaticCacheFlushAfterComputeShader(bool bEnable) final override;
@@ -275,6 +288,10 @@ public:
 	virtual void RHISetUAVParameter(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV)  final override;
 
 	virtual void RHISetUAVParameter(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV, uint32 InitialCount)  final override;
+
+	virtual void RHISetUAVParam(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV)  final override;
+
+	virtual void RHISetUAVParam(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV, uint32 InitalCount)  final override;
 
 	//ResourceBind----------------------------------------------------------------------------------------------SRV
 	virtual void RHISetShaderResourceViewParameter(FRHIVertexShader* VertexShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)  final override;
@@ -459,9 +476,13 @@ private:
 	//Context Private-----------------------------------------------------------------CommitResource
 	void CommitRenderTargetsAndUAVs();
 
-	void CommitGraphicResourceTables();//Uniform Buffer
+	void CommitGraphicResourceTables();//Uniform Buffer ,No Compute Shader Version
 
-	void CommitNonComputeShaderConstants();//Uniform Buffer
+	void CommitComputeShaderResourceTables(FD3D11ComputeShader* ComputeShader);
+	
+	void CommitNonComputeShaderConstants();//Uniform Buffer ,No Compute Shader Version
+
+	void CommitComputeShaderConstants();
 
 	template <class ShaderType> void SetResourcesFromTables(const ShaderType* RESTRICT);
 	//Clear                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

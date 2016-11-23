@@ -56,7 +56,7 @@ void FD3D11DynamicRHI::RHISetBlendState(FRHIBlendState* NewState, const FLinearC
 {
 	FD3D11BlendState* D11BlendState = (FD3D11BlendState*)NewState;
 
-	StateCache.SetBlendState(D11BlendState->Resource , &BlendFactor , 0xffffffff);
+	StateCache.SetBlendState(D11BlendState->Resource , (const float*)&BlendFactor , 0xffffffff);
 }
 
 void FD3D11DynamicRHI::RHISetViewport(uint32 MinX, uint32 MinY, float MinZ, uint32 MaxX, uint32 MaxY, float MaxZ)
@@ -266,6 +266,36 @@ void FD3D11DynamicRHI::RHISetUAVParameter(FRHIComputeShader* ComputeShader, uint
 	Direct3DDeviceIMContext->CSSetUnorderedAccessViews(UAVIndex, 1, &(D11UAV->View), &InitialCount);
 }
 
+void FD3D11DynamicRHI::RHISetUAVParam(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV)
+{
+	FD3D11UnorderedAccessView* D11UAV = (FD3D11UnorderedAccessView*)UAV;
+
+	if (D11UAV)
+	{
+		//ZYZ_TODO:Don't know why
+		//ConditionalClearShaderResource(UAV->Resource);
+
+		D11UAV->Resource->SetDirty(true, 0);
+	}
+	uint32 InitialCount = -1;
+	Direct3DDeviceIMContext->CSSetUnorderedAccessViews(UAVIndex, 1, &(D11UAV->View), &InitialCount);
+}
+
+void FD3D11DynamicRHI::RHISetUAVParam(FRHIComputeShader* ComputeShader, uint32 UAVIndex, FRHIUnorderedAccessView* UAV, uint32 InitalCount)
+{
+	FD3D11UnorderedAccessView* D11UAV = (FD3D11UnorderedAccessView*)UAV;
+
+	if (D11UAV)
+	{
+		//ZYZ_TODO:Don't know why
+		//ConditionalClearShaderResource(UAV->Resource);
+
+		D11UAV->Resource->SetDirty(true, 0);
+	}
+
+	Direct3DDeviceIMContext->CSSetUnorderedAccessViews(UAVIndex, 1, &(D11UAV->View), &InitalCount);
+}
+
 void FD3D11DynamicRHI::RHISetShaderResourceViewParameter(FRHIVertexShader* VertexShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
 {
 	FD3D11ShaderResourceView* D11ShaderResource = (FD3D11ShaderResourceView*)SRV;
@@ -321,6 +351,7 @@ FRTVDesc GetRenderTargetViewDesc(ID3D11RenderTargetView* RenderTargetView)
 	case D3D11_RTV_DIMENSION_TEXTURE2DARRAY:
 	case D3D11_RTV_DIMENSION_TEXTURE2DMS:
 	case D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY:
+	{
 		ID3D11Texture2D* Texture2D = nullptr;
 		RenderTargetView->GetResource((ID3D11Resource**)Texture2D);
 		D3D11_TEXTURE2D_DESC Texture2DDesc;
@@ -333,7 +364,9 @@ FRTVDesc GetRenderTargetViewDesc(ID3D11RenderTargetView* RenderTargetView)
 			MipIndex = RTVDesc.Texture2D.MipSlice;
 		}
 		break;
-	case D3D11_RTV_DIMENSION_TEXTURE3D:break;
+	}
+	case D3D11_RTV_DIMENSION_TEXTURE3D:
+	{
 		ID3D11Texture3D* Texture3D = nullptr;
 		RenderTargetView->GetResource((ID3D11Resource**)Texture3D);
 		D3D11_TEXTURE3D_DESC Texture3DDesc;
@@ -343,6 +376,8 @@ FRTVDesc GetRenderTargetViewDesc(ID3D11RenderTargetView* RenderTargetView)
 		Result.SampleDesc.Count = 1;
 		Result.SampleDesc.Quality = 0;
 		MipIndex = RTVDesc.Texture3D.MipSlice;
+		break;
+	}
 	default:
 		break;
 	}
@@ -358,7 +393,7 @@ void FD3D11DynamicRHI::RHISetRenderTarget(uint32 NumSimulataneousRenderTargets, 
 	FD3D11TextureBase* D11DepthStencilTarget = (FD3D11TextureBase*)(NewDepthStencilTarget->Texture->GetTextureBaseRHI());
 	bool bTargetChanged = false;
 	//ZYZ_TODO: Set the appropriate depth stencil view depending on whether depth writes are enabled or not
-	ID3D11DepthStencilView* DSV;
+	ID3D11DepthStencilView* DSV = NULL;
 	if (D11DepthStencilTarget)
 	{
 		CurrentDSVAccessType = NewDepthStencilTarget->GetDepthStencilAccess();
@@ -479,10 +514,10 @@ void FD3D11DynamicRHI::RHISetRenderTarget(uint32 NumSimulataneousRenderTargets, 
 	}
 	else if (DSV)
 	{
-		ID3D11Texture2D* Texture;
-		DSV->GetResource((ID3D11Resource**)Texture);
+		ID3D11Texture2D* Texture2D = NULL;
+		DSV->GetResource((ID3D11Resource**)Texture2D);
 		D3D11_TEXTURE2D_DESC Texture2DDesc;
-		Texture->GetDesc(&Texture2DDesc);
+		Texture2D->GetDesc(&Texture2DDesc);
 		RHISetViewport(0, 0, 0, Texture2DDesc.Width, Texture2DDesc.Height, 1.0f);
 	}
 }
@@ -911,7 +946,7 @@ void FD3D11DynamicRHI::RHIClearMRTImpl(bool bClearColor, int32 NumClearColors, c
 	FExclusiveDepthStencil RequestedAccess;
 	RequestedAccess.SetDepthStencilWrite(bClearDepth, bClearStencil);
 
-	D3D11_VIEWPORT* ViewPort;
+	D3D11_VIEWPORT* ViewPort = NULL;
 	uint32 Count = 1;
 	StateCache.GetViewports(&Count , ViewPort);
 

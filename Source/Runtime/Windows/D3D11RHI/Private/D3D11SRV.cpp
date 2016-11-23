@@ -200,7 +200,7 @@ void FD3D11DynamicRHI::InternalSetShaderResourceView(FD3D11BaseShaderResource* R
 
 	}
 
-	StateCache.SetSahderResourceView<ShaderFrequency>(SRV, ResourceIndex , SrvType);
+	StateCache.SetShaderResourceView<ShaderFrequency>(SRV, ResourceIndex , SrvType);
 }
 
 template <EShaderFrequency ShaderFrequency>
@@ -271,7 +271,17 @@ void FD3D11DynamicRHI::CommitGraphicResourceTables()
 	}
 }
 
+void FD3D11DynamicRHI::CommitComputeShaderResourceTables(FD3D11ComputeShader* ComputeShader)
+{
+
+}
+
 void FD3D11DynamicRHI::CommitNonComputeShaderConstants()
+{
+
+}
+
+void FD3D11DynamicRHI::CommitComputeShaderConstants()
 {
 
 }

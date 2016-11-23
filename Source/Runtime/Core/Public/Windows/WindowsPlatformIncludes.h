@@ -10,4 +10,4 @@
 #include "WindowsPlatformMath.h"
 
 //RELEASE COM OBJ
-#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } 
+#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }

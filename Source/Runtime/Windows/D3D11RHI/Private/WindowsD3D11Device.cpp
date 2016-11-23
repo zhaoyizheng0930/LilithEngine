@@ -56,7 +56,7 @@ void FindAdaptor(FD3D11Adapter& ChosenAdaptor , DXGI_ADAPTER_DESC& ChosenDescrip
 					if (!FAILED(TempAdapter->GetDesc(&AdapterDesc)))
 					{
 						AdapterDescs.push_back(AdapterDesc);
-						if (!ChosenAdaptor->IsValid())
+						if (!ChosenAdaptor.IsValid())
 						{
 							FD3D11Adapter CurrentAdapter(i, ActualFeatureLevel);
 							ChosenAdaptor = CurrentAdapter;

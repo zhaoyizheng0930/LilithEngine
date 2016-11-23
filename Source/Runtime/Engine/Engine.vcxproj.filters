@@ -16,10 +16,22 @@
     <Filter Include="Classes\Engine">
       <UniqueIdentifier>{14fb9a6e-d547-47dd-b56c-cb378bc144b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Public\Shader">
+      <UniqueIdentifier>{dbb4247f-e939-4b39-bcee-536e888b2ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Shader">
+      <UniqueIdentifier>{48376adf-3fb3-47e6-9ada-db6572a958ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\UnrealEngine.cpp">
       <Filter>Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Shader\GlobalShader.cpp">
+      <Filter>Private\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\Shader\ShaderCompiler.cpp">
+      <Filter>Private\Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="Public\PixelFormat.h">
       <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Shader\GlobalShader.h">
+      <Filter>Public\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Shader\ShaderCompiler.h">
+      <Filter>Public\Shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

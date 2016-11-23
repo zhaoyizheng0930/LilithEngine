@@ -37,6 +37,11 @@ public:
 			A.GeometryShader == GeometryShader;
 	}
 
+	bool operator < (const FBoundShaderStateKey& A) const
+	{
+		return this<&A;
+	}
+
 protected:
 private:
 

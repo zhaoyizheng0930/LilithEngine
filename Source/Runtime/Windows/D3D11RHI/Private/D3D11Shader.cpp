@@ -81,7 +81,7 @@ FRHIPixelShader* FD3D11DynamicRHI::RHICreatePixelShader(const std::vector<uint8>
 
 	FD3D11PixelShader* Shader = new FD3D11PixelShader;
 
-	Direct3DDevice->CreateVertexShader((void*)Code.data(), Code.size(), NULL, &D11Shader);
+	Direct3DDevice->CreatePixelShader((void*)Code.data(), Code.size(), NULL, &D11Shader);
 
 	Shader->Resource = D11Shader;
 
@@ -93,7 +93,7 @@ FRHIBoundShaderState* FD3D11DynamicRHI::RHICreateBoundShaderState(FRHIVertexDecl
 	//TODO:Wait for BoundStateCache
 	FD3D11BoundShaderState* BoundShaderState = new FD3D11BoundShaderState(InVertexDeclaration , InVertexShader , InHullShader , InDomainShader , InGeometryShader , InPixelShader , Direct3DDevice);
 
-	return BoundShaderState
+	return BoundShaderState;
 }
 
 FD3D11BoundShaderState::FD3D11BoundShaderState(FRHIVertexDeclaration* InVertexDeclaration, FRHIVertexShader* InVertexShader, FRHIHullShader* InHullShader, FRHIDomainShader* InDomainShader, FRHIGeometryShader* InGeometryShader, FRHIPixelShader* InPixelShader, ID3D11Device* Direct3DDevice)
@@ -122,5 +122,61 @@ FD3D11BoundShaderState::FD3D11BoundShaderState(FRHIVertexDeclaration* InVertexDe
 	bShaderNeedsGlobalConstantBuffer[SF_Domain] = D11DomainShader?D11DomainShader->bShaderNeedsGlobalConstantBuffer:false;
 	bShaderNeedsGlobalConstantBuffer[SF_Pixel] = D11GeometryShader ?D11GeometryShader->bShaderNeedsGlobalConstantBuffer:false;
 	bShaderNeedsGlobalConstantBuffer[SF_Geometry] = D11PixelShader?D11PixelShader->bShaderNeedsGlobalConstantBuffer:false;
+
+}
+
+void FD3D11DynamicRHI::RHISetComputeShader(FRHIComputeShader* ComputerShader)
+{
+	FD3D11ComputeShader* D11ComputerShader = (FD3D11ComputeShader*)ComputerShader;
+
+	if (CurrentComputeShader != ComputerShader)
+	{
+		CurrentComputeShader = D11ComputerShader;
+	}
+}
+
+void FD3D11DynamicRHI::RHIDispatchComputeShader(uint32 ThreadGroupCountX, uint32 ThreadGroupCountY, uint32 ThreadGroupCountZ)
+{
+	FD3D11ComputeShader* ComputeShader = CurrentComputeShader;
+
+	StateCache.SetComputeShader(ComputeShader->Resource);
+	//commit constants
+	CommitComputeShaderConstants();
+	//commit resource
+	CommitComputeShaderResourceTables(ComputeShader);
+
+	Direct3DDeviceIMContext->Dispatch(ThreadGroupCountX, ThreadGroupCountY, ThreadGroupCountZ);
+
+	StateCache.SetComputeShader((ID3D11ComputeShader*)nullptr);
+}
+
+void FD3D11DynamicRHI::RHIDispatchIndirectComputeShader(FRHIVertexBuffer* ArgumentBuffer, uint32 ArgumentOffset)
+{
+	FD3D11ComputeShader* ComputeShader = CurrentComputeShader;
+	FD3D11VertexBuffer* D11VertexBuffer = (FD3D11VertexBuffer*)ArgumentBuffer;
+
+	StateCache.SetComputeShader(ComputeShader->Resource);
+	//commit constants
+	CommitComputeShaderConstants();
+	//commit resource
+	CommitComputeShaderResourceTables(ComputeShader);
+
+	Direct3DDeviceIMContext->DispatchIndirect(D11VertexBuffer->Resource , ArgumentOffset);
+
+	StateCache.SetComputeShader((ID3D11ComputeShader*)nullptr);
+}
+
+void FD3D11DynamicRHI::RHISetShaderResourceViewParam(FRHIComputeShader* ComputeShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
+{
+
+}
+
+void FD3D11DynamicRHI::PushEvent(char* Name, FColor Color)
+{
+
+}
+
+void FD3D11DynamicRHI::PopEvent()
+{
 
 }

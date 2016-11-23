@@ -105,7 +105,7 @@ public:
 
 	void GetGeometryShader(ID3D11GeometryShader** GeometryShader)
 	{
-		*GeometryShader = CurrentGeometryShader
+		*GeometryShader = CurrentGeometryShader;
 	}
 	//Shader------------------------------------------------------------------------Pixel
 	void SetPixelShader(ID3D11PixelShader* PixelShader)
@@ -167,7 +167,7 @@ public:
 	template<EShaderFrequency ShaderFrequency>
 	void SetConstantBuffer(ID3D11Buffer* CanstantBuffer , uint32 SlotIndex)
 	{
-		FD3D11ConstantBufferState& CBuffer = CurrentConstantBuffers[ShaderFrequency][SlotIndex].Buffer
+		FD3D11ConstantBufferState& CBuffer = CurrentConstantBuffers[ShaderFrequency][SlotIndex];
 		if (CBuffer.Buffer != CanstantBuffer || CBuffer.FirstConstant != 0 || CBuffer.NumConstants != D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT)
 		{
 			CBuffer.Buffer = CanstantBuffer;
@@ -182,7 +182,7 @@ public:
 	{
 		for (uint32 i = 0; i < ResourceCount;i++)
 		{
-			CanstantBuffer[i] = CurrentConstantBuffers[i + SlotIndex].Buffer;
+			CanstantBuffer[i] = CurrentConstantBuffers[ShaderFrequency][i + SlotIndex].Buffer;
 		}
 	}
 
@@ -218,7 +218,7 @@ public:
 		}
 	}
 
-	D3D11_VIEWPORT* GetViewports(uint32* Count, D3D11_VIEWPORT *Viewports)
+	void GetViewports(uint32* Count, D3D11_VIEWPORT *Viewports)
 	{
 		if (Viewports)
 		{
@@ -249,7 +249,7 @@ public:
 	{
 		for (int i = 0; i < NumResources;i++)
 		{
-			SRV[i] = CurrentShaderResourceViews[StartResourceIndex + i];
+			SRV[i] = CurrentShaderResourceViews[ShaderFrequency][StartResourceIndex + i];
 		}
 	}
 	//State--------------------------------------------------------------------------Sampler
@@ -473,7 +473,7 @@ private:
 		//Compare Dirty
 		switch (ShaderFrequency)
 		{
-		case SF_Vertex:		Direct3DDeviceIMContext->VSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer) break;
+		case SF_Vertex:		Direct3DDeviceIMContext->VSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
 		case SF_Hull:		Direct3DDeviceIMContext->HSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
 		case SF_Domain:		Direct3DDeviceIMContext->DSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;
 		case SF_Geometry:	Direct3DDeviceIMContext->GSSetConstantBuffers(SlotIndex, 1, &ConstantBuffer); break;

@@ -6,6 +6,6 @@
 #include "D3D11Util.h"
 #include "D3D11Viewport.h"
 #include "D3D11Resources.h"
-#include "Windows/D3D11StateCache.h"
+#include "StateCache/D3D11StateCache.h"
 #include "D3D11ConstantBuffer.h"
 

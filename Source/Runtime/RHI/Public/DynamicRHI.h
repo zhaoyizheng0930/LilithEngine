@@ -40,7 +40,7 @@ public:
 	virtual FRHIDomainShader* RHICreateDomainShader(const std::vector<uint8>& Code) = 0;
 
 	virtual FRHIGeometryShader* RHICreateGeometryShader(const std::vector<uint8>& Code) = 0;
-	virtual FRHIGeometryShader* RHICreateGeometryShaderWithStreamOutput() {} //Todo:Later
+	virtual FRHIGeometryShader* RHICreateGeometryShaderWithStreamOutput() { return NULL; } //Todo:Later
 
 	virtual FRHIComputeShader* RHICreateComputeShader(const std::vector<uint8>& Code) = 0;
 

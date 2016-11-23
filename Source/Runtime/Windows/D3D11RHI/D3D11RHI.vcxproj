@@ -152,9 +152,7 @@
     <ClCompile Include="Private\WindowsD3D11Device.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Private\D3D11StateCachePrivate.h" />
     <ClInclude Include="Private\WindowsD3D11DynamicRHI.h" />
-    <ClInclude Include="Private\Windows\D3D11StateCache.h" />
     <ClInclude Include="Public\D3D11ConstantBuffer.h" />
     <ClInclude Include="Public\D3D11Definitions.h" />
     <ClInclude Include="Public\D3D11DeviceStateCapture.h" />
@@ -165,6 +163,8 @@
     <ClInclude Include="Public\D3D11State.h" />
     <ClInclude Include="Public\D3D11Util.h" />
     <ClInclude Include="Public\D3D11Viewport.h" />
+    <ClInclude Include="Public\StateCache\D3D11StateCache.h" />
+    <ClInclude Include="Public\StateCache\D3D11StateCachePrivate.h" />
     <ClInclude Include="Public\WindowsD3D11Device.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
