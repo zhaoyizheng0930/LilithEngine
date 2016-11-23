@@ -2,7 +2,7 @@
 #include "D3D11DeviceStateCapture.h"
 
 
-void D3D11DeviceStateCapture::ReleaseResource()
+void FD3D11DeviceStateCapture::ReleaseResource()
 {
 	SAFE_RELEASE(OldVertexShader);
 	SAFE_RELEASE(OldPixelShader);

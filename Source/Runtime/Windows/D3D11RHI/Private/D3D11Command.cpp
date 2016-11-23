@@ -1,6 +1,7 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
 #include "RHIUtilities.h"
+#include "D3D11DeviceStateCapture.h"
 
 void FD3D11DynamicRHI::RHISubmitCommandsHint()
 {
@@ -964,7 +965,7 @@ void FD3D11DynamicRHI::RHIClearMRTImpl(bool bClearColor, int32 NumClearColors, c
 		bUseDrawClear = false;
 	}
 
-
+	//ZYZ_TODO:Support SubScreen Clear later
 	if (bUseDrawClear)//ClearSubScreen
 	{ 
 		if (CurrentDepthTexture)
@@ -1013,6 +1014,20 @@ void FD3D11DynamicRHI::RHIClearMRTImpl(bool bClearColor, int32 NumClearColors, c
 		}
 
 		//CaptureDeviceState
+		FD3D11DeviceStateCapture DeviceStateCapture(GetContext());
+		DeviceStateCapture.CaptureDeviceState(&StateCache,BoundShaderStateHistory);
+
+		//SetNewState
+		float BF[4] = { 0,0,0,0 };
+		StateCache.SetBlendState(((FD3D11BlendState*)BlendState)->Resource, BF, 0xffffffff);
+		StateCache.SetRasterizerState(((FD3D11RasterizerState*)RasterizerState)->Resource);
+		StateCache.SetDepthStencilState(((FD3D11DepthStencilState*)DepthStencilState)->Resource, Stencil);
+
+		//ZYZ_tODO:Don't know why.OriginalResourceState.ClearCurrentVertexResources(StateCache);
+
+		//GetOneColorShader:VS PS
+		//SetMRT
+		//Draw
 
 	}
 	else//ClearFullScreen just clear RTV or DSV

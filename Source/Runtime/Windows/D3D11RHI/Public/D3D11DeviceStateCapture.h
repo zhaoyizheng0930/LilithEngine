@@ -1,10 +1,10 @@
 #pragma once
 #include "D3D11RHI.h"
 
-class D3D11DeviceStateCapture
+class FD3D11DeviceStateCapture
 {
 public:
-	D3D11DeviceStateCapture(FD3D11DeviceContext* InD3D11Context)
+	FD3D11DeviceStateCapture(FD3D11DeviceContext* InD3D11Context)
 		:D3D11Context(InD3D11Context)
 	{
 
@@ -14,7 +14,41 @@ public:
 
 	void CaptureDeviceState(FD3D11StateCache* InStateCache, TBoundShaderStateHistory<1000>& BoundShaderStateHistory)
 	{
-		InStateCache->get
+		InStateCache->GetConstantBuffer<SF_Vertex>(0, D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT, &OldVertexConstantBuffer[0]);
+		InStateCache->GetConstantBuffer<SF_Pixel>(0, D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT, &OldPixelConstantBuffer[0]);
+		InStateCache->GetShaderResourceView<SF_Vertex>(0 , D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT , &OldSRV[0]);
+		InStateCache->GetPixelShader(&OldPixelShader);
+		InStateCache->GetVertexShader(&OldVertexShader);
+
+		InStateCache->GetInputLayout(&OldInputLayout);
+
+		InStateCache->GetBlendState(&OldBlendState , OldBlendFactor , &OldSampleMask);
+		InStateCache->GetDepthStencilState(&OldDepthStencilState , &OldStencilRef);
+		InStateCache->GetRasterizerState(&OldRasterizerState);
+
+		OldBoundShaderState = BoundShaderStateHistory.GetLast();
+	}
+
+	void RestoreDeviceState(FD3D11StateCache& InStateCache, TBoundShaderStateHistory<10000>& BSSHistory)
+	{
+		for (int i = 0; i < D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;i++)
+		{
+			InStateCache.SetConstantBuffer<SF_Vertex>(OldVertexConstantBuffer[i] , i);
+			InStateCache.SetConstantBuffer<SF_Pixel>(OldPixelConstantBuffer[i], i);
+		}
+
+		for (int i = 0; i < D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;i++)
+		{
+			InStateCache.SetShaderResourceView<SF_Vertex>(OldSRV[i] , i);
+		}
+
+		InStateCache.SetPixelShader(OldPixelShader);
+		InStateCache.SetVertexShader(OldVertexShader);
+		InStateCache.SetInputLayout(OldInputLayout);
+
+		InStateCache.SetBlendState(OldBlendState, OldBlendFactor, OldSampleMask);
+		InStateCache.SetDepthStencilState(OldDepthStencilState, OldStencilRef);
+		InStateCache.SetRasterizerState(OldRasterizerState);
 	}
 protected:
 private:
@@ -33,7 +67,12 @@ private:
 
 	//Three State
 	ID3D11BlendState* OldBlendState;
+	float OldBlendFactor[4];
+	uint32 OldSampleMask;
+
 	ID3D11DepthStencilState* OldDepthStencilState;
+	uint32 OldStencilRef;
+
 	ID3D11RasterizerState* OldRasterizerState;
 
 	//SRV

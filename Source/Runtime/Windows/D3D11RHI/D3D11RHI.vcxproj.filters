@@ -75,6 +75,9 @@
     <ClCompile Include="Private\D3D11RHI.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\D3D11DeviceStateCapture.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\D3D11RHIPCH.h">
@@ -114,6 +117,9 @@
       <Filter>Public</Filter>
     </ClInclude>
     <ClInclude Include="Public\D3D11Viewport.h">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\D3D11DeviceStateCapture.h">
       <Filter>Public</Filter>
     </ClInclude>
   </ItemGroup>

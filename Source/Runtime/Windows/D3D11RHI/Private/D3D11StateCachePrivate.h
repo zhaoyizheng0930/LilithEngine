@@ -57,7 +57,7 @@ public:
 		}
 	}
 
-	void SetVertexShader(ID3D11VertexShader** VertexShader)
+	void GetVertexShader(ID3D11VertexShader** VertexShader)
 	{
 		//Compare Dirty
 		*VertexShader = CurrentVertexShader;
@@ -73,7 +73,7 @@ public:
 		}
 	}
 
-	void SetHullSahder(ID3D11HullShader** HullShader)
+	void GetHullSahder(ID3D11HullShader** HullShader)
 	{
 		*HullShader = CurrentHullShader;
 	}
@@ -88,7 +88,7 @@ public:
 		}
 	}
 
-	void SetDomainShader(ID3D11DomainShader** DomainShader)
+	void GetDomainShader(ID3D11DomainShader** DomainShader)
 	{
 		*DomainShader = CurrentDoaminShader;
 	}
@@ -103,7 +103,7 @@ public:
 		}
 	}
 
-	void SetGeometryShader(ID3D11GeometryShader** GeometryShader)
+	void GetGeometryShader(ID3D11GeometryShader** GeometryShader)
 	{
 		*GeometryShader = CurrentGeometryShader
 	}
@@ -159,7 +159,7 @@ public:
 		}
 	}
 
-	void SetInputLayout(ID3D11InputLayout** InputeLayout)
+	void GetInputLayout(ID3D11InputLayout** InputeLayout)
 	{
 		*InputeLayout = CurrentInputLayout;
 	}
@@ -239,11 +239,19 @@ public:
 
 	//SRV--------------------------------------------------------------------------
 	template <EShaderFrequency ShaderFrequency>
-	void SetSahderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex, ESRV_Type SrvType = SRV_Unknown)
+	void SetShaderResourceView(ID3D11ShaderResourceView* SRV, uint32 ResourceIndex, ESRV_Type SrvType = SRV_Unknown)
 	{
 		InternalSetShaderResourceView<ShaderFrequency>(SRV , ResourceIndex, nullptr);
 	}
 
+	template <EShaderFrequency ShaderFrequency>
+	void GetShaderResourceView(uint32 StartResourceIndex, uint32 NumResources, ID3D11ShaderResourceView** SRV)
+	{
+		for (int i = 0; i < NumResources;i++)
+		{
+			SRV[i] = CurrentShaderResourceViews[StartResourceIndex + i];
+		}
+	}
 	//State--------------------------------------------------------------------------Sampler
 	template <EShaderFrequency ShaderFrequency>
 	void SetSamplerState(ID3D11SamplerState* SamplerState , uint32 SamplerIndex)
@@ -262,6 +270,12 @@ public:
 		}
 	}
 
+	void GetDepthStencilState(ID3D11DepthStencilState** DepthStencilState , uint32* StencilRef)
+	{
+		*DepthStencilState = CurrentDepthStencilState;
+		*StencilRef = CurrentReferenceStencil;
+	}
+
 	//State---------------------------------------------------------------------------BlendState
 	void SetBlendState(ID3D11BlendState* BlendState , const float Color[4] , uint32 SampleMask)
 	{
@@ -272,6 +286,13 @@ public:
 			FMemory::Memcpy(CurrentBlendFactor, Color, sizeof(CurrentBlendFactor));
 			Direct3DDeviceIMContext->OMSetBlendState(BlendState, Color, SampleMask);
 		}
+	}
+
+	void GetBlendState(ID3D11BlendState** BlendState, const float Color[4], uint32* SampleMask)
+	{
+		*BlendState = CurrentBlendState;
+		FMemory::Memcmp(Color, CurrentBlendFactor, sizeof(CurrentBlendFactor));
+		*SampleMask = CurrentBlendSampleMask;
 	}
 protected:
 	ID3D11DeviceContext* Direct3DDeviceIMContext;
