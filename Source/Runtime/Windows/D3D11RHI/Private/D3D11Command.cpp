@@ -650,19 +650,19 @@ void SetResource(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, uint3
 template <EShaderFrequency ShaderFrequency>
 inline int32 SetShaderResourcesFromBuffer_Surface(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
 {
-
+	//ZYZ_TODO:ShaderResource Bound Support Later;
 }
 
 template <EShaderFrequency ShaderFrequency>
 inline int32 SetShaderResourcesFromBuffer_SRV(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
 {
-
+	//ZYZ_TODO:ShaderResource Bound Support Later;
 }
 
 template <EShaderFrequency ShaderFrequency>
 inline int32 SetShaderResourcesFromBuffer_Sampler(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
 {
-
+	//ZYZ_TODO:ShaderResource Bound Support Later;
 }
 
 static D3D11_PRIMITIVE_TOPOLOGY GetD3D11PrimitiveType(uint32 PrimitiveType, bool bUsingTessellation)

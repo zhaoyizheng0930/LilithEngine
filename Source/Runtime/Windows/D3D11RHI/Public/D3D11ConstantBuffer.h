@@ -1,5 +1,24 @@
 #pragma once
 #include "RenderResource.h"
+#include "RHI.h"
+
+//ZYZ_TODO:move it later
+template <typename T>
+inline T Align(const T Ptr, int32 Alignment)
+{
+	return (T)(((int32)Ptr + Alignment - 1) & ~(Alignment - 1));
+}
+
+#define MAX_GLOBAL_CONSTANT_BUFFER_SIZE		4096
+
+enum ED3D11ShaderOffsetBuffer
+{
+	/** Default constant buffer. */
+	GLOBAL_CONSTANT_BUFFER_INDEX = 0,
+	MAX_CONSTANT_BUFFER_SLOTS
+};
+
+extern const uint32 GConstantBufferSizes[MAX_CONSTANT_BUFFER_SLOTS];
 
 class FD3D11ConstantBuffer : public FRenderResource
 {
@@ -38,9 +57,12 @@ public:
 	}
 protected:
 	FD3D11DynamicRHI* D3DRHI;
+
 	uint32 MaxSize;
 	uint8* ShadowData;
 
 	uint32 CurrentUpdateSize;
+
+	uint32 TotalUpdateSize;
 private:
 };

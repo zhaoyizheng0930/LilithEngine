@@ -94,7 +94,8 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>RenderCorePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\Engine\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\Engine\Public;$(SolutionDir)/../Source\Runtime\RHI\Public</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,7 +123,8 @@
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>RenderCorePCH.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Core\Public</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../Source\Runtime\RenderCore\Public;$(SolutionDir)/../Source\Runtime\Core\Public;$(SolutionDir)/../Source\Runtime\Engine\Public;$(SolutionDir)/../Source\Runtime\RHI\Public</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

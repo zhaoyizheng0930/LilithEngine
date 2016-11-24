@@ -168,7 +168,11 @@ void FD3D11DynamicRHI::RHIDispatchIndirectComputeShader(FRHIVertexBuffer* Argume
 
 void FD3D11DynamicRHI::RHISetShaderResourceViewParam(FRHIComputeShader* ComputeShader, uint32 SRVIndex, FRHIShaderResourceView* SRV)
 {
+	FD3D11ShaderResourceView* D3DSRV = (FD3D11ShaderResourceView*)SRV;
 
+	FD3D11ComputeShader* D11ComputeShader = (FD3D11ComputeShader*)ComputeShader;
+
+	SetShaderResourceView<SF_Compute>(D3DSRV->Resource, D3DSRV->View, SRVIndex, "");
 }
 
 void FD3D11DynamicRHI::PushEvent(char* Name, FColor Color)

@@ -2,7 +2,7 @@
 #include "../Core.h"
 
 
-uint32 HashCombine(uint32 A, uint32 C)
+inline uint32 HashCombine(uint32 A, uint32 C)
 {
 	uint32 B = 0x9e3779b9;
 	A += B;
@@ -20,7 +20,7 @@ uint32 HashCombine(uint32 A, uint32 C)
 	return C;
 }
 
-uint32 PointerHash(const void* Key, uint32 c = 0)
+inline uint32 PointerHash(const void* Key, uint32 c = 0)
 {
 	auto PtrInt = reinterpret_cast<uint32>(Key) >> 4;
 

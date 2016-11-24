@@ -19,6 +19,12 @@
     <Filter Include="Public\StateCache">
       <UniqueIdentifier>{d898c70b-7aa7-4202-9216-57a00b426c9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Public\Windows">
+      <UniqueIdentifier>{67452eff-a44b-4e1a-8768-f5143dd2b942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Private\Windows">
+      <UniqueIdentifier>{69415dbb-db0b-4e93-8547-3d4272a2ed37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Private\WindowsD3D11Device.cpp">
@@ -78,6 +84,12 @@
     <ClCompile Include="Private\D3D11DeviceStateCapture.cpp">
       <Filter>Private</Filter>
     </ClCompile>
+    <ClCompile Include="Private\Windows\WindowsD3D11ConstantBuffer.cpp">
+      <Filter>Private\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Private\D3D11ConstantBuffer.cpp">
+      <Filter>Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Public\D3D11RHIPCH.h">
@@ -121,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Public\StateCache\D3D11StateCachePrivate.h">
       <Filter>Public\StateCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Public\Windows\WindowsD3D11ConstantBuffer.h">
+      <Filter>Public\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

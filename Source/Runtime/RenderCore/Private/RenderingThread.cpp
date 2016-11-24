@@ -4,7 +4,7 @@
 
 bool GIsThreadedRendering = false;
 
-bool GUseThreadedRendering = false;
+//bool GUseThreadedRendering = false;
 
 bool GUseRHIThread = false;
 

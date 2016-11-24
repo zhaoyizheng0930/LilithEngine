@@ -136,6 +136,7 @@
     <ClCompile Include="Private\Buffer\D3D11UniformBuffer.cpp" />
     <ClCompile Include="Private\Buffer\D3D11VertexBuffer.cpp" />
     <ClCompile Include="Private\D3D11Command.cpp" />
+    <ClCompile Include="Private\D3D11ConstantBuffer.cpp" />
     <ClCompile Include="Private\D3D11Device.cpp" />
     <ClCompile Include="Private\D3D11DeviceStateCapture.cpp" />
     <ClCompile Include="Private\D3D11Query.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Private\D3D11VertexDeclaration.cpp" />
     <ClCompile Include="Private\D3D11Viewport.cpp" />
     <ClCompile Include="Private\WindowsD3D11Device.cpp" />
+    <ClCompile Include="Private\Windows\WindowsD3D11ConstantBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Private\WindowsD3D11DynamicRHI.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="Public\StateCache\D3D11StateCache.h" />
     <ClInclude Include="Public\StateCache\D3D11StateCachePrivate.h" />
     <ClInclude Include="Public\WindowsD3D11Device.h" />
+    <ClInclude Include="Public\Windows\WindowsD3D11ConstantBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

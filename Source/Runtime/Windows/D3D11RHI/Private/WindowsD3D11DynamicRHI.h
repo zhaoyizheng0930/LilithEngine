@@ -426,6 +426,8 @@ protected:
 	/** Global D3D11 lock list */
 	std::map<FD3D11LockedKey, FD3D11LockedData> OutstandingLocks;
 
+	bool bDiscardSharedConstants;
+	bool bUsingTessellation;
 	std::vector<FD3D11ConstantBuffer*> VSConstantBuffers;
 	std::vector<FD3D11ConstantBuffer*> HSConstantBuffers;
 	std::vector<FD3D11ConstantBuffer*> DSConstantBuffers;
@@ -485,6 +487,7 @@ private:
 	void CommitComputeShaderConstants();
 
 	template <class ShaderType> void SetResourcesFromTables(const ShaderType* RESTRICT);
+
 	//Clear                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 	void ClearAllShaderResources();
 	void ConditionalClearShaderResource(FD3D11BaseShaderResource* Resource);//Clear Resource ref,ALL Shader ref this resource will be clean

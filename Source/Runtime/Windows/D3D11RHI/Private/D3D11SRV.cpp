@@ -1,6 +1,7 @@
 #include "D3D11RHIPCH.h"
 #include "WindowsD3D11DynamicRHI.h"
 #include "RenderUtils.h"
+#include "Windows/WindowsD3D11ConstantBuffer.h"
 
 FRHIShaderResourceView* FD3D11DynamicRHI::RHICreateShaderResourceView(FRHIStructureBuffer* StructBuffer)
 {
@@ -249,41 +250,94 @@ void FD3D11DynamicRHI::CommitGraphicResourceTables()
 {
 	FD3D11BoundShaderState* CurrentBoundShaderState = (FD3D11BoundShaderState*)BoundShaderStateHistory.GetLast();
 
-	if (CurrentBoundShaderState->VertexShader)
+	if (auto* Shader = CurrentBoundShaderState->GetVertexShader())
 	{
-		SetResourcesFromTables(CurrentBoundShaderState->GetVertexShader());
+		SetResourcesFromTables(Shader);
 	}
-	if (CurrentBoundShaderState->PixelShader)
+	if (auto* Shader = CurrentBoundShaderState->GetPixelShader())
 	{
-		SetResourcesFromTables(CurrentBoundShaderState->GetPixelShader());
+		SetResourcesFromTables(Shader);
 	}
-	if (CurrentBoundShaderState->DomainShader)
+	if (auto* Shader = CurrentBoundShaderState->GetDomainShader())
 	{
-		SetResourcesFromTables(CurrentBoundShaderState->GetDomainShader());
+		SetResourcesFromTables(Shader);
 	}
-	if (CurrentBoundShaderState->HullShader)
+	if (auto* Shader = CurrentBoundShaderState->GetHullShader())
 	{
-		SetResourcesFromTables(CurrentBoundShaderState->GetHullShader());
+		SetResourcesFromTables(Shader);
 	}
-	if (CurrentBoundShaderState->GeometryShader)
+	if (auto* Shader = CurrentBoundShaderState->GetGeometryShader())
 	{
-		SetResourcesFromTables(CurrentBoundShaderState->GetGeometryShader());
+		SetResourcesFromTables(Shader);
 	}
 }
 
 void FD3D11DynamicRHI::CommitComputeShaderResourceTables(FD3D11ComputeShader* ComputeShader)
 {
-
+	SetResourcesFromTables(ComputeShader);
 }
 
 void FD3D11DynamicRHI::CommitNonComputeShaderConstants()
 {
+	FD3D11BoundShaderState* D11BoundShaderState = (FD3D11BoundShaderState*)BoundShaderStateHistory.GetLast();
 
+	if (D11BoundShaderState->bShaderNeedsGlobalConstantBuffer[SF_Vertex])
+	{
+		for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;)
+		{
+			CommitConstants<SF_Vertex>(VSConstantBuffers[i] , &StateCache ,i,bDiscardSharedConstants);
+		}
+	}
+
+	if (bUsingTessellation)
+	{
+		if (D11BoundShaderState->bShaderNeedsGlobalConstantBuffer[SF_Hull])
+		{
+			for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;)
+			{
+				CommitConstants<SF_Hull>(HSConstantBuffers[i], &StateCache, i, bDiscardSharedConstants);
+			}
+		}
+
+		if (D11BoundShaderState->bShaderNeedsGlobalConstantBuffer[SF_Domain])
+		{
+			for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;)
+			{
+				CommitConstants<SF_Domain>(DSConstantBuffers[i], &StateCache, i, bDiscardSharedConstants);
+			}
+		}
+	}
+
+	if (D11BoundShaderState->bShaderNeedsGlobalConstantBuffer[SF_Geometry])
+	{
+		for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;)
+		{
+			CommitConstants<SF_Geometry>(GSConstantBuffers[i], &StateCache, i, bDiscardSharedConstants);
+		}
+	}
+
+	if (D11BoundShaderState->bShaderNeedsGlobalConstantBuffer[SF_Pixel])
+	{
+		for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;)
+		{
+			CommitConstants<SF_Pixel>(PSConstantBuffers[i], &StateCache, i, bDiscardSharedConstants);
+		}
+	}
+
+	bDiscardSharedConstants = false;
 }
 
 void FD3D11DynamicRHI::CommitComputeShaderConstants()
 {
+	FD3D11BoundShaderState* D11BoundShaderState = (FD3D11BoundShaderState*)BoundShaderStateHistory.GetLast();
 
+	if (D11BoundShaderState->bShaderNeedsGlobalConstantBuffer[SF_Compute])
+	{
+		for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;)
+		{
+			CommitConstants<SF_Compute>(CSConstantBuffers[i], &StateCache,i , bDiscardSharedConstants );
+		}
+	}
 }
 
 void FD3D11DynamicRHI::ClearAllShaderResources()

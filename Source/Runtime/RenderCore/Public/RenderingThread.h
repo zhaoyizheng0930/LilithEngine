@@ -2,7 +2,7 @@
 
 extern bool GIsThreadedRendering;
 
-extern bool GUseThreadedRendering;
+//extern bool GUseThreadedRendering;
 
 extern bool GUseRHIThread;
 

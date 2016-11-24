@@ -3,6 +3,9 @@
 #include "RHI.h"
 #include "WindowsD3D11DynamicRHI.h"
 #include "RenderUtils.h"
+#include "Windows/WindowsD3D11ConstantBuffer.h"
+
+int64 GTexturePoolSize = 0 * 1024 * 1024;
 
 void SafeCreateDXGIFactory(IDXGIFactory1** DXGIFactory1)
 {
@@ -95,8 +98,6 @@ FD3D11DynamicRHI::FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LE
 	NumSimultaneousRenderTargets(0),
 	NumUAVs(0)
 {
-	GTexturePoolSize = 0;
-
 	//Init PixelFormat
 	GPixelFormats[PF_Unknown].PlatformFormat = DXGI_FORMAT_UNKNOWN;
 	GPixelFormats[PF_A32B32G32R32F].PlatformFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -171,6 +172,8 @@ FD3D11DynamicRHI::FD3D11DynamicRHI(IDXGIFactory1* InDXGIFactory1, D3D_FEATURE_LE
 	uint32 DynamicIBSizes[] = { 128,1024,64 * 1024,1024 * 1024,0 };
 	DynamicIB = new FD3D11DynamicBuffer(this , D3D11_BIND_INDEX_BUFFER , DynamicIBSizes);
 
+	bDiscardSharedConstants = false;
+	bUsingTessellation = false;
 }
 
 FD3D11DynamicRHI::~FD3D11DynamicRHI()
@@ -274,7 +277,31 @@ void FD3D11DynamicRHI::SetupAfterDeviceCreation()
 
 void FD3D11DynamicRHI::InitConstantBuffers()
 {
+	//Init ConstantBuffers
+	bool bDiscardSharedConstants;
+	bool bUsingTessellation;
+	for (int i = 0; i < MAX_CONSTANT_BUFFER_SLOTS;i++)
+	{
+		uint32 SubBuffers = 1;
+		if (i == GLOBAL_CONSTANT_BUFFER_INDEX)
+		{
+			SubBuffers = 5;
+		}
 
+		FD3D11ConstantBuffer* CVBuffer = new FWinD3D11ConstantBuffer(this, GConstantBufferSizes[i], SubBuffers);
+		VSConstantBuffers.push_back(CVBuffer);
+		FD3D11ConstantBuffer* CPBuffer = new FWinD3D11ConstantBuffer(this, GConstantBufferSizes[i], SubBuffers);
+		PSConstantBuffers.push_back(CPBuffer);
+
+		FD3D11ConstantBuffer* CHBuffer = new FWinD3D11ConstantBuffer(this, GConstantBufferSizes[i]);
+		HSConstantBuffers.push_back(CHBuffer);
+		FD3D11ConstantBuffer* CDBuffer = new FWinD3D11ConstantBuffer(this, GConstantBufferSizes[i]);
+		DSConstantBuffers.push_back(CDBuffer);
+		FD3D11ConstantBuffer* CGBuffer = new FWinD3D11ConstantBuffer(this, GConstantBufferSizes[i]);
+		GSConstantBuffers.push_back(CGBuffer);
+		FD3D11ConstantBuffer* CCGBuffer = new FWinD3D11ConstantBuffer(this, GConstantBufferSizes[i]);
+		CSConstantBuffers.push_back(CCGBuffer);
+	}
 }
 
 void FD3D11DynamicRHI::RHIAutomaticCacheFlushAfterComputeShader(bool bEnable)
