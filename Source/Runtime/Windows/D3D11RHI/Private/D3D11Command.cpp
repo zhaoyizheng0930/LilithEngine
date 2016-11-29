@@ -617,24 +617,6 @@ void FD3D11DynamicRHI::RHISetShaderParameter(FRHIPixelShader* PixelShader, uint3
 	PSConstantBuffers[BufferIndex]->UpdateConstant((const uint8*)NewValue, BaseIndex, NumBytes);
 }
 
-template <class ShaderType>
-void FD3D11DynamicRHI::SetResourcesFromTables(const ShaderType* Shader)
-{
-	uint32 DirtyBits = Shader->ShaderResourceTable.ResourceTableBits & DirtyUniformBuffers[ShaderType::StaticFrequency];
-
-	while (DirtyBits)
-	{
-		const uint32 LowestBitMask = (DirtyBits)& (-(int32)DirtyBits);
-		const int32 BufferIndex = FMath::FloorLog2(LowestBitMask);
-		DirtyBits ^= LowestBitMask;
-		FD3D11UniformBuffer* Buffer = (FD3D11UniformBuffer*)BoundUniformBuffers[ShaderType::StaticFrequency][BufferIndex];
-
-		SetShaderResourcesFromBuffer_Surface<(EShaderFrequency)ShaderType::StaticFrequency>(this, &StateCache, Buffer, Shader->ShaderResourceTable.TextureMap.GetData(), BufferIndex);
-		SetShaderResourcesFromBuffer_SRV<(EShaderFrequency)ShaderType::StaticFrequency>(this, &StateCache, Buffer, Shader->ShaderResourceTable.TextureMap.GetData(), BufferIndex);
-		SetShaderResourcesFromBuffer_Sampler<(EShaderFrequency)ShaderType::StaticFrequency>(this, &StateCache, Buffer, Shader->ShaderResourceTable.TextureMap.GetData(), BufferIndex);
-	}
-}
-
 template <EShaderFrequency Frequency>
 void SetResource(FD3D11DynamicRHI* D3D11RHI , FD3D11StateCache* StateCache , uint32 BindIndex , FD3D11BaseShaderResource* ShaderResource , FD3D11ShaderResourceView* SRV , std::string name = "")
 {
@@ -645,24 +627,6 @@ template <EShaderFrequency Frequency>
 void SetResource(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, uint32 BindIndex, ID3D11SamplerState* SamplerState)
 {
 	StateCache->SetSamplerState<Frequency>(SamplerState , BindIndex)
-}
-
-template <EShaderFrequency ShaderFrequency>
-inline int32 SetShaderResourcesFromBuffer_Surface(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
-{
-	//ZYZ_TODO:ShaderResource Bound Support Later;
-}
-
-template <EShaderFrequency ShaderFrequency>
-inline int32 SetShaderResourcesFromBuffer_SRV(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
-{
-	//ZYZ_TODO:ShaderResource Bound Support Later;
-}
-
-template <EShaderFrequency ShaderFrequency>
-inline int32 SetShaderResourcesFromBuffer_Sampler(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
-{
-	//ZYZ_TODO:ShaderResource Bound Support Later;
 }
 
 static D3D11_PRIMITIVE_TOPOLOGY GetD3D11PrimitiveType(uint32 PrimitiveType, bool bUsingTessellation)

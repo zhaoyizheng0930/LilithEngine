@@ -152,7 +152,7 @@ FD3D11Viewport::FD3D11Viewport(class FD3D11DynamicRHI* InD3DRHI, HWND InWindowHa
 	D3DRHI->InitD3DDevice();
 
 	IDXGIDevice* DXGIDevice = nullptr;
-	D3DRHI->GetDevice()->QueryInterface(IID_IDXGIDevice , (void**)(&DXGIDevice));
+	D3DRHI->GetDevice()->QueryInterface(__uuidof(IDXGIDevice), (void**)(&DXGIDevice));
 	//Create SwapChain
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 
@@ -258,7 +258,7 @@ bool FD3D11Viewport::Present(bool bLockToVsync)
 FD3D11Texture2D* FD3D11Viewport::GetSwapChainSurface(FD3D11DynamicRHI* D3DRHI, EPixelFormat PixelFormat, IDXGISwapChain* SwapChain)
 {
 	ID3D11Texture2D* BackBufferTexture = nullptr;
-	SwapChain->GetBuffer(0, IID_ID3D10Texture2D, (void**)&BackBufferTexture);
+	SwapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (void**)&BackBufferTexture);
 	//CreateSRV
 	ID3D11ShaderResourceView* SRV;
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;

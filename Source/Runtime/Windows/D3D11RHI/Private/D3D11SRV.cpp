@@ -246,6 +246,45 @@ void FD3D11DynamicRHI::CommitRenderTargetsAndUAVs()
 
 }
 
+template <EShaderFrequency ShaderFrequency>
+inline int32 SetShaderResourcesFromBuffer_Surface(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
+{
+	//ZYZ_TODO:ShaderResource Bound Support Later;
+	return 0;
+}
+
+template <EShaderFrequency ShaderFrequency>
+inline int32 SetShaderResourcesFromBuffer_SRV(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
+{
+	//ZYZ_TODO:ShaderResource Bound Support Later;
+	return 0;
+}
+
+template <EShaderFrequency ShaderFrequency>
+inline int32 SetShaderResourcesFromBuffer_Sampler(FD3D11DynamicRHI* D3D11RHI, FD3D11StateCache* StateCache, FD3D11UniformBuffer* Buffer, const uint32* ResourceMap, int32 BufferIndex)
+{
+	//ZYZ_TODO:ShaderResource Bound Support Later;
+	return 0;
+}
+
+template <class ShaderType>
+void FD3D11DynamicRHI::SetResourcesFromTables(ShaderType* Shader)
+{
+	uint32 DirtyBits = Shader->ShaderResourceTable.ResourceTableBits & DirtyUniformBuffers[ShaderType::StaticFrequency];
+
+	while (DirtyBits)
+	{
+		const uint32 LowestBitMask = (DirtyBits)& (-(int32)DirtyBits);
+		const int32 BufferIndex = FMath::FloorLog2(LowestBitMask);
+		DirtyBits ^= LowestBitMask;
+		FD3D11UniformBuffer* Buffer = (FD3D11UniformBuffer*)BoundUniformBuffers[ShaderType::StaticFrequency][BufferIndex];
+
+		SetShaderResourcesFromBuffer_Surface<(EShaderFrequency)ShaderType::StaticFrequency>(this, &StateCache, Buffer, Shader->ShaderResourceTable.TextureMap.data(), BufferIndex);
+		SetShaderResourcesFromBuffer_SRV<(EShaderFrequency)ShaderType::StaticFrequency>(this, &StateCache, Buffer, Shader->ShaderResourceTable.TextureMap.data(), BufferIndex);
+		SetShaderResourcesFromBuffer_Sampler<(EShaderFrequency)ShaderType::StaticFrequency>(this, &StateCache, Buffer, Shader->ShaderResourceTable.TextureMap.data(), BufferIndex);
+	}
+}
+
 void FD3D11DynamicRHI::CommitGraphicResourceTables()
 {
 	FD3D11BoundShaderState* CurrentBoundShaderState = (FD3D11BoundShaderState*)BoundShaderStateHistory.GetLast();

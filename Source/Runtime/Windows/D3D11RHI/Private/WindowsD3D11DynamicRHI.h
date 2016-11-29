@@ -419,7 +419,7 @@ protected:
 	uint32 PendingNumIndices;
 	uint32 PendingIndexDataStride;
 
-	//CBuffer Dirty
+	//SRV CBuffer Dirty
 	FD3D11UniformBuffer* BoundUniformBuffers[SF_NumFrequencies][14];
 	uint16 DirtyUniformBuffers[SF_NumFrequencies];
 
@@ -447,6 +447,7 @@ protected:
 	bool bUseTesslation;
 
 	TBoundShaderStateHistory<1000> BoundShaderStateHistory;
+
 protected:
 	/** Initializes the constant buffers.  Called once at RHI initialization time. */
 	void InitConstantBuffers();
@@ -474,6 +475,7 @@ protected:
 		FD3D11DeviceContext* Direct3DDeviceContext,
 		typename TPixelShader::FParameter PixelShaderParameter
 		);
+
 private:
 	//Context Private-----------------------------------------------------------------CommitResource
 	void CommitRenderTargetsAndUAVs();
@@ -486,7 +488,8 @@ private:
 
 	void CommitComputeShaderConstants();
 
-	template <class ShaderType> void SetResourcesFromTables(const ShaderType* RESTRICT);
+	template <class ShaderType>
+	void SetResourcesFromTables(ShaderType* Shader);
 
 	//Clear                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 	void ClearAllShaderResources();
