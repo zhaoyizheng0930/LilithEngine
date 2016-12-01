@@ -1,5 +1,6 @@
 #include "RenderCorePCH.h"
 #include "RenderResource.h"
+#include "RHI.h"
 
 void BeginInitResource(FRenderResource* Resource)
 {
@@ -11,7 +12,7 @@ void FRenderResource::InitResource()
 	if (!bInitialized)
 	{
 		//ZYZ_TODO:Resource list Link
-		//if (GIsRHIInitialized)
+		if (GIsRHIInitialized)
 		{
 			InitDynamicRHI();
 			InitRHI();

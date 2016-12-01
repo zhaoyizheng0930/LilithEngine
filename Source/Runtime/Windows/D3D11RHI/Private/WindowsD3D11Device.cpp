@@ -12,6 +12,7 @@ void SafeCreateDXGIFactory(IDXGIFactory1** DXGIFactory1)
 	CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)DXGIFactory1);
 }
 
+//ZYZ_TODO:didn't support DX10 Feature level
 bool SafeTestCreateD3D11Device(IDXGIAdapter* Adapter,D3D_FEATURE_LEVEL MaxFeatureLevel,D3D_FEATURE_LEVEL* OutFeatureLevel)
 {
 	UINT flag = D3D11_CREATE_DEVICE_SINGLETHREADED;
@@ -22,12 +23,12 @@ bool SafeTestCreateD3D11Device(IDXGIAdapter* Adapter,D3D_FEATURE_LEVEL MaxFeatur
 		D3D_FEATURE_LEVEL_10_0
 	};
 
-	int32 FirstAllowedFeatureLevel = D3D_FEATURE_LEVEL_11_0;
+	int FirstAllowedFeatureLevel = 0;
 	ID3D11Device* pDevice = nullptr;
 	ID3D11DeviceContext* pImmediateContext = nullptr;
 
-	if (D3D11CreateDevice(Adapter , D3D_DRIVER_TYPE_UNKNOWN , NULL , flag ,  featurelevel , FirstAllowedFeatureLevel , D3D11_SDK_VERSION , &pDevice
-		, OutFeatureLevel, &pImmediateContext))
+	if (D3D11CreateDevice(Adapter , D3D_DRIVER_TYPE_UNKNOWN , NULL , flag , &featurelevel[FirstAllowedFeatureLevel], 1, D3D11_SDK_VERSION , &pDevice
+		, OutFeatureLevel, &pImmediateContext) == S_OK)
 	{
 		pDevice->Release();
 		pImmediateContext->Release();

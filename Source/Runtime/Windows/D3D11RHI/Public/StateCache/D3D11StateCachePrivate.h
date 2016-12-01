@@ -29,7 +29,77 @@ public:
 
 	void ClearState()
 	{
+		if (Direct3DDeviceIMContext)
+		{
+			Direct3DDeviceIMContext->ClearState();
+		}
 
+		//Clear Cache
+		//Shader Cache
+		CurrentVertexShader = nullptr;
+		CurrentHullShader = nullptr;
+		CurrentDoaminShader = nullptr;
+		CurrentGeometryShader = nullptr;
+		CurrentPixelShader = nullptr;
+		CurrentComputeShader = nullptr;
+
+		// Shader Resource Views Cache
+		for (int i = 0;i<SF_NumFrequencies;i++)
+		{
+			for (int j = 0;j<D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;j++)
+			{
+				CurrentShaderResourceViews[i][j] = nullptr;
+			}
+		}
+
+		// Shader Sampler State Cache
+		for (int i = 0; i < SF_NumFrequencies; i++)
+		{
+			for (int j = 0; j < D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT; j++)
+			{
+				CurrentSamplerStates[i][j] = nullptr;
+			}
+		}
+
+		// Viewport Cache
+		CurrentNumberOfViewports = 0;
+		FMemory::Memset(&CurrentViewport[0], 0, sizeof(D3D11_VIEWPORT) * D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE);
+
+		//VertexBuffer Cache
+		FMemory::Memset(&CurrentVertexBuffer[0], 0, sizeof(FD3D11VertexBufferState) * D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT);
+
+		//IndexBuffer Cache
+		CurrentIndexBuffer = nullptr;
+		CurrentIndexFormat = DXGI_FORMAT_UNKNOWN;
+		CurrentIndexOffset = 0;
+
+		//InputLayout Cache
+		CurrentInputLayout = nullptr;
+
+		//Constant Buffer
+		for (int i = 0; i < SF_NumFrequencies; i++)
+		{
+			for (int j = 0; j < D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT; j++)
+			{
+				CurrentConstantBuffers[i][j].Buffer = nullptr;
+				CurrentConstantBuffers[i][j].FirstConstant = 0;
+				CurrentConstantBuffers[i][j].NumConstants = 0;
+			}
+		}
+
+		//D3D11_PRIMITIVE_TOPOLOGY
+		CurrentPrimitiveTopology = D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
+
+		//StateCache
+		//RasterizerState
+		CurrentRasterizerState = nullptr;
+		//DepthStencilState
+		CurrentDepthStencilState = nullptr;
+		CurrentReferenceStencil = 0;
+		//BlendState
+		CurrentBlendState = nullptr;
+		CurrentBlendSampleMask = 0;
+		FMemory::Memset(&CurrentBlendFactor[0], 0, sizeof(float) * 4);
 	}
 
 	//StateSet---------------------------------------------------------------------------------
@@ -324,12 +394,9 @@ private:
 	}CurrentVertexBuffer[D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT];
 
 	//IndexBuffer Cache
-	struct FD3D11IndexBufferState
-	{
-		ID3D11Buffer* IndexBuffer;
-		DXGI_FORMAT Format;
-		uint32 Offset;
-	}CurrentIndexBuffer;
+	ID3D11Buffer* CurrentIndexBuffer;
+	DXGI_FORMAT CurrentIndexFormat;
+	uint32 CurrentIndexOffset;
 
 	//InputLayout Cache
 	ID3D11InputLayout* CurrentInputLayout;
@@ -382,11 +449,11 @@ private:
 	void InternalSetIndeBuffer(ID3D11Buffer* IndexBuffer, DXGI_FORMAT Format, uint32 Offset , TSetIndexBufferAlternate AlternatePathFunction)
 	{
 		//Compare Dirty
-		if (CurrentIndexBuffer.IndexBuffer != IndexBuffer || CurrentIndexBuffer.Offset != Offset || CurrentIndexBuffer.Format != Format)
+		if (CurrentIndexBuffer != IndexBuffer || CurrentIndexOffset != Offset || CurrentIndexFormat != Format)
 		{
-			CurrentIndexBuffer.IndexBuffer = IndexBuffer;
-			CurrentIndexBuffer.Offset = Offset;
-			CurrentIndexBuffer.Format = Format;
+			CurrentIndexBuffer = IndexBuffer;
+			CurrentIndexOffset = Offset;
+			CurrentIndexFormat = Format;
 			if (AlternatePathFunction == nullptr)
 			{
 				Direct3DDeviceIMContext->IASetIndexBuffer(IndexBuffer, Format, Offset);

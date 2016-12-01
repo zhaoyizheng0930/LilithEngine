@@ -6,6 +6,7 @@ FDynamicRHI* GDynamicRHI = nullptr;
 std::wstring GRHIAdapterName = L"";
 uint32 GRHIVendorId = 0;
 uint32 GRHIDeviceId = 0;
+bool GIsRHIInitialized = false;
 
 void RHIInit(bool bHasEditorToken)
 {
@@ -15,6 +16,7 @@ void RHIInit(bool bHasEditorToken)
 		if (GDynamicRHI)
 		{
 			GDynamicRHI->Init();
+			GIsRHIInitialized = true;
 			//GRHICommandList
 		}
 	}

@@ -19,6 +19,8 @@ extern std::wstring GRHIAdapterName;
 extern uint32 GRHIVendorId;
 extern uint32 GRHIDeviceId;
 
+extern bool GIsRHIInitialized;
+
 
 extern int32 GNumActiveGPUsForRendering;
 
