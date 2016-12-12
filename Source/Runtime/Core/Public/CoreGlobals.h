@@ -15,3 +15,6 @@ extern bool GRHISupportsRHIThread;
 extern bool GUseMultithreadDevice;
 
 extern bool GUseD3DDebug;
+
+//RenderThread
+extern uint32 GRenderThreadId;

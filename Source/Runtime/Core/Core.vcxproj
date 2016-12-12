@@ -144,6 +144,7 @@
     <ClInclude Include="Public\CorePCH.h" />
     <ClInclude Include="Public\GenericPlatform\GenericApplication.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatform.h" />
+    <ClInclude Include="Public\GenericPlatform\GenericPlatformAffinity.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatformMath.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatformMemory.h" />
     <ClInclude Include="Public\GenericPlatform\GenericPlatformProcess.h" />

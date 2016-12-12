@@ -55,6 +55,7 @@ int32 FEngineLoop::PreInit(const char* CmdLine)
 	//CreateDevice And Context
 	RHIInit(false);
 
+	//ShaderCoreInit
 	InitializeShaderTypes();
 
 	//Setup Default material
