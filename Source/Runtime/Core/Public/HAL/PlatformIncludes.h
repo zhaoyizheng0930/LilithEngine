@@ -27,6 +27,7 @@
 #include "../GenericPlatform/GenericPlatformMemory.h"
 #include "../GenericPlatform/GenericPlatformProcess.h"
 #include "../GenericPlatform/GenericApplication.h"
+#include "../GenericPlatform/GenericPlatformAffinity.h"
 #include "../GenericPlatform/GenericWindow.h"
 
 #ifdef PLATFORM_WINDOWS

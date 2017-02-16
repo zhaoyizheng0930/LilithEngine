@@ -14,3 +14,5 @@ bool					GRHISupportsRHIThread = true;
 bool					GUseMultithreadDevice = true;
 
 bool					GUseD3DDebug = true;
+
+uint32					GRenderThreadId = 0;
