@@ -1,0 +1,108 @@
+32 bit-64bit
+D3D11 UPDATE TO D3D11X  GNM
+SSAO
+SSAO AFFACT BY FOG
+ADD DLC DATA
+GAMEPAD INPUT 
+CONSOLE LIFESTATE.     SUSPEND MODE 
+PIX PROFILER
+VIDEO BINK
+UI FIRE RENDERTARGET RESOLVE
+ZFIGHTING INVERSE DEPTH
+TRC  RICHPRESENCE ACHIVEMENT herostat accountpicker
+Shader disassembling      div 0
+DOF
+
+ENGINE-------------------------------------------
+TASK BASE ENGINE
+ENGINE-------------------------------------------
+
+RENDER-------------------------------------------
+STARTUPPASS----------------------------------------
+STARTUPPASS----------------------------------------
+
+VISIBILITYPASS----------------------------------------
+VISIBILITYPASS----------------------------------------
+
+HizOcclusionCullingPass---------------------------------
+HizOcclusionCullingPass---------------------------------
+
+ShadowPass---------------------------------
+ShadowPass---------------------------------
+
+ProjectorPass---------------------------------------
+ProjectorPass---------------------------------------
+
+VisibilityQueriesFetchPass----------------------------
+VisibilityQueriesFetchPass----------------------------
+
+ReflexionPass----------------------------------------
+ReflexionPass----------------------------------------
+
+MainOpaquePass--------------------------------------
+MainOpaquePass--------------------------------------
+
+mainPass--------------------------------------------
+SSAO-------------------------------------------
+SSAO-------------------------------------------
+DrawTransparent--------------------------------------
+DrawTransparent--------------------------------------
+POSTEFFECT-------------------------------------------
+POSTEFFECT-------------------------------------------
+mainPass--------------------------------------------
+
+RENDER-------------------------------------------
+
+PERFORMANCE PROFILE------------------------------
+FRONT TO BACK
+MULTITHREAD
+FAST SEMANTIC
+HZB OCCLUSION
+PLACEMENT BUFFER
+PERFORMANCE PROFILE------------------------------
+
+
+
+
+
+Main loop-----------------------------------
+BegineFrame -> BeginGraphicFrame -> m_GraphicFrame -> m_EndGraphicFrame -> m_EndFrame
+
+
+
+BegineFrame -> BeginEngineFrame -> EngineStoppedBranch -> UniverseComponentStep -> PreActionStep -> m_PreStep -> EngineStoppedPreStepActionBranch ->PreActionWorldStep -					>StepPreWorlds
+			   -> MenusAndSoundsBlock
+Main loop-----------------------------------
+
+
+
+
+Render MultiThread------------------Deferred Context
+m_mainDevice->BeginCommandListExecution();
+
+	Gfxex_GPUProfile(m_mainDevice, FlushAllCommandListInDeferredContextsBegin);
+
+#ifdef POP_PLATFORM_DURANGO
+	{
+		PlatformGfxDevice* gfxDeviceForLoading = m_GraphicDevice->GetDeviceForLoadingThread();
+		gfxDeviceForLoading->StartRecordingCommands();
+		GfxCmdList* cmdlist = gfxDeviceForLoading->FinishRecordingCommands();
+		m_mainDevice->ExecuteRecordedCommands(cmdlist);
+	}
+#endif
+
+	for (ubiU32 i = 0; i < m_NbContexts; ++i)
+	{
+		PlatformGfxDevice* deferredDevice = m_GraphicDevice->GetDeferredDeviceForPhysicalThreadType(i);
+		deferredDevice->StartRecordingCommands();
+		GfxCmdList* cmdlist = deferredDevice->FinishRecordingCommands();
+		m_mainDevice->ExecuteRecordedCommands(cmdlist);
+	}
+
+	Gfxex_GPUProfile(m_mainDevice, FlushAllCommandListInDeferredContextsEnd);
+
+	m_mainDevice->EndCommandListExecution();
+
+	m_mainDevice->KickCommandBuffer(false);
+
+Render MultiThread------------------Deferred Context
